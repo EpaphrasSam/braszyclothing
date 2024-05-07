@@ -7,6 +7,8 @@ import { NavbarLinks, NavLinkTypes } from "@/lib/constants/routes";
 import { usePathname } from "next/navigation";
 import { motion, useScroll } from "framer-motion";
 import {
+  Avatar,
+  Badge,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -27,6 +29,9 @@ import SearchBar from "./SearchBar";
 import SideDrawer from "./SideDrawer";
 import { MdOutlineClose } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
+import { useStore } from "@/store/useStore";
+import useCartStore, { CartState } from "@/store/cart";
+import ProfileDrawer from "./ProfileDrawer";
 
 const chevronVariants = {
   down: { rotate: 0 },
@@ -42,9 +47,14 @@ const NavBar = () => {
   const [showNav, setShowNav] = useState({
     leftNav: false,
   });
+  const [showProfileNav, setShowProfileNav] = useState({
+    leftNav: false,
+  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
+
+  const cartItems = useStore(useCartStore, (state) => state.cartItems);
 
   useEffect(() => {
     return scrollY.onChange((y) => {
@@ -71,6 +81,17 @@ const NavBar = () => {
       return;
     }
     setShowNav({ ...showNav, [anchor]: open });
+    return;
+  };
+
+  const profileHandler = (anchor: any, open: any) => (event: any) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setShowProfileNav({ ...showNav, [anchor]: open });
     return;
   };
 
@@ -236,19 +257,27 @@ const NavBar = () => {
           {NavbarLinks.map(renderLink)}
         </NavbarContent>
         <NavbarContent justify="end">
-          <NavbarItem className="flex gap-2 items-center">
-            <p className="text-blue-500 cursor-pointer transition ease-in-out duration-300 hover:-translate-y-1 hover:scale-110">
+          <NavbarItem className="flex gap-4 items-center">
+            {/* <p className="text-blue-500 cursor-pointer transition ease-in-out duration-300 hover:-translate-y-1 hover:scale-110">
               Log In
-            </p>
+            </p> */}
             <IoSearchOutline
               size={24}
-              className="cursor-pointer hover:opacity-75"
+              className="transition-transform duration-300 cursor-pointer hover:scale-105"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             />
-            <CiShoppingCart
-              size={28}
-              className="cursor-pointer hover:opacity-75"
-              onClick={navHandler("leftNav", true)}
+            <Badge content={cartItems && cartItems.length} color="primary">
+              <CiShoppingCart
+                size={28}
+                className="transition-transform duration-300 cursor-pointer hover:scale-105"
+                onClick={navHandler("leftNav", true)}
+              />
+            </Badge>
+            <Avatar
+              size="sm"
+              isBordered
+              className="transition-transform duration-300 cursor-pointer hover:scale-105"
+              onClick={profileHandler("leftNav", true)}
             />
           </NavbarItem>
         </NavbarContent>
@@ -263,6 +292,10 @@ const NavBar = () => {
       <SideDrawer
         isOpen={showNav["leftNav"]}
         onClose={navHandler("leftNav", false)}
+      />
+      <ProfileDrawer
+        isOpen={showProfileNav["leftNav"]}
+        onClose={profileHandler("leftNav", false)}
       />
     </>
   );

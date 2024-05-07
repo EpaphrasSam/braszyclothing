@@ -1,20 +1,15 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { CartItem } from "@/types/CartItems";
+import { CartItemType } from "@/types/CartItemsTypes";
+import { initialCartItems } from "@/lib/constants/cartItems";
 
 export interface CartState {
-  cartItems: CartItem[];
-  addToCart: (item: CartItem) => void;
+  cartItems: CartItemType[];
+  addToCart: (item: CartItemType) => void;
   removeFromCart: (itemId: string) => void;
   incrementQuantity: (itemId: string) => void;
   decrementQuantity: (itemId: string) => void;
 }
-
-const initialCartItems: CartItem[] = [
-  { id: "1", name: "Apple", price: 0.99, quantity: 3 },
-  { id: "2", name: "Banana", price: 0.79, quantity: 2 },
-  { id: "3", name: "Carrot", price: 0.5, quantity: 5 },
-];
 
 const useCartStore = create<CartState>()(
   persist(
@@ -25,10 +20,10 @@ const useCartStore = create<CartState>()(
           cartItems: state.cartItems.some((cartItem) => cartItem.id === item.id)
             ? state.cartItems.map((cartItem) =>
                 cartItem.id === item.id
-                  ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                  ? { ...cartItem, quantity: (cartItem.quantity || 0) + 1 }
                   : cartItem
               )
-            : [...state.cartItems, item],
+            : [...state.cartItems, { ...item, quantity: 1 }],
         })),
       removeFromCart: (itemId) =>
         set((state) => ({
@@ -37,16 +32,20 @@ const useCartStore = create<CartState>()(
       incrementQuantity: (itemId) =>
         set((state) => ({
           cartItems: state.cartItems.map((item) =>
-            item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+            item.id === itemId
+              ? { ...item, quantity: (item.quantity || 0) + 1 }
+              : item
           ),
         })),
       decrementQuantity: (itemId) =>
         set((state) => ({
-          cartItems: state.cartItems.map((item) =>
-            item.id === itemId
-              ? { ...item, quantity: Math.max(0, item.quantity - 1) }
-              : item
-          ),
+          cartItems: state.cartItems
+            .map((item) =>
+              item.id === itemId
+                ? { ...item, quantity: Math.max(0, (item.quantity || 0) - 1) }
+                : item
+            )
+            .filter((item) => item.quantity > 0), // Remove item if quantity is zero or not present
         })),
     }),
     {

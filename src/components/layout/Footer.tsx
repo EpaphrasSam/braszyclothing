@@ -9,7 +9,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white py-8 mx-auto mt-10">
+    <footer className="bg-gray-800 text-white py-8 mx-auto w-full">
       <div className="container mx-auto px-4 md:block flex flex-col justify-center items-center">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <div>

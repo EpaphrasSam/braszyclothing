@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "react-multi-carousel/lib/styles.css";
 import { Providers } from "./providers";
 import NavBar from "@/components/layout/NavBar";
 import Footer from "@/components/layout/Footer";
@@ -22,8 +23,10 @@ export default function RootLayout({
       <body className={`${inter.className} `}>
         <Providers>
           <NavBar />
-          <main className="h-screen">{children}</main>
-          <Footer />
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

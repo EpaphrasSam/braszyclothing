@@ -2,14 +2,13 @@
 
 import React, { useState } from "react";
 import { Drawer } from "@mui/material";
-import Cart from "../pages/cart/Cart";
 
-type SideDrawerProps = {
+type ProfileDrawerProps = {
   isOpen: boolean;
   onClose: any;
 };
 
-const SideDrawer = ({ isOpen, onClose }: SideDrawerProps) => {
+const ProfileDrawer = ({ isOpen, onClose }: ProfileDrawerProps) => {
   return (
     <>
       <Drawer
@@ -25,10 +24,10 @@ const SideDrawer = ({ isOpen, onClose }: SideDrawerProps) => {
         onClose={onClose}
         variant="temporary"
       >
-        <Cart />
+        ProfileDrawer
       </Drawer>
     </>
   );
 };
 
-export default SideDrawer;
+export default ProfileDrawer;

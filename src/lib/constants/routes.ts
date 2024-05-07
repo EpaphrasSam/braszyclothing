@@ -17,10 +17,10 @@ export const NavbarLinks: NavLinkTypes[] = [
     name: "Women",
     route: "categories/women",
   },
-  {
-    name: "Children",
-    route: "categories/children",
-  },
+  // {
+  //   name: "Children",
+  //   route: "categories/children",
+  // },
   // {
   //   name: "Categories",
   //   route: "/categories",
@@ -50,5 +50,5 @@ export const NavbarLinks: NavLinkTypes[] = [
   {
     name: "Cart",
     route: "/cart",
-  }
+  },
 ];

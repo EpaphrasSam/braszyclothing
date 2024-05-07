@@ -17,6 +17,13 @@ const config: Config = {
       },
     },
   },
-  plugins: [nextui(), require("tailwindcss-animate")],
+  plugins: [
+    nextui({
+      layout: {
+        dividerWeight: "1.5px",
+      },
+    }),
+    require("tailwindcss-animate"),
+  ],
 };
 export default config;
