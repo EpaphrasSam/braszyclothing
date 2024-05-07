@@ -31,6 +31,7 @@ import { MdOutlineClose } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
 import { useStore } from "@/store/useStore";
 import useCartStore, { CartState } from "@/store/cart";
+import ProfileDrawer from "./ProfileDrawer";
 
 const chevronVariants = {
   down: { rotate: 0 },
@@ -46,24 +47,20 @@ const NavBar = () => {
   const [showNav, setShowNav] = useState({
     leftNav: false,
   });
+  const [showProfileNav, setShowProfileNav] = useState({
+    leftNav: false,
+  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
 
-  const cartStore = useStore<CartState, CartState>(
-    useCartStore,
-    (state) => state
-  );
+  const cartItems = useStore(useCartStore, (state) => state.cartItems);
 
   useEffect(() => {
     return scrollY.onChange((y) => {
       setIsScrolled(y > 0);
     });
   }, [scrollY]);
-
-  if (!cartStore) return null;
-
-  const { cartItems } = cartStore;
 
   const brandVariants = {
     scrolled: {
@@ -84,6 +81,17 @@ const NavBar = () => {
       return;
     }
     setShowNav({ ...showNav, [anchor]: open });
+    return;
+  };
+
+  const profileHandler = (anchor: any, open: any) => (event: any) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setShowProfileNav({ ...showNav, [anchor]: open });
     return;
   };
 
@@ -258,7 +266,7 @@ const NavBar = () => {
               className="transition-transform duration-300 cursor-pointer hover:scale-105"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             />
-            <Badge content={cartItems.length} color="primary">
+            <Badge content={cartItems && cartItems.length} color="primary">
               <CiShoppingCart
                 size={28}
                 className="transition-transform duration-300 cursor-pointer hover:scale-105"
@@ -269,6 +277,7 @@ const NavBar = () => {
               size="sm"
               isBordered
               className="transition-transform duration-300 cursor-pointer hover:scale-105"
+              onClick={profileHandler("leftNav", true)}
             />
           </NavbarItem>
         </NavbarContent>
@@ -283,6 +292,10 @@ const NavBar = () => {
       <SideDrawer
         isOpen={showNav["leftNav"]}
         onClose={navHandler("leftNav", false)}
+      />
+      <ProfileDrawer
+        isOpen={showProfileNav["leftNav"]}
+        onClose={profileHandler("leftNav", false)}
       />
     </>
   );

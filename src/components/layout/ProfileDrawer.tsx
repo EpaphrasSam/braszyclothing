@@ -3,12 +3,12 @@
 import React, { useState } from "react";
 import { Drawer } from "@mui/material";
 
-type SideDrawerProps = {
+type ProfileDrawerProps = {
   isOpen: boolean;
   onClose: any;
 };
 
-const SideDrawer = ({ isOpen, onClose }: SideDrawerProps) => {
+const ProfileDrawer = ({ isOpen, onClose }: ProfileDrawerProps) => {
   return (
     <>
       <Drawer
@@ -24,10 +24,10 @@ const SideDrawer = ({ isOpen, onClose }: SideDrawerProps) => {
         onClose={onClose}
         variant="temporary"
       >
-        SideDrawer
+        ProfileDrawer
       </Drawer>
     </>
   );
 };
 
-export default SideDrawer;
+export default ProfileDrawer;

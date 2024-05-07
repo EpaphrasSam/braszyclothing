@@ -1,5 +1,6 @@
 export const menProducts = [
   {
+    id: "ab1cd2ef",
     name: "Classic Cotton T-Shirt",
     price: 19.99,
     imageUrls: [
@@ -9,8 +10,10 @@ export const menProducts = [
       "/images/img4.jpg",
     ],
     category: "Shirts",
+    quantity: 0,
   },
   {
+    id: "gh3ij4kl",
     name: "Slim Fit Chino Pants",
     price: 49.99,
     imageUrls: [
@@ -20,8 +23,10 @@ export const menProducts = [
       "/images/img4.jpg",
     ],
     category: "Pants",
+    quantity: 0,
   },
   {
+    id: "mn5op6qr",
     name: "Lightweight Windbreaker Jacket",
     price: 69.99,
     imageUrls: [
@@ -31,8 +36,10 @@ export const menProducts = [
       "/images/img4.jpg",
     ],
     category: "Outerwear",
+    quantity: 0,
   },
   {
+    id: "st7uv8wx",
     name: "Athletic Running Shorts",
     price: 29.99,
     imageUrls: [
@@ -42,8 +49,10 @@ export const menProducts = [
       "/images/img4.jpg",
     ],
     category: "Shorts",
+    quantity: 0,
   },
   {
+    id: "yz9ab0cd",
     name: "Comfortable Boxer Briefs (Pack of 3)",
     price: 24.99,
     imageUrls: [
@@ -53,8 +62,10 @@ export const menProducts = [
       "/images/img4.jpg",
     ],
     category: "Underwear",
+    quantity: 0,
   },
   {
+    id: "ef2gh3ij",
     name: "Slim Fit Denim Jeans",
     price: 59.99,
     imageUrls: [
@@ -64,8 +75,10 @@ export const menProducts = [
       "/images/img4.jpg",
     ],
     category: "Jeans",
+    quantity: 0,
   },
   {
+    id: "kl4mn5op",
     name: "Flannel Button-Down Shirt",
     price: 39.99,
     imageUrls: [
@@ -75,8 +88,10 @@ export const menProducts = [
       "/images/img4.jpg",
     ],
     category: "Shirts",
+    quantity: 0,
   },
   {
+    id: "qr6st7uv",
     name: "Leather Chelsea Boots",
     price: 99.99,
     imageUrls: [
@@ -86,8 +101,10 @@ export const menProducts = [
       "/images/img4.jpg",
     ],
     category: "Shoes",
+    quantity: 0,
   },
   {
+    id: "wx8yz9ab",
     name: "Wool Blend Peacoat",
     price: 129.99,
     imageUrls: [
@@ -97,8 +114,10 @@ export const menProducts = [
       "/images/img4.jpg",
     ],
     category: "Outerwear",
+    quantity: 0,
   },
   {
+    id: "cd0ef2gh",
     name: "Hooded Pullover Sweatshirt",
     price: 44.99,
     imageUrls: [
@@ -108,11 +127,13 @@ export const menProducts = [
       "/images/img4.jpg",
     ],
     category: "Sweaters",
+    quantity: 0,
   },
 ];
 
 export const womenProducts = [
   {
+    id: "ij3kl4mn",
     name: "Floral Print Midi Dress",
     price: 59.99,
     imageUrls: [
@@ -122,8 +143,10 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Dresses",
+    quantity: 0,
   },
   {
+    id: "op6qr6st",
     name: "High-Waisted Skinny Jeans",
     price: 49.99,
     imageUrls: [
@@ -133,8 +156,10 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Jeans",
+    quantity: 0,
   },
   {
+    id: "uv8wx8yz",
     name: "Striped Button-Down Shirt",
     price: 39.99,
     imageUrls: [
@@ -144,8 +169,10 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Shirts",
+    quantity: 0,
   },
   {
+    id: "9ab0cd0e",
     name: "Pleated A-Line Skirt",
     price: 34.99,
     imageUrls: [
@@ -155,8 +182,10 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Skirts",
+    quantity: 0,
   },
   {
+    id: "f2gh3ij3",
     name: "Lace Bralette and Panty Set",
     price: 29.99,
     imageUrls: [
@@ -166,8 +195,10 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Lingerie",
+    quantity: 0,
   },
   {
+    id: "kl4mn5op",
     name: "Oversized Sweater Dress",
     price: 49.99,
     imageUrls: [
@@ -177,8 +208,10 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Dresses",
+    quantity: 0,
   },
   {
+    id: "6qr6st7u",
     name: "Distressed Boyfriend Jeans",
     price: 54.99,
     imageUrls: [
@@ -188,8 +221,10 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Jeans",
+    quantity: 0,
   },
   {
+    id: "v8wx8yz9",
     name: "Floral Wrap Blouse",
     price: 39.99,
     imageUrls: [
@@ -199,8 +234,10 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Shirts",
+    quantity: 0,
   },
   {
+    id: "ab0cd0ef",
     name: "Faux Leather Moto Jacket",
     price: 79.99,
     imageUrls: [
@@ -210,8 +247,10 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Outerwear",
+    quantity: 0,
   },
   {
+    id: "2gh3ij3k",
     name: "Strappy Lace Bodysuit",
     price: 24.99,
     imageUrls: [
@@ -221,8 +260,10 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Lingerie",
+    quantity: 0,
   },
   {
+    id: "l4mn5op6",
     name: "Faux Fur Teddy Coat",
     price: 99.99,
     imageUrls: [
@@ -232,5 +273,6 @@ export const womenProducts = [
       "/images/img4.jpg",
     ],
     category: "Outerwear",
+    quantity: 0,
   },
 ];

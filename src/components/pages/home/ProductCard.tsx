@@ -30,7 +30,6 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ products, category }: ProductCardProps) => {
-  console.log(products);
   return (
     <div>
       <Divider className="my-4" />
@@ -38,8 +37,8 @@ const ProductCard = ({ products, category }: ProductCardProps) => {
         {category} Collection
       </h2>
       <Carousel responsive={responsive} ssr={true}>
-        {products.map((product, index) => (
-          <CardItems key={index} product={product} />
+        {products.map((product) => (
+          <CardItems key={product.id} product={product} />
         ))}
       </Carousel>
     </div>
