@@ -47,4 +47,8 @@ export const NavbarLinks: NavLinkTypes[] = [
     name: "New Releases",
     route: "/new-releases",
   },
+  {
+    name: "Cart",
+    route: "/cart",
+  }
 ];
