@@ -7,6 +7,8 @@ import { NavbarLinks, NavLinkTypes } from "@/lib/constants/routes";
 import { usePathname } from "next/navigation";
 import { motion, useScroll } from "framer-motion";
 import {
+  Avatar,
+  Badge,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -27,6 +29,8 @@ import SearchBar from "./SearchBar";
 import SideDrawer from "./SideDrawer";
 import { MdOutlineClose } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
+import { useStore } from "@/store/useStore";
+import useCartStore, { CartState } from "@/store/cart";
 
 const chevronVariants = {
   down: { rotate: 0 },
@@ -46,11 +50,20 @@ const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
 
+  const cartStore = useStore<CartState, CartState>(
+    useCartStore,
+    (state) => state
+  );
+
   useEffect(() => {
     return scrollY.onChange((y) => {
       setIsScrolled(y > 0);
     });
   }, [scrollY]);
+
+  if (!cartStore) return null;
+
+  const { cartItems } = cartStore;
 
   const brandVariants = {
     scrolled: {
@@ -236,19 +249,26 @@ const NavBar = () => {
           {NavbarLinks.map(renderLink)}
         </NavbarContent>
         <NavbarContent justify="end">
-          <NavbarItem className="flex gap-2 items-center">
-            <p className="text-blue-500 cursor-pointer transition ease-in-out duration-300 hover:-translate-y-1 hover:scale-110">
+          <NavbarItem className="flex gap-4 items-center">
+            {/* <p className="text-blue-500 cursor-pointer transition ease-in-out duration-300 hover:-translate-y-1 hover:scale-110">
               Log In
-            </p>
+            </p> */}
             <IoSearchOutline
               size={24}
-              className="cursor-pointer hover:opacity-75"
+              className="transition-transform duration-300 cursor-pointer hover:scale-105"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             />
-            <CiShoppingCart
-              size={28}
-              className="cursor-pointer hover:opacity-75"
-              onClick={navHandler("leftNav", true)}
+            <Badge content={cartItems.length} color="primary">
+              <CiShoppingCart
+                size={28}
+                className="transition-transform duration-300 cursor-pointer hover:scale-105"
+                onClick={navHandler("leftNav", true)}
+              />
+            </Badge>
+            <Avatar
+              size="sm"
+              isBordered
+              className="transition-transform duration-300 cursor-pointer hover:scale-105"
             />
           </NavbarItem>
         </NavbarContent>

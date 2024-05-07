@@ -1,16 +1,16 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { CartItem } from "@/types/CartItems";
+import { CartItemType } from "@/types/CartItemsTypes";
 
 export interface CartState {
-  cartItems: CartItem[];
-  addToCart: (item: CartItem) => void;
+  cartItems: CartItemType[];
+  addToCart: (item: CartItemType) => void;
   removeFromCart: (itemId: string) => void;
   incrementQuantity: (itemId: string) => void;
   decrementQuantity: (itemId: string) => void;
 }
 
-const initialCartItems: CartItem[] = [
+const initialCartItems: CartItemType[] = [
   { id: "1", name: "Apple", price: 0.99, quantity: 3 },
   { id: "2", name: "Banana", price: 0.79, quantity: 2 },
   { id: "3", name: "Carrot", price: 0.5, quantity: 5 },

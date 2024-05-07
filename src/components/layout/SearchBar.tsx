@@ -32,9 +32,9 @@ const SearchBar = ({ isOpen, onClose }: SearchBarProps) => {
           >
             <Input
               isClearable
-              radius="sm"
+              radius="full"
               className="sm:w-[600px] w-full"
-              endContent={<IoSearchOutline size={20} />}
+              startContent={<IoSearchOutline size={20} />}
               placeholder="Search..."
               classNames={{
                 label: "text-black text-[12px]",
@@ -43,7 +43,7 @@ const SearchBar = ({ isOpen, onClose }: SearchBarProps) => {
             <IoCloseOutline
               size={28}
               onClick={onClose}
-              className="cursor-pointer hover:opacity-75"
+              className="cursor-pointer hover:opacity-75 flex"
             />
           </motion.div>
         </>
