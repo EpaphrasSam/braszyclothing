@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { NavbarLinks, NavLinkTypes } from "@/lib/constants/routes";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import {
   Dropdown,
   DropdownItem,
@@ -43,6 +43,25 @@ const NavBar = () => {
     leftNav: false,
   });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { scrollY } = useScroll();
+
+  useEffect(() => {
+    return scrollY.onChange((y) => {
+      setIsScrolled(y > 0);
+    });
+  }, [scrollY]);
+
+  const brandVariants = {
+    scrolled: {
+      scale: 1,
+      transition: { type: "tween", duration: 0.3 },
+    },
+    top: {
+      scale: 1.1,
+      transition: { type: "tween", duration: 0.3 },
+    },
+  };
 
   const navHandler = (anchor: any, open: any) => (event: any) => {
     if (
@@ -120,6 +139,7 @@ const NavBar = () => {
                   href={{
                     pathname: `${link.route}${child.route}`,
                   }}
+                  className="hover:underline underline-offset-4 hover:bg-transparent"
                 >
                   {child.name}
                 </Link>
@@ -201,16 +221,25 @@ const NavBar = () => {
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden"
         />
-        {/* <NavbarContent justify="center"> */}
+        <NavbarContent justify="start" className="sm:hidden" />
+
         <NavbarBrand>
-          <Image src="/logo.jpg" alt="logo" width={50} height={50} />
+          <motion.div
+            animate={isScrolled ? "scrolled" : "top"}
+            variants={brandVariants}
+          >
+            <Image src="/logo.jpg" alt="logo" width={50} height={50} />
+          </motion.div>
         </NavbarBrand>
-        {/* </NavbarContent> */}
+
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           {NavbarLinks.map(renderLink)}
         </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem className="flex gap-2 items-center">
+            <p className="text-blue-500 cursor-pointer transition ease-in-out duration-300 hover:-translate-y-1 hover:scale-110">
+              Log In
+            </p>
             <IoSearchOutline
               size={24}
               className="cursor-pointer hover:opacity-75"

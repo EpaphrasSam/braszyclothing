@@ -12,36 +12,64 @@ export const NavbarLinks: NavLinkTypes[] = [
   {
     name: "Collections",
     route: "/collections",
-  },
-  {
-    name: "Clothing",
-    route: "/clothing",
     children: [
       {
-        name: "T-Shirts",
-        route: "/t-shirt",
+        name: "Unity",
+        route: "/unity",
       },
       {
-        name: "Hoodies",
-        route: "/hoodie",
+        name: "Global",
+        route: "/global",
       },
       {
-        name: "Tracksuits",
-        route: "/tracksuit",
+        name: "Identity",
+        route: "/identity",
       },
     ],
   },
+  // {
+  //   name: "Clothing",
+  //   route: "/clothing",
+  //   children: [
+  //     {
+  //       name: "T-Shirts",
+  //       route: "/t-shirt",
+  //     },
+  //     {
+  //       name: "Hoodies",
+  //       route: "/hoodie",
+  //     },
+  //     {
+  //       name: "Tracksuits",
+  //       route: "/tracksuit",
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: "Footwear",
+  //   route: "/footwear",
+  //   children: [
+  //     {
+  //       name: "Sneakers",
+  //       route: "/sneakers",
+  //     },
+  //     {
+  //       name: "Boots",
+  //       route: "/boots",
+  //     },
+  //   ],
+  // },
   {
-    name: "Footwear",
-    route: "/footwear",
+    name: "Categories",
+    route: "/categories",
     children: [
       {
-        name: "Sneakers",
-        route: "/sneakers",
+        name: "Men",
+        route: "/men",
       },
       {
-        name: "Boots",
-        route: "/boots",
+        name: "Women",
+        route: "/women",
       },
     ],
   },
