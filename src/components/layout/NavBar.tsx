@@ -219,9 +219,9 @@ const NavBar = () => {
             !isOpen ? <FaBars size={20} /> : <MdOutlineClose size={32} />
           }
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden"
+          className="md:hidden"
         />
-        <NavbarContent justify="start" className="sm:hidden" />
+        <NavbarContent justify="start" className="md:hidden" />
 
         <NavbarBrand>
           <motion.div
@@ -232,7 +232,7 @@ const NavBar = () => {
           </motion.div>
         </NavbarBrand>
 
-        <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <NavbarContent className="hidden md:flex gap-4" justify="center">
           {NavbarLinks.map(renderLink)}
         </NavbarContent>
         <NavbarContent justify="end">

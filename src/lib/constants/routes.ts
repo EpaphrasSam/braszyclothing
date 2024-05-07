@@ -10,71 +10,41 @@ export const NavbarLinks: NavLinkTypes[] = [
     route: "/",
   },
   {
-    name: "Collections",
-    route: "/collections",
-    children: [
-      {
-        name: "Unity",
-        route: "/unity",
-      },
-      {
-        name: "Global",
-        route: "/global",
-      },
-      {
-        name: "Identity",
-        route: "/identity",
-      },
-    ],
+    name: "Men",
+    route: "categories/men",
+  },
+  {
+    name: "Women",
+    route: "categories/women",
+  },
+  {
+    name: "Children",
+    route: "categories/children",
   },
   // {
-  //   name: "Clothing",
-  //   route: "/clothing",
+  //   name: "Categories",
+  //   route: "/categories",
   //   children: [
   //     {
-  //       name: "T-Shirts",
-  //       route: "/t-shirt",
+  //       name: "Men",
+  //       route: "/men",
   //     },
   //     {
-  //       name: "Hoodies",
-  //       route: "/hoodie",
+  //       name: "Women",
+  //       route: "/women",
   //     },
   //     {
-  //       name: "Tracksuits",
-  //       route: "/tracksuit",
-  //     },
-  //   ],
-  // },
-  // {
-  //   name: "Footwear",
-  //   route: "/footwear",
-  //   children: [
-  //     {
-  //       name: "Sneakers",
-  //       route: "/sneakers",
-  //     },
-  //     {
-  //       name: "Boots",
-  //       route: "/boots",
+  //       name: "Children",
+  //       route: "/children",
   //     },
   //   ],
   // },
   {
-    name: "Categories",
-    route: "/categories",
-    children: [
-      {
-        name: "Men",
-        route: "/men",
-      },
-      {
-        name: "Women",
-        route: "/women",
-      },
-    ],
+    name: "Gift Cards",
+    route: "/gift",
   },
   {
-    name: "Contact",
-    route: "/contact",
+    name: "New Releases",
+    route: "/new-releases",
   },
 ];
