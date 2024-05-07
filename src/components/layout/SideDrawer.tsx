@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Drawer } from "@mui/material";
+import Cart from "../pages/cart/Cart";
 
 type SideDrawerProps = {
   isOpen: boolean;
@@ -14,9 +15,9 @@ const SideDrawer = ({ isOpen, onClose }: SideDrawerProps) => {
       <Drawer
         PaperProps={{
           sx: {
-            width: "350px",
-            borderTopLeftRadius: "10px",
-            borderBottomLeftRadius: "10px",
+            width: "400px",
+            borderTopLeftRadius: "5px",
+            borderBottomLeftRadius: "5px",
           },
         }}
         anchor="right"
@@ -24,7 +25,7 @@ const SideDrawer = ({ isOpen, onClose }: SideDrawerProps) => {
         onClose={onClose}
         variant="temporary"
       >
-        SideDrawer
+        <Cart />
       </Drawer>
     </>
   );
