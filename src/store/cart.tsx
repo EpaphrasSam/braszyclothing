@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { CartItemType } from "@/types/CartItemsTypes";
 import { initialCartItems } from "@/lib/constants/cartItems";
 
@@ -45,12 +45,12 @@ const useCartStore = create<CartState>()(
                 ? { ...item, quantity: Math.max(0, (item.quantity || 0) - 1) }
                 : item
             )
-            .filter((item) => item.quantity > 0), // Remove item if quantity is zero or not present
+            .filter((item) => item.quantity > 0),
         })),
     }),
     {
       name: "cart-storage",
-      getStorage: () => localStorage,
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

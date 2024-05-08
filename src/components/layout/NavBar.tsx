@@ -57,18 +57,18 @@ const NavBar = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
 
   useEffect(() => {
-    return scrollY.onChange((y) => {
+    return scrollY.on("change", (y) => {
       setIsScrolled(y > 0);
     });
   }, [scrollY]);
 
   const brandVariants = {
     scrolled: {
-      scale: 1,
+      scale: 0.7,
       transition: { type: "tween", duration: 0.3 },
     },
     top: {
-      scale: 1.1,
+      scale: 1,
       transition: { type: "tween", duration: 0.3 },
     },
   };
@@ -157,9 +157,8 @@ const NavBar = () => {
             {link.children.map((child) => (
               <DropdownItem key={child.route}>
                 <Link
-                  href={{
-                    pathname: `${link.route}${child.route}`,
-                  }}
+                  key={child.name}
+                  href={`${link.route}${child.route}`}
                   className="hover:underline underline-offset-4 hover:bg-transparent"
                 >
                   {child.name}
@@ -186,6 +185,7 @@ const NavBar = () => {
           }}
         >
           <Link
+            key={link.name}
             href={link.route}
             className={`${
               isActive
@@ -209,6 +209,7 @@ const NavBar = () => {
     if (link.children && link.children.length > 0) {
       return (
         <NavbarMenuItem
+          key={link.name}
           className={`${
             isActive && "bg-gray-300"
           }, p-4 justify-between flex items-center rounded-lg hover:opacity-75 cursor-pointer`}
@@ -220,8 +221,9 @@ const NavBar = () => {
     }
 
     return (
-      <Link href={link.route}>
+      <Link key={link.name} href={link.route}>
         <NavbarMenuItem
+          key={link.name}
           className={`${
             isActive && "bg-gray-300"
           } p-4 rounded-lg hover:opacity-75`}
@@ -249,7 +251,13 @@ const NavBar = () => {
             animate={isScrolled ? "scrolled" : "top"}
             variants={brandVariants}
           >
-            <Image src="/logo.jpg" alt="logo" width={50} height={50} />
+            <Image
+              src="/logo.jpg"
+              alt="logo"
+              width={50}
+              height={50}
+              className="w-12 h-12"
+            />
           </motion.div>
         </NavbarBrand>
 
@@ -258,9 +266,6 @@ const NavBar = () => {
         </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem className="flex gap-4 items-center">
-            {/* <p className="text-blue-500 cursor-pointer transition ease-in-out duration-300 hover:-translate-y-1 hover:scale-110">
-              Log In
-            </p> */}
             <IoSearchOutline
               size={24}
               className="transition-transform duration-300 cursor-pointer hover:scale-105"

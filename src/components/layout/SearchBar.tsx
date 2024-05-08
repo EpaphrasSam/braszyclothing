@@ -32,6 +32,7 @@ const SearchBar = ({ isOpen, onClose }: SearchBarProps) => {
           >
             <Input
               isClearable
+              variant="bordered"
               radius="full"
               className="sm:w-[600px] w-full"
               startContent={<IoSearchOutline size={20} />}

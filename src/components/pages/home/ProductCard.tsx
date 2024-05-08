@@ -7,20 +7,30 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 
 const responsive = {
+  LargeDesktop: {
+    breakpoint: { max: 3000, min: 1400 },
+    items: 5,
+    // slidesToSlide: 5,
+  },
   desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    slidesToSlide: 3, // optional, default to 1.
+    breakpoint: { max: 1400, min: 1024 },
+    items: 4,
+    // slidesToSlide: 4,
   },
   tablet: {
-    breakpoint: { max: 1024, min: 648 },
-    items: 2,
-    slidesToSlide: 2, // optional, default to 1.
+    breakpoint: { max: 1100, min: 848 },
+    items: 3,
+    // slidesToSlide: 3,
   },
   mobile: {
+    breakpoint: { max: 848, min: 648 },
+    items: 2,
+    // slidesToSlide: 2,
+  },
+  smallMobile: {
     breakpoint: { max: 648, min: 0 },
     items: 1,
-    slidesToSlide: 1, // optional, default to 1.
+    // slidesToSlide: 1,
   },
 };
 

@@ -43,7 +43,7 @@ const CardItems = ({ product }: CardItemsProps) => {
   return (
     <Card
       isFooterBlurred
-      className="relative h-[300px] m-2 transition ease-in-out delay-150 duration-300 hover:scale-105"
+      className="relative w-[250px] h-[400px] m-2 transition ease-in-out delay-150 duration-300 hover:scale-105"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -95,8 +95,8 @@ const CardItems = ({ product }: CardItemsProps) => {
       </AnimatePresence>
       <CardFooter className="flex absolute px-4 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
         <div className="flex justify-between w-full">
-          <p className="text-black text-base truncate">{product.name}</p>
-          <p className="text-black text-base">{product.price}</p>
+          <p className="text-black text-sm truncate">{product.name}</p>
+          <p className="text-black text-sm">{product.price}</p>
         </div>
       </CardFooter>
     </Card>

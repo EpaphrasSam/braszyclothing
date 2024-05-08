@@ -56,10 +56,9 @@ const Cart = () => {
       <div className="font-bold">
         Total: $
         {cartItems &&
-          cartItems.reduce(
-            (total, item) => total + item.price * item.quantity,
-            0
-          )}
+          cartItems
+            .reduce((total, item) => total + item.price * item.quantity, 0)
+            .toFixed(2)}
       </div>
     </div>
   );
