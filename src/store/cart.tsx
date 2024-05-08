@@ -1,11 +1,11 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { CartItemType } from "@/types/CartItemsTypes";
 import { initialCartItems } from "@/lib/constants/cartItems";
+import { ProductCardType } from "@/types/ProductCardType";
 
 export interface CartState {
-  cartItems: CartItemType[];
-  addToCart: (item: CartItemType) => void;
+  cartItems: ProductCardType[];
+  addToCart: (item: ProductCardType) => void;
   removeFromCart: (itemId: string) => void;
   incrementQuantity: (itemId: string) => void;
   decrementQuantity: (itemId: string) => void;

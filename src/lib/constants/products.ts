@@ -1,4 +1,50 @@
-export const menProducts = [
+import { ProductCardType } from "@/types/ProductCardType";
+
+export const categories: { id: string; name: string }[] = [
+  { id: "1", name: "Men" },
+  { id: "2", name: "Women" },
+];
+
+export const menCategories = [
+  { id: "1", name: "Shirts", images: ["/images/img1.jpg", "/images/img2.jpg"] },
+  { id: "2", name: "Pants", images: ["/images/img3.jpg", "/images/img4.jpg"] },
+  {
+    id: "3",
+    name: "Outerwear",
+    images: ["/images/img1.jpg", "/images/img2.jpg"],
+  },
+  { id: "4", name: "Shorts", images: ["/images/img3.jpg", "/images/img4.jpg"] },
+  { id: "5", name: "Jeans", images: ["/images/img1.jpg", "/images/img2.jpg"] },
+  {
+    id: "6",
+    name: "Underwear",
+    images: ["/images/img3.jpg", "/images/img4.jpg"],
+  },
+  { id: "7", name: "Shoes", images: ["/images/img2.jpg", "/images/img4.jpg"] },
+];
+
+export const womenCategories = [
+  {
+    id: "1",
+    name: "Dresses",
+    images: ["/images/img1.jpg", "/images/img2.jpg"],
+  },
+  { id: "2", name: "Jeans", images: ["/images/img3.jpg", "/images/img4.jpg"] },
+  { id: "3", name: "Shirts", images: ["/images/img1.jpg", "/images/img2.jpg"] },
+  { id: "4", name: "Skirts", images: ["/images/img3.jpg", "/images/img4.jpg"] },
+  {
+    id: "5",
+    name: "Lingerie",
+    images: ["/images/img1.jpg", "/images/img2.jpg"],
+  },
+  {
+    id: "6",
+    name: "Outerwear",
+    images: ["/images/img3.jpg", "/images/img4.jpg"],
+  },
+];
+
+export const menProducts: ProductCardType[] = [
   {
     id: "ab1cd2ef",
     name: "Classic Cotton T-Shirt",
@@ -9,7 +55,7 @@ export const menProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Shirts",
+    apparel: "Shirts",
     quantity: 0,
   },
   {
@@ -22,7 +68,7 @@ export const menProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Pants",
+    apparel: "Pants",
     quantity: 0,
   },
   {
@@ -35,7 +81,7 @@ export const menProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Outerwear",
+    apparel: "Outerwear",
     quantity: 0,
   },
   {
@@ -48,7 +94,7 @@ export const menProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Shorts",
+    apparel: "Shorts",
     quantity: 0,
   },
   {
@@ -61,7 +107,7 @@ export const menProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Underwear",
+    apparel: "Underwear",
     quantity: 0,
   },
   {
@@ -74,7 +120,7 @@ export const menProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Jeans",
+    apparel: "Jeans",
     quantity: 0,
   },
   {
@@ -87,7 +133,7 @@ export const menProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Shirts",
+    apparel: "Shirts",
     quantity: 0,
   },
   {
@@ -100,7 +146,7 @@ export const menProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Shoes",
+    apparel: "Shoes",
     quantity: 0,
   },
   {
@@ -113,7 +159,7 @@ export const menProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Outerwear",
+    apparel: "Outerwear",
     quantity: 0,
   },
   {
@@ -126,12 +172,12 @@ export const menProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Sweaters",
+    apparel: "Sweaters",
     quantity: 0,
   },
 ];
 
-export const womenProducts = [
+export const womenProducts: ProductCardType[] = [
   {
     id: "ij3kl4mn",
     name: "Floral Print Midi Dress",
@@ -142,7 +188,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Dresses",
+    apparel: "Dresses",
     quantity: 0,
   },
   {
@@ -155,7 +201,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Jeans",
+    apparel: "Jeans",
     quantity: 0,
   },
   {
@@ -168,7 +214,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Shirts",
+    apparel: "Shirts",
     quantity: 0,
   },
   {
@@ -181,7 +227,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Skirts",
+    apparel: "Skirts",
     quantity: 0,
   },
   {
@@ -194,7 +240,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Lingerie",
+    apparel: "Lingerie",
     quantity: 0,
   },
   {
@@ -207,7 +253,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Dresses",
+    apparel: "Dresses",
     quantity: 0,
   },
   {
@@ -220,7 +266,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Jeans",
+    apparel: "Jeans",
     quantity: 0,
   },
   {
@@ -233,7 +279,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Shirts",
+    apparel: "Shirts",
     quantity: 0,
   },
   {
@@ -246,7 +292,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Outerwear",
+    apparel: "Outerwear",
     quantity: 0,
   },
   {
@@ -259,7 +305,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Lingerie",
+    apparel: "Lingerie",
     quantity: 0,
   },
   {
@@ -272,7 +318,7 @@ export const womenProducts = [
       "/images/img3.jpg",
       "/images/img4.jpg",
     ],
-    category: "Outerwear",
+    apparel: "Outerwear",
     quantity: 0,
   },
 ];

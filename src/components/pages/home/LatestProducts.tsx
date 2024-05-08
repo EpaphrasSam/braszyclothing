@@ -13,17 +13,17 @@ const responsive = {
     // slidesToSlide: 5,
   },
   desktop: {
-    breakpoint: { max: 1400, min: 1024 },
+    breakpoint: { max: 1400, min: 1200 },
     items: 4,
     // slidesToSlide: 4,
   },
   tablet: {
-    breakpoint: { max: 1100, min: 848 },
+    breakpoint: { max: 1200, min: 848 },
     items: 3,
     // slidesToSlide: 3,
   },
   mobile: {
-    breakpoint: { max: 848, min: 648 },
+    breakpoint: { max: 930, min: 648 },
     items: 2,
     // slidesToSlide: 2,
   },
@@ -36,17 +36,22 @@ const responsive = {
 
 interface ProductCardProps {
   products: ProductCardType[];
-  category: "women's" | "men's";
 }
 
-const ProductCard = ({ products, category }: ProductCardProps) => {
+const LatestProducts = ({ products }: ProductCardProps) => {
   return (
     <div>
       <Divider className="my-4" />
       <h2 className="text-3xl font-semibold mb-4 capitalize">
-        {category} Collection
+        Latest collection
       </h2>
-      <Carousel responsive={responsive} ssr={true}>
+      <Carousel
+        responsive={responsive}
+        ssr={true}
+        autoPlay
+        autoPlaySpeed={3000}
+        infinite
+      >
         {products.map((product) => (
           <CardItems key={product.id} product={product} />
         ))}
@@ -55,4 +60,4 @@ const ProductCard = ({ products, category }: ProductCardProps) => {
   );
 };
 
-export default ProductCard;
+export default LatestProducts;

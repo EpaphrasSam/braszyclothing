@@ -7,19 +7,23 @@ import { IoFilterOutline } from "react-icons/io5";
 import { menProducts, womenProducts } from "@/lib/constants/products";
 import CardItems from "@/components/global/CardItems";
 
-type CategoryProps = {
+type ShopProps = {
   slug: string;
+  filter?: string;
 };
 
-const Category = ({ slug }: CategoryProps) => {
+const Shop = ({ slug, filter }: ShopProps) => {
   const router = useRouter();
   const [products, setProducts] = useState(
     slug === "men" ? menProducts : womenProducts
   );
 
   useEffect(() => {
-    if (slug) return router.push(`/categories/${slug}`);
-  }, [slug, router]);
+    if (slug) {
+      const path = `/shop/${slug}` + (filter ? `?filter=${filter}` : "");
+      router.push(path);
+    }
+  }, [slug, router, filter]);
 
   return (
     <div className="m-10">
@@ -55,4 +59,4 @@ const Category = ({ slug }: CategoryProps) => {
   );
 };
 
-export default Category;
+export default Shop;

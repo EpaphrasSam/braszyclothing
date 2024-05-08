@@ -6,37 +6,21 @@ export type NavLinkTypes = {
 
 export const NavbarLinks: NavLinkTypes[] = [
   {
-    name: "Men",
-    route: "/categories/men",
+    name: "Shop",
+    route: "/shop",
+    children: [
+      {
+        name: "Men",
+        route: "/men",
+      },
+      {
+        name: "Women",
+        route: "/women",
+      },
+    ],
   },
   {
-    name: "Women",
-    route: "/categories/women",
-  },
-  // {
-  //   name: "Children",
-  //   route: "categories/children",
-  // },
-  // {
-  //   name: "Categories",
-  //   route: "/categories",
-  //   children: [
-  //     {
-  //       name: "Men",
-  //       route: "/men",
-  //     },
-  //     {
-  //       name: "Women",
-  //       route: "/women",
-  //     },
-  //     {
-  //       name: "Children",
-  //       route: "/children",
-  //     },
-  //   ],
-  // },
-  {
-    name: "Gift Cards",
+    name: "Gifts",
     route: "/gift",
   },
   {

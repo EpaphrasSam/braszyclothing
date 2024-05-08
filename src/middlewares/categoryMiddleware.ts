@@ -16,7 +16,7 @@ export const categoryMiddleware = (request: NextRequest) => {
 
   if (!slug) {
     return NextResponse.rewrite(
-      new URL(`/categories/${allowedSlugs[0]}`, request.url)
+      new URL(`/shop/${allowedSlugs[0]}`, request.url)
     );
   }
 

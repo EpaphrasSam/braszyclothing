@@ -8,7 +8,7 @@ export const config = {
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/categories")) {
+  if (pathname.startsWith("/shop")) {
     const response = categoryMiddleware(request);
     if (response) return response;
   }
