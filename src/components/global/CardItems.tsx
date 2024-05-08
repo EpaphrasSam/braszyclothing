@@ -8,6 +8,7 @@ import { CiShoppingCart } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/store/useStore";
 import useCartStore, { CartState } from "@/store/cart";
+import { FaEye } from "react-icons/fa6";
 
 interface CardItemsProps {
   product: ProductCardType;
@@ -75,6 +76,7 @@ const CardItems = ({ product }: CardItemsProps) => {
             <Button
               size="sm"
               className="mr-2"
+              startContent={<FaEye size={20} />}
               onClick={() => router.push(`/products/${product.id}`)}
             >
               See Details

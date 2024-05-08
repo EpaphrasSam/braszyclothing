@@ -6,10 +6,6 @@ export type NavLinkTypes = {
 
 export const NavbarLinks: NavLinkTypes[] = [
   {
-    name: "Home",
-    route: "/",
-  },
-  {
     name: "Men",
     route: "/categories/men",
   },

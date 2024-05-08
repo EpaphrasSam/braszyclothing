@@ -21,7 +21,6 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/react";
-
 import { FaBars, FaChevronDown, FaChevronUp, FaSearch } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
 import { CiShoppingCart } from "react-icons/ci";
@@ -236,7 +235,12 @@ const NavBar = () => {
 
   return (
     <>
-      <Navbar isBordered position="sticky" onMenuOpenChange={setIsMenuOpen}>
+      <Navbar
+        maxWidth="full"
+        isBordered
+        position="sticky"
+        onMenuOpenChange={setIsMenuOpen}
+      >
         <NavbarMenuToggle
           icon={(isOpen) =>
             !isOpen ? <FaBars size={20} /> : <MdOutlineClose size={32} />
@@ -246,24 +250,32 @@ const NavBar = () => {
         />
         <NavbarContent justify="start" className="md:hidden" />
 
-        <NavbarBrand>
-          <motion.div
-            animate={isScrolled ? "scrolled" : "top"}
-            variants={brandVariants}
-          >
-            <Image
-              src="/logo.jpg"
-              alt="logo"
-              width={50}
-              height={50}
-              className="w-12 h-12"
-            />
-          </motion.div>
-        </NavbarBrand>
-
-        <NavbarContent className="hidden md:flex gap-4" justify="center">
+        <NavbarContent className="hidden md:flex gap-4" justify="start">
           {NavbarLinks.map(renderLink)}
         </NavbarContent>
+
+        <NavbarContent justify="center">
+          <NavbarItem>
+            <Link href="/">
+              <motion.div
+                whileHover={{
+                  scale: 1.05,
+                }}
+                animate={isScrolled ? "scrolled" : "top"}
+                variants={brandVariants}
+              >
+                <Image
+                  src="/logo.jpg"
+                  alt="logo"
+                  width={50}
+                  height={50}
+                  className="w-12 h-12"
+                />
+              </motion.div>
+            </Link>
+          </NavbarItem>
+        </NavbarContent>
+
         <NavbarContent justify="end">
           <NavbarItem className="flex gap-4 items-center">
             <IoSearchOutline
