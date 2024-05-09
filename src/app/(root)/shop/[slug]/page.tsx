@@ -7,7 +7,7 @@ export default async function CategoryPage({
   searchParams?: { [key: string]: string };
 }) {
   return (
-    <div>
+    <div className="sm:m-10 m-5">
       <Shop slug={params.slug} filter={searchParams?.filter} />
     </div>
   );

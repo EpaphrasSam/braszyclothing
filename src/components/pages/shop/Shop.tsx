@@ -26,7 +26,7 @@ const Shop = ({ slug, filter }: ShopProps) => {
   }, [slug, router, filter]);
 
   return (
-    <div className="m-10">
+    <div>
       <div className="flex gap-6 mb-4 justify-end items-center">
         <div className="flex items-center gap-2 cursor-pointer transition ease-in-out hover:scale-105 hover:opacity-50">
           <IoFilterOutline size={20} />
