@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import ImageTransition from "@/components/global/ImageTransition";
@@ -35,10 +35,12 @@ const responsive = {
 const CategoryCard = ({ categories, apparels }: CategoryCardProps) => {
   const router = useRouter();
   return (
-    <Carousel responsive={responsive} ssr={true}>
+    <div className="flex justify-evenly overflow-x-scroll p-2">
       {categories.map((category) => (
-        <Card key={category.id} className=" mt-2 mr-4" isBlurred>
-          <CardHeader>{category.name}</CardHeader>
+        <Card key={category.id} className=" mt-2 mr-4 w-[600px]" isBlurred>
+          <CardHeader className="text-gray-600 text-3xl">
+            {category.name}
+          </CardHeader>
           <CardBody className="grid grid-cols-3 gap-3 w-full h-[500px]">
             {apparels.map((apparel) => (
               <Card
@@ -46,9 +48,7 @@ const CategoryCard = ({ categories, apparels }: CategoryCardProps) => {
                 isPressable
                 onClick={() =>
                   router.push(
-                    `/shop/${category.name.toLowerCase()}?filter=${
-                      apparel.name
-                    }`
+                    `/shop/${category.name.toLowerCase()}?filter=${apparel.name.toLowerCase()}`
                   )
                 }
               >
@@ -62,11 +62,12 @@ const CategoryCard = ({ categories, apparels }: CategoryCardProps) => {
                     //     repeat: Infinity,
                     //   },
                     // }}
-                    className="text-gray-700  font-bold"
+                    className="text-gray-500  font-semibold text-lg"
                   >
                     {apparel.name}
                   </motion.div>
                 </CardHeader>
+                <Divider />
                 <motion.div
                   className="relative w-full h-full"
                   initial={{ opacity: 0 }}
@@ -80,7 +81,7 @@ const CategoryCard = ({ categories, apparels }: CategoryCardProps) => {
           </CardBody>
         </Card>
       ))}
-    </Carousel>
+    </div>
   );
 };
 

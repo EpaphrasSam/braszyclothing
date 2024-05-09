@@ -13,6 +13,7 @@ type ProductProps = {
 
 const Product = ({ product }: ProductProps) => {
   const addToCart = useCartStore((state) => state.addToCart);
+
   return (
     <div className="grid gap-8 md:grid-cols-2">
       <ImageGallery images={product.imageUrls} />
@@ -26,7 +27,7 @@ const Product = ({ product }: ProductProps) => {
             {product.name}
           </h2>
         </div>
-        <div className="mb-6 flex items-center gap-3 md:mb-10">
+        {/* <div className="mb-6 flex items-center gap-3 md:mb-10">
           <Button
             radius="full"
             size="sm"
@@ -39,9 +40,9 @@ const Product = ({ product }: ProductProps) => {
           <span className="text-sm text-gray-500 transition duration-100">
             56 ratings
           </span>
-        </div>
+        </div> */}
         <div className="mb-4">
-          <div className="flex items-end">
+          <div className="flex gap-2 items-end">
             <span className="text-xl font-bold text-gray-800 md:text-2xl">
               $ {product.price}
             </span>

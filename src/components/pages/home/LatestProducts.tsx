@@ -43,7 +43,7 @@ const LatestProducts = ({ products }: ProductCardProps) => {
     <div>
       <Divider className="my-4" />
       <h2 className="text-3xl font-semibold mb-4 capitalize">
-        Latest collection
+        Latest products
       </h2>
       <Carousel
         responsive={responsive}
