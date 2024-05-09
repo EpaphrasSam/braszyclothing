@@ -6,9 +6,10 @@ import { Button } from "@nextui-org/react";
 import { CiStar } from "react-icons/ci";
 import { FiTruck } from "react-icons/fi";
 import useCartStore from "@/store/cart";
+import { ProductType } from "@/types/SanityTypes";
 
 type ProductProps = {
-  product: any;
+  product: ProductType;
 };
 
 const Product = ({ product }: ProductProps) => {
@@ -16,11 +17,11 @@ const Product = ({ product }: ProductProps) => {
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
-      <ImageGallery images={product.imageUrls} />
+      <ImageGallery images={product.imageUrls} inStock={product.inStock} />
       <div>
         <div className="mb-2 md:mb-3">
           <span className="mb-0.5 inline-block text-gray-500">
-            Men ({product.apparel})
+            {product.categoryName} ({product.apparel})
           </span>
 
           <h2 className="text-2xl font-bold text-gray-800 lg:text-3xl">
@@ -69,10 +70,7 @@ const Product = ({ product }: ProductProps) => {
           </Button>
         </div>
         <p className="mt-12 text-base text-gray-500 tracking-wide">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe sed
-          dignissimos error quisquam officiis ea ipsa quidem, blanditiis a eos
-          asperiores ipsam voluptate. Sit quos, pariatur voluptatem sapiente cum
-          praesentium?
+          {product.description}
         </p>
       </div>
     </div>

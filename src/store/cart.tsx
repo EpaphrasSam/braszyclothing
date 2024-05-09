@@ -1,11 +1,10 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { initialCartItems } from "@/lib/constants/cartItems";
-import { ProductCardType } from "@/types/ProductCardType";
+import { ProductType } from "@/types/SanityTypes";
 
 export interface CartState {
-  cartItems: ProductCardType[];
-  addToCart: (item: ProductCardType) => void;
+  cartItems: ProductType[];
+  addToCart: (item: ProductType) => void;
   removeFromCart: (itemId: string) => void;
   incrementQuantity: (itemId: string) => void;
   decrementQuantity: (itemId: string) => void;
@@ -14,7 +13,7 @@ export interface CartState {
 const useCartStore = create<CartState>()(
   persist(
     (set) => ({
-      cartItems: initialCartItems,
+      cartItems: [],
       addToCart: (item) =>
         set((state) => ({
           cartItems: state.cartItems.some((cartItem) => cartItem.id === item.id)
@@ -45,7 +44,7 @@ const useCartStore = create<CartState>()(
                 ? { ...item, quantity: Math.max(0, (item.quantity || 0) - 1) }
                 : item
             )
-            .filter((item) => item.quantity > 0),
+            .filter((item) => item.quantity! > 0),
         })),
     }),
     {

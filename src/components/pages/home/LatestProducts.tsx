@@ -2,6 +2,7 @@
 
 import CardItems from "@/components/global/CardItems";
 import { ProductCardType } from "@/types/ProductCardType";
+import { ProductType } from "@/types/SanityTypes";
 import { Divider } from "@nextui-org/react";
 import React from "react";
 import Carousel from "react-multi-carousel";
@@ -35,7 +36,7 @@ const responsive = {
 };
 
 interface ProductCardProps {
-  products: ProductCardType[];
+  products: ProductType[];
 }
 
 const LatestProducts = ({ products }: ProductCardProps) => {

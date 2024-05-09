@@ -5,49 +5,48 @@ import { motion, AnimatePresence } from "framer-motion";
 
 type ImageGalleryProps = {
   images: string[];
+  inStock: boolean;
 };
 
-const ImageGallery = ({ images }: ImageGalleryProps) => {
+const ImageGallery = ({ images, inStock }: ImageGalleryProps) => {
   const [bigImage, setBigImage] = useState(images[0]);
 
   const handleSmallImageClick = (image: string) => {
     setBigImage(image);
   };
   return (
-    <div className="flex flex-col lg:grid gap-4 lg:grid-cols-5">
-      <div className="order-first flex gap-4 lg:order-none lg:flex-col overflow-auto">
+    <div className="lg:grid lg:gap-4 lg:grid-cols-5">
+      <div className="order-first lg:order-none flex max-lg:mb-4 lg:flex-col flex-row gap-4 overflow-auto">
         {images.map((image, index) => (
           <div
             key={index}
-            className="overflow-hidden h-full rounded-lg bg-gray-100"
+            className="overflow-hidden max-h-36 lg:max-h-[300px] lg:h-auto lg:w-full rounded-lg bg-gray-100"
           >
             <motion.img
               src={image}
               className="w-full h-full object-cover object-center cursor-pointer"
               whileHover={{ scale: 1.1 }}
-              width={200}
-              height={200}
               alt="photo"
               onClick={() => handleSmallImageClick(image)}
             />
           </div>
         ))}
       </div>
-      <div className="relative h-[300px] md:h-full w-full rounded-lg bg-gray-100 lg:col-span-4">
+      <div className="relative h-96 lg:col-span-4 lg:h-[500px]">
         <AnimatePresence initial={false}>
           <motion.img
             key={bigImage}
             src={bigImage}
-            width={500}
-            height={500}
             className="w-full h-full absolute rounded-lg object-cover"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
         </AnimatePresence>
-        <span className="absolute top-0 left-0 rounded-tl-lg bg-green-500 px-3 py-1.5 text-sm uppercase tracking-wider text-white">
-          Sale
+        <span
+          className={`absolute top-0 left-0 rounded-br-lg rounded-tl-lg ${inStock ? "bg-green-500" : "bg-red-500"} px-3 py-1.5 text-sm uppercase tracking-wider text-white`}
+        >
+          {inStock ? "In Stock" : "Out of Stock"}
         </span>
       </div>
     </div>

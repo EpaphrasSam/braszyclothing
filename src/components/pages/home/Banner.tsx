@@ -2,14 +2,18 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence, wrap } from "framer-motion";
-import { slides } from "@/lib/constants/slides";
+import { BannerTypes } from "@/types/SanityTypes";
 
-const Banner = () => {
+interface BannerProps {
+  banners: BannerTypes[];
+}
+
+const Banner = ({ banners }: BannerProps) => {
   const [[currentSlide, direction], setCurrentSlide] = useState([0, 0]);
 
   const imageIndex = useMemo(
-    () => wrap(0, slides.length, currentSlide),
-    [currentSlide]
+    () => wrap(0, banners.length, currentSlide),
+    [currentSlide, banners.length]
   );
 
   const paginate = useCallback(
@@ -31,7 +35,7 @@ const Banner = () => {
       <motion.img
         className="w-full h-full object-cover absolute"
         key={currentSlide}
-        src={slides[imageIndex].image}
+        src={banners[imageIndex].image}
         custom={direction}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -52,7 +56,7 @@ const Banner = () => {
           transition={{ duration: 2, delay: 0.5 }}
           className="text-center text-white text-4xl font-bold"
         >
-          {slides[imageIndex].text}
+          {banners[imageIndex].message}
         </motion.div>
       </div>
     </AnimatePresence>

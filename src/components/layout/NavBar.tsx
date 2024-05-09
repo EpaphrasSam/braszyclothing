@@ -283,7 +283,10 @@ const NavBar = () => {
               className="transition-transform duration-300 cursor-pointer hover:scale-105"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             />
-            <Badge content={cartItems && cartItems.length} color="primary">
+            <Badge
+              content={cartItems && cartItems.length > 0 && cartItems.length}
+              color="primary"
+            >
               <CiShoppingCart
                 size={28}
                 className="transition-transform duration-300 cursor-pointer hover:scale-105"

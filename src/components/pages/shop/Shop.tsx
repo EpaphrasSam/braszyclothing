@@ -2,21 +2,19 @@
 
 import { Select, SelectItem } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { IoFilterOutline } from "react-icons/io5";
-import { menProducts, womenProducts } from "@/lib/constants/products";
 import CardItems from "@/components/global/CardItems";
+import { ProductType } from "@/types/SanityTypes";
 
 type ShopProps = {
   slug: string;
   filter?: string;
+  allProducts: ProductType[];
 };
 
-const Shop = ({ slug, filter }: ShopProps) => {
+const Shop = ({ slug, filter, allProducts }: ShopProps) => {
   const router = useRouter();
-  const [products, setProducts] = useState(
-    slug === "men" ? menProducts : womenProducts
-  );
 
   useEffect(() => {
     if (slug) {
@@ -45,12 +43,9 @@ const Shop = ({ slug, filter }: ShopProps) => {
           </Select>
         </div>
       </div>
-      <div className="flex flex-row items-center sm:justify-between justify-center flex-wrap">
-        {products.map((product) => (
-          <div
-            key={product.id}
-            //   className="w-1/5 p-2"
-          >
+      <div className="flex flex-row max-[670px]:justify-center gap-4 flex-wrap">
+        {allProducts.map((product) => (
+          <div key={product.id}>
             <CardItems product={product} />
           </div>
         ))}

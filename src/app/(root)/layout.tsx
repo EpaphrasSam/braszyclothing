@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import "react-multi-carousel/lib/styles.css";
-import { Providers } from "./providers";
+import { Providers } from "../providers";
 import NavBar from "@/components/layout/NavBar";
 import Footer from "@/components/layout/Footer";
 
@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   title: "Braszy Clothing",
   description: "Your one stop for all your fashion needs",
 };
+
+export const dynamic = "force-dynamic";
 
 export default function RootLayout({
   children,

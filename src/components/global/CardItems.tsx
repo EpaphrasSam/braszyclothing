@@ -3,14 +3,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Card, CardFooter, Button } from "@nextui-org/react";
 import { AnimatePresence, motion, wrap } from "framer-motion";
-import { ProductCardType } from "@/types/ProductCardType";
 import { CiShoppingCart } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cart";
 import { HiArrowsPointingOut } from "react-icons/hi2";
+import { ProductType } from "@/types/SanityTypes";
 
 interface CardItemsProps {
-  product: ProductCardType;
+  product: ProductType;
 }
 
 const CardItems = ({ product }: CardItemsProps) => {
@@ -78,7 +78,7 @@ const CardItems = ({ product }: CardItemsProps) => {
                 radius="full"
                 className="mr-2 bg-blue-950 text-white"
                 startContent={<HiArrowsPointingOut size={20} color="white" />}
-                onClick={() => router.push(`/products/${product.id}`)}
+                onClick={() => router.push(`/products/${product.slug}`)}
               >
                 View Item
               </Button>
@@ -103,7 +103,7 @@ const CardItems = ({ product }: CardItemsProps) => {
             <p className="text-black text-sm">{product.price}</p>
           </div>
           <div className="flex justify-between w-full">
-            <p className="text-gray-500 text-sm ">Men </p>
+            <p className="text-gray-500 text-sm ">{product.categoryName} </p>
             <p className="text-gray-500 text-sm ">{product.apparel}</p>
           </div>
         </CardFooter>

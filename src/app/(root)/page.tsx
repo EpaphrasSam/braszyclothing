@@ -1,21 +1,26 @@
+import Banner from "@/components/pages/home/Banner";
 import CategoryCard from "@/components/pages/home/CategoryCard";
-import Home from "@/components/pages/home/Home";
 import LatestProducts from "@/components/pages/home/LatestProducts";
 import {
-  categories,
-  menProducts,
-  womenCategories,
-  womenProducts,
-  menCategories,
-} from "@/lib/constants/products";
+  getBanners,
+  getCategory,
+  getLatestProducts,
+} from "@/services/sanityServices";
 
 export default async function HomePage() {
+  const { banners, error: bannersError } = await getBanners();
+  const { categories, error: categoriesError } = await getCategory();
+  const { latestProducts, error: latestProductsError } =
+    await getLatestProducts();
+
   return (
     <>
-      <Home />
+      <div className="relative h-screen">
+        <Banner banners={banners} />
+      </div>
       <div className="m-10  text-3xl font-semibold">
-        <CategoryCard categories={categories} apparels={womenCategories} />
-        <LatestProducts products={menProducts} />
+        <CategoryCard categories={categories} />
+        <LatestProducts products={latestProducts} />
       </div>
     </>
   );
