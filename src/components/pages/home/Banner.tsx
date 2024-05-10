@@ -30,12 +30,17 @@ const Banner = ({ banners }: BannerProps) => {
 
     return () => clearInterval(interval);
   }, [paginate]);
+
+  if (banners.length === 0) {
+    return <div className="bg-gray-600"></div>;
+  }
+
   return (
     <AnimatePresence initial={false} custom={direction}>
       <motion.img
         className="w-full h-full object-cover absolute"
         key={currentSlide}
-        src={banners[imageIndex].image}
+        src={banners[imageIndex]?.image}
         custom={direction}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

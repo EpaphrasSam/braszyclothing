@@ -90,7 +90,7 @@ export const getLatestProducts = async () => {
 
 export const getProduct = async (slug: string) => {
   try {
-    const query = `*[_type == "product" && slug.current == "${slug}"][0]{
+    const query = `*[_type == "product" && slug.current == "unisex"][0]{
       "id": _id,
       name,
       price,
@@ -113,22 +113,23 @@ export const getAllProductsByCategory = async (
   filter?: string
 ) => {
   try {
-    let query = `*[_type == "product" && category->slug.current == "${slug}"`;
-    if (filter) {
-      query += ` && apparel->slug.current == "${filter}"`;
-    }
-    query += `]{
-      "id": _id,
-      name,
-      price,
-      description,
-      inStock,
-      "apparel": apparel->title,
-      "categoryName": category->title,
-      "categorySlug": category->slug.current,
-      "slug": slug.current,
-      "imageUrls": images[].asset->url
-    }`;
+    let baseQuery = `*[_type == "product" && category->slug.current == "${slug}"`;
+    let filterQuery = filter ? ` && apparel->slug.current == "${filter}"` : "";
+    let fieldsQuery = `]{
+  "id": _id,
+  name,
+  price,
+  description,
+  inStock,
+  "apparel": apparel->title,
+  "categoryName": category->title,
+  "categorySlug": category->slug.current,
+  "slug": slug.current,
+  "imageUrls": images[].asset->url
+}`;
+
+    let query = baseQuery + filterQuery + fieldsQuery;
+
     const response: ProductType[] = await client.fetch(query);
     return { AllProducts: response, error: null };
   } catch (error: any) {
