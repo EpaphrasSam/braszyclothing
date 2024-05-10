@@ -31,6 +31,7 @@
     "react-multi-carousel": "^2.8.5",
     "sanity": "^3.41.1",
     "styled-components": "^6.1.10",
+    "tailwind-scrollbar": "^3.1.0",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^4.5.2"
   },

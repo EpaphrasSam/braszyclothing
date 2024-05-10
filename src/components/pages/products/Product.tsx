@@ -15,6 +15,8 @@ type ProductProps = {
 const Product = ({ product }: ProductProps) => {
   const addToCart = useCartStore((state) => state.addToCart);
 
+  const isDisabled = !product.inStock;
+
   return (
     <div className="grid gap-8 md:grid-cols-2">
       <ImageGallery images={product.imageUrls} inStock={product.inStock} />
@@ -45,11 +47,13 @@ const Product = ({ product }: ProductProps) => {
         <div className="mb-4">
           <div className="flex gap-2 items-end">
             <span className="text-xl font-bold text-gray-800 md:text-2xl">
-              $ {product.price}
+              ${product.price}
             </span>
-            <span className="mb-0.5 text-gray-500 line-through">
-              $ {(product.price + 30).toFixed(2)}
-            </span>
+            {product.oldPrice && (
+              <span className="mb-0.5 text-gray-500 line-through">
+                ${product.oldPrice}
+              </span>
+            )}
           </div>
           <span className="text-sm text-gray-500">Incl. Vat plus shipping</span>
         </div>
@@ -60,12 +64,17 @@ const Product = ({ product }: ProductProps) => {
         <div className="flex gap-2.5">
           <Button
             radius="sm"
-            color="primary"
+            color={`${isDisabled ? "default" : "secondary"}`}
             onClick={() => addToCart(product)}
+            isDisabled={isDisabled}
           >
             Add To Cart
           </Button>
-          <Button radius="sm" color="secondary">
+          <Button
+            radius="sm"
+            color={`${isDisabled ? "default" : "secondary"}`}
+            isDisabled={isDisabled}
+          >
             Checkout Now
           </Button>
         </div>

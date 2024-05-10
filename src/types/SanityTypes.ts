@@ -21,6 +21,7 @@ export interface ProductType {
   id: string;
   name: string;
   price: number;
+  oldPrice: number;
   description: string;
   quantity?: number;
   apparel: string;
@@ -29,4 +30,16 @@ export interface ProductType {
   inStock: boolean;
   slug: string;
   imageUrls: string[];
+}
+
+export interface ApparelType {
+  id: string;
+  title: string;
+  slug: string;
+  imageUrls: string[];
+  categories: {
+    id: string;
+    title: string;
+    slug: string;
+  }[];
 }

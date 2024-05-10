@@ -9,6 +9,7 @@ export default defineType({
       name: "title",
       title: "Banner Title",
       type: "string",
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "message",

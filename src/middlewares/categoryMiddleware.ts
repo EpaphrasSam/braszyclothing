@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const allowedSlugs = ["men", "women"];
+const allowedSlugs = ["men", "women", "unisex"];
 
 export const categoryMiddleware = (request: NextRequest) => {
   const url = request.nextUrl;

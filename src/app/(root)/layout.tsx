@@ -13,8 +13,6 @@ export const metadata: Metadata = {
   description: "Your one stop for all your fashion needs",
 };
 
-export const dynamic = "force-dynamic";
-
 export default function RootLayout({
   children,
 }: Readonly<{

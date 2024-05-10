@@ -43,12 +43,18 @@ const Shop = ({ slug, filter, allProducts }: ShopProps) => {
           </Select>
         </div>
       </div>
-      <div className="flex flex-row max-[670px]:justify-center gap-4 flex-wrap">
-        {allProducts.map((product) => (
-          <div key={product.id}>
-            <CardItems product={product} />
+      <div className="flex flex-row w-full max-[670px]:justify-center gap-4 flex-wrap">
+        {allProducts.length === 0 ? (
+          <div className="w-full my-20 text-center text-4xl font-bold text-gray-600">
+            No products available
           </div>
-        ))}
+        ) : (
+          allProducts.map((product) => (
+            <div key={product.id}>
+              <CardItems product={product} />
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

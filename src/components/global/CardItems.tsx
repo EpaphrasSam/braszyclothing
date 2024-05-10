@@ -39,6 +39,7 @@ const CardItems = ({ product }: CardItemsProps) => {
   }, [paginate]);
 
   const addToCart = useCartStore((state) => state.addToCart);
+  const isDisabled = !product.inStock;
 
   return (
     <div className="flex justify-center">
@@ -82,18 +83,20 @@ const CardItems = ({ product }: CardItemsProps) => {
               >
                 View Item
               </Button>
-              <Button
-                size="sm"
-                radius="full"
-                className="ml-2"
-                color="primary"
-                startContent={<CiShoppingCart size={20} />}
-                onClick={() => {
-                  addToCart(product);
-                }}
-              >
-                Add to Cart
-              </Button>
+              {!isDisabled && (
+                <Button
+                  size="sm"
+                  radius="full"
+                  className="ml-2"
+                  color="primary"
+                  startContent={<CiShoppingCart size={20} />}
+                  onClick={() => {
+                    addToCart(product);
+                  }}
+                >
+                  Add to Cart
+                </Button>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -107,6 +110,11 @@ const CardItems = ({ product }: CardItemsProps) => {
             <p className="text-gray-500 text-sm ">{product.apparel}</p>
           </div>
         </CardFooter>
+        <span
+          className={`absolute top-0 left-0 rounded-br-lg rounded-tl-lg ${product.inStock ? "bg-green-500" : "bg-red-500"} px-3 py-1.5 text-sm uppercase tracking-wider text-white`}
+        >
+          {product.inStock ? "In Stock" : "Out of Stock"}
+        </span>
       </Card>
     </div>
   );

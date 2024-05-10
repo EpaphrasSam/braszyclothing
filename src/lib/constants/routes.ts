@@ -28,6 +28,10 @@ export const NavbarLinks: NavLinkTypes[] = [
     route: "/shop/women",
   },
   {
+    name: "Unisex",
+    route: "/shop/unisex",
+  },
+  {
     name: "Gifts",
     route: "/gift",
   },

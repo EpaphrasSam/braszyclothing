@@ -1,7 +1,6 @@
 "use client";
 
 import CardItems from "@/components/global/CardItems";
-import { ProductCardType } from "@/types/ProductCardType";
 import { ProductType } from "@/types/SanityTypes";
 import { Divider } from "@nextui-org/react";
 import React from "react";
@@ -46,17 +45,23 @@ const LatestProducts = ({ products }: ProductCardProps) => {
       <h2 className="text-3xl font-semibold mb-4 capitalize">
         Latest products
       </h2>
-      <Carousel
-        responsive={responsive}
-        ssr={true}
-        autoPlay
-        autoPlaySpeed={3000}
-        infinite
-      >
-        {products.map((product) => (
-          <CardItems key={product.id} product={product} />
-        ))}
-      </Carousel>
+      {products.length === 0 ? (
+        <div className="text-center text-4xl font-semibold text-gray-500 my-20 pb-10">
+          No latest products
+        </div>
+      ) : (
+        <Carousel
+          responsive={responsive}
+          ssr={true}
+          autoPlay
+          autoPlaySpeed={3000}
+          infinite
+        >
+          {products.map((product) => (
+            <CardItems key={product.id} product={product} />
+          ))}
+        </Carousel>
+      )}
     </div>
   );
 };

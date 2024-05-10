@@ -9,12 +9,14 @@ export default defineType({
       name: "title",
       title: "Apparel Title",
       type: "string",
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "category",
-      type: "reference",
-      title: "Category",
-      to: [{ type: "category" }],
+      name: "categories",
+      title: "Categories",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "category" }] }],
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "slug",
@@ -24,6 +26,7 @@ export default defineType({
         source: "title",
         maxLength: 96,
       },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "images",

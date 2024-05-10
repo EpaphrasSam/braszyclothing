@@ -15,7 +15,7 @@ const SideDrawer = ({ isOpen, onClose }: SideDrawerProps) => {
       <Drawer
         PaperProps={{
           sx: {
-            width: "350px",
+            width: "400px",
             // borderTopLeftRadius: "10px",
             // borderBottomLeftRadius: "10px",
           },
@@ -25,7 +25,7 @@ const SideDrawer = ({ isOpen, onClose }: SideDrawerProps) => {
         onClose={onClose}
         variant="temporary"
       >
-        <Cart />
+        <Cart onClose={onClose} />
       </Drawer>
     </>
   );

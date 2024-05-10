@@ -1,6 +1,11 @@
 "use server";
 
-import { BannerTypes, CategoryType, ProductType } from "@/types/SanityTypes";
+import {
+  ApparelType,
+  BannerTypes,
+  CategoryType,
+  ProductType,
+} from "@/types/SanityTypes";
 import { client } from "../../sanity/lib/client";
 
 export const getBanners = async () => {
@@ -39,6 +44,27 @@ export const getCategory = async () => {
     return { categories, error: null };
   } catch (error: any) {
     return { categories: [], error };
+  }
+};
+
+export const getApparels = async () => {
+  try {
+    const query = `*[_type == "apparel"]{
+      "id": _id,
+      title,
+      "slug": slug.current,
+      "imageUrls": images[].asset->url,
+      "categories": categories[]-> {
+        "id": _id,
+        title,
+        "slug": slug.current
+      }
+    }
+    `;
+    const apparels: ApparelType[] = await client.fetch(query);
+    return { apparels, error: null };
+  } catch (error: any) {
+    return { apparels: [], error };
   }
 };
 

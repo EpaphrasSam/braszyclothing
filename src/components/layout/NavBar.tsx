@@ -29,7 +29,7 @@ import SideDrawer from "./SideDrawer";
 import { MdOutlineClose } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa6";
 import { useStore } from "@/store/useStore";
-import useCartStore, { CartState } from "@/store/cart";
+import useCartStore from "@/store/cart";
 import ProfileDrawer from "./ProfileDrawer";
 
 const chevronVariants = {
@@ -284,7 +284,9 @@ const NavBar = () => {
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             />
             <Badge
-              content={cartItems && cartItems.length > 0 && cartItems.length}
+              content={
+                cartItems && cartItems.length > 0 ? cartItems.length : null
+              }
               color="primary"
             >
               <CiShoppingCart
