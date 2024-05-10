@@ -42,7 +42,7 @@ const CardItems = ({ product }: CardItemsProps) => {
   const isDisabled = !product.inStock;
 
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-row w-full max-[670px]:justify-center gap-4 flex-wrap">
       <Card
         isFooterBlurred
         className="relative w-[270px] h-[400px] m-2 transition ease-in-out delay-150 duration-300 hover:scale-105"

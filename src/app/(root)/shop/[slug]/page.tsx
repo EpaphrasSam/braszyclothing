@@ -1,5 +1,6 @@
 import Shop from "@/components/pages/shop/Shop";
 import { getAllProductsByCategory } from "@/services/sanityServices";
+
 export default async function CategoryPage({
   params,
   searchParams,
@@ -9,7 +10,8 @@ export default async function CategoryPage({
 }) {
   const { AllProducts, error } = await getAllProductsByCategory(
     params.slug,
-    searchParams?.filter
+    { apparel: searchParams?.apparel },
+    "a-z"
   );
 
   return (
@@ -17,7 +19,7 @@ export default async function CategoryPage({
       <Shop
         allProducts={AllProducts}
         slug={params.slug}
-        filter={searchParams?.filter}
+        apparel={searchParams?.apparel}
       />
     </div>
   );

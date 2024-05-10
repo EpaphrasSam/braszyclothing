@@ -90,11 +90,12 @@ export const getLatestProducts = async () => {
 
 export const getProduct = async (slug: string) => {
   try {
-    const query = `*[_type == "product" && slug.current == "unisex"][0]{
+    const query = `*[_type == "product" && slug.current == "${slug}"][0]{
       "id": _id,
       name,
       price,
       description,
+      inStock,
       "apparel": apparel-> title,
       "categoryName": category->title,
       "categorySlug": category->slug.current,
@@ -110,25 +111,61 @@ export const getProduct = async (slug: string) => {
 
 export const getAllProductsByCategory = async (
   slug: string,
-  filter?: string
+  filters: { [key: string]: any },
+  sortBy?: string
 ) => {
   try {
     let baseQuery = `*[_type == "product" && category->slug.current == "${slug}"`;
-    let filterQuery = filter ? ` && apparel->slug.current == "${filter}"` : "";
-    let fieldsQuery = `]{
-  "id": _id,
-  name,
-  price,
-  description,
-  inStock,
-  "apparel": apparel->title,
-  "categoryName": category->title,
-  "categorySlug": category->slug.current,
-  "slug": slug.current,
-  "imageUrls": images[].asset->url
-}`;
 
-    let query = baseQuery + filterQuery + fieldsQuery;
+    let filterQuery = "";
+    if (filters) {
+      filterQuery = Object.entries(filters)
+        .map(([key, value]) => {
+          switch (key) {
+            case "apparel":
+              return ` && ${key}->slug.current == "${value}"`;
+            case "price":
+              return ` && price >= ${value[0]} && price <= ${value[1]}`;
+            default:
+              return ` && ${key} == "${value}"`;
+          }
+        })
+        .join("");
+    }
+
+    let sortQuery = "";
+    switch (sortBy) {
+      case "a-z":
+        sortQuery = " | order(name asc)";
+        break;
+      case "price-asc":
+        sortQuery = " | order(price asc)";
+        break;
+      case "price-desc":
+        sortQuery = " | order(price desc)";
+        break;
+      case "newest":
+        sortQuery = " | order(_createdAt desc)";
+        break;
+      case "oldest":
+        sortQuery = " | order(_createdAt asc)";
+        break;
+    }
+
+    let fieldsQuery = `{
+      "id": _id,
+      name,
+      price,
+      description,
+      inStock,
+      "apparel": apparel->title,
+      "categoryName": category->title,
+      "categorySlug": category->slug.current,
+      "slug": slug.current,
+      "imageUrls": images[].asset->url
+    }`;
+
+    let query = baseQuery + filterQuery + "]" + sortQuery + fieldsQuery;
 
     const response: ProductType[] = await client.fetch(query);
     return { AllProducts: response, error: null };

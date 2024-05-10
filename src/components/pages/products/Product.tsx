@@ -64,7 +64,7 @@ const Product = ({ product }: ProductProps) => {
         <div className="flex gap-2.5">
           <Button
             radius="sm"
-            color={`${isDisabled ? "default" : "secondary"}`}
+            color={`${isDisabled ? "default" : "primary"}`}
             onClick={() => addToCart(product)}
             isDisabled={isDisabled}
           >

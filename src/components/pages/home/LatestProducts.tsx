@@ -3,8 +3,9 @@
 import CardItems from "@/components/global/CardItems";
 import { ProductType } from "@/types/SanityTypes";
 import { Divider } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
+import SkeletonLoader from "../../global/SkeletonLoader";
 
 const responsive = {
   LargeDesktop: {
@@ -39,13 +40,22 @@ interface ProductCardProps {
 }
 
 const LatestProducts = ({ products }: ProductCardProps) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (products) {
+      setLoading(false);
+    }
+  }, [products]);
   return (
     <div>
       <Divider className="my-4" />
       <h2 className="text-3xl font-semibold mb-4 capitalize">
         Latest products
       </h2>
-      {products.length === 0 ? (
+      {loading ? (
+        <SkeletonLoader />
+      ) : products.length === 0 ? (
         <div className="text-center text-4xl font-semibold text-gray-500 my-20 pb-10">
           No latest products
         </div>

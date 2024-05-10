@@ -21,7 +21,7 @@ const AdminHeader = (props: any) => {
       <NavbarContent justify="center">
         <div className="transition ease-in-out duration-300 hover:scale-105">
           <Image
-            src="/logo.jpg"
+            src="/logo.png"
             alt="logo"
             width={50}
             height={50}

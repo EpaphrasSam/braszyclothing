@@ -254,7 +254,7 @@ const NavBar = () => {
           {NavbarLinks.map(renderLink)}
         </NavbarContent>
 
-        <NavbarContent justify="center">
+        <NavbarContent justify="center" className="max-sm:mr-10">
           <NavbarItem>
             <Link href="/">
               <motion.div
@@ -265,7 +265,7 @@ const NavBar = () => {
                 variants={brandVariants}
               >
                 <Image
-                  src="/logo.jpg"
+                  src="/logo.png"
                   alt="logo"
                   width={50}
                   height={50}

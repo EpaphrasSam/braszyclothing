@@ -11,23 +11,28 @@ import { MdDeleteOutline } from "react-icons/md";
 const Cart = ({ onClose }: { onClose: () => void }) => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
 
-  const { addToCart, removeFromCart, incrementQuantity, decrementQuantity } =
-    useCartStore((state) => ({
-      addToCart: state.addToCart,
+  const { removeFromCart, incrementQuantity, decrementQuantity } = useCartStore(
+    (state) => ({
       removeFromCart: state.removeFromCart,
       incrementQuantity: state.incrementQuantity,
       decrementQuantity: state.decrementQuantity,
-    }));
+    })
+  );
 
   return (
     <>
-      {cartItems && cartItems.length > 0 ? (
+      {cartItems && cartItems.length === 0 ? (
         <div className="p-5 h-full flex justify-center items-center">
-          <div className="flex flex-col gap-y-6">
+          <div className="flex items-center justify-center flex-col gap-y-6">
             <div className="text-xl text-gray-600 tracking-wider font-semibold">
               YOUR CART IS EMPTY
             </div>
-            <Button color="primary" radius="none" className="w-[200px]">
+            <Button
+              onClick={onClose}
+              color="primary"
+              radius="none"
+              className="w-[200px]"
+            >
               Continue Shopping
             </Button>
           </div>

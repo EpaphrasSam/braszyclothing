@@ -1,5 +1,4 @@
 import Product from "@/components/pages/products/Product";
-import { menProducts } from "@/lib/constants/products";
 import { getProduct } from "@/services/sanityServices";
 
 export default async function ProductPage({
