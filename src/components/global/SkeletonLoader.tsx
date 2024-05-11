@@ -2,12 +2,15 @@
 
 import React from "react";
 import { Skeleton, Card } from "@nextui-org/react";
-import Image from "next/image";
 
-const SkeletonLoader = () => {
+interface SkeletonLoaderProps {
+  array?: number;
+}
+
+const SkeletonLoader = ({ array = 4 }: SkeletonLoaderProps) => {
   return (
     <div className="flex flex-row w-full pt-4 max-sm:justify-center justify-between gap-4 flex-wrap">
-      {Array(4)
+      {Array(array)
         .fill(null)
         .map((_, index) => (
           <Card key={index} className="w-[270px] h-[400px]" radius="lg">

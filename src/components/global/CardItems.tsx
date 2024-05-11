@@ -103,7 +103,7 @@ const CardItems = ({ product }: CardItemsProps) => {
         <CardFooter className="flex flex-col absolute px-4 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10">
           <div className="flex justify-between w-full">
             <p className="text-black text-sm truncate">{product.name}</p>
-            <p className="text-black text-sm">{product.price}</p>
+            <p className="text-black text-sm">${product.price}</p>
           </div>
           <div className="flex justify-between w-full">
             <p className="text-gray-500 text-sm ">{product.categoryName} </p>

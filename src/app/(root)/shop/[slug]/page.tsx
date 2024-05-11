@@ -8,9 +8,9 @@ export default async function CategoryPage({
   params: { slug: string };
   searchParams?: { [key: string]: string };
 }) {
-  const { AllProducts, error } = await getAllProductsByCategory(
+  const { AllProducts, totalPages, error } = await getAllProductsByCategory(
     params.slug,
-    { apparel: searchParams?.apparel },
+    searchParams?.apparel ? { apparel: searchParams?.apparel } : {},
     "a-z"
   );
 
@@ -19,7 +19,8 @@ export default async function CategoryPage({
       <Shop
         allProducts={AllProducts}
         slug={params.slug}
-        apparel={searchParams?.apparel}
+        search={searchParams}
+        total={totalPages!}
       />
     </div>
   );

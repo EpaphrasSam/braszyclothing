@@ -110,7 +110,7 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
               ))}
           </div>
           <Divider className="my-4" />
-          <div className="">
+          <div>
             <div className="my-2 flex justify-between">
               <p className="text-lg text-gray-600 font-semibold">Total</p>
               <p className="text-lg text-gray-600 font-semibold">

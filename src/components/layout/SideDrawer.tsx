@@ -15,7 +15,7 @@ const SideDrawer = ({ isOpen, onClose }: SideDrawerProps) => {
       <Drawer
         PaperProps={{
           sx: {
-            width: "400px",
+            width: "370px",
             // borderTopLeftRadius: "10px",
             // borderBottomLeftRadius: "10px",
           },

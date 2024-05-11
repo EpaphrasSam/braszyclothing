@@ -78,7 +78,7 @@ const ApparelsCard = ({ apparels }: ApparelsCardProps) => {
                 <ImageTransition images={apparel.imageUrls} />
               </motion.div>
               <CardFooter className="absolute px-4 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10">
-                <div className="flex w-full justify-between">
+                <div className="flex w-full justify-evenly">
                   {apparel.categories.map((category) => (
                     <div
                       key={category.id}

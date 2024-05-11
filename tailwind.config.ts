@@ -18,11 +18,12 @@ const config: Config = {
     },
   },
   plugins: [
-    nextui({
-      layout: {
-        dividerWeight: "1.5px",
-      },
-    }),
+    nextui(),
+    //   {
+    //   layout: {
+    //     dividerWeight: "1.5px",
+    //   },
+    // }
     require("tailwindcss-animate"),
     require("tailwind-scrollbar"),
   ],

@@ -111,8 +111,10 @@ export const getProduct = async (slug: string) => {
 
 export const getAllProductsByCategory = async (
   slug: string,
-  filters: { [key: string]: any },
-  sortBy?: string
+  filters?: { [key: string]: any },
+  sortBy?: string,
+  page: number = 1,
+  itemsPerPage: number = 1
 ) => {
   try {
     let baseQuery = `*[_type == "product" && category->slug.current == "${slug}"`;
@@ -123,11 +125,18 @@ export const getAllProductsByCategory = async (
         .map(([key, value]) => {
           switch (key) {
             case "apparel":
-              return ` && ${key}->slug.current == "${value}"`;
+              if (Array.isArray(value)) {
+                const apparelQuery = value
+                  .map((apparel) => `${key}->slug.current == "${apparel}"`)
+                  .join(" || ");
+                return ` && (${apparelQuery})`;
+              } else {
+                return ` && ${key}->slug.current == "${value}"`;
+              }
             case "price":
               return ` && price >= ${value[0]} && price <= ${value[1]}`;
             default:
-              return ` && ${key} == "${value}"`;
+              return ` && ${key} == ${typeof value === "string" && (value.toLowerCase() === "true" || value.toLowerCase() === "false") ? JSON.parse(value) : `"${value}"`}`;
           }
         })
         .join("");
@@ -165,11 +174,48 @@ export const getAllProductsByCategory = async (
       "imageUrls": images[].asset->url
     }`;
 
-    let query = baseQuery + filterQuery + "]" + sortQuery + fieldsQuery;
+    let start = (page - 1) * itemsPerPage;
+    let end = page * itemsPerPage;
+
+    let countQuery = `count(${baseQuery + filterQuery}])`;
+    let totalItems = await client.fetch(countQuery);
+    let totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    let query =
+      baseQuery +
+      filterQuery +
+      `][${start}...${end}]` +
+      sortQuery +
+      fieldsQuery;
 
     const response: ProductType[] = await client.fetch(query);
-    return { AllProducts: response, error: null };
+    return { AllProducts: response, totalPages: totalPages, error: null };
   } catch (error: any) {
     return { AllProducts: [], error };
+  }
+};
+
+export const getUniqueApparelsAndPrices = async (slug: string) => {
+  try {
+    const apparelQuery = `*[_type == "apparel" && category->slug.current == "${slug}"]{
+      "id": _id,
+      title,
+      "slug": slug.current
+    }`;
+
+    const apparelResponse = await client.fetch(apparelQuery);
+
+    const priceQuery = `*[_type == "product" && category->slug.current == "${slug}"] | order(price desc)[0]{
+      "highestPrice": price
+    }`;
+    const priceResponse = await client.fetch(priceQuery);
+
+    return {
+      apparel: apparelResponse,
+      highestPrice: priceResponse?.highestPrice || null,
+      error: null,
+    };
+  } catch (error: any) {
+    return { category: null, highestPrice: null, error };
   }
 };
