@@ -46,7 +46,7 @@ const ImageGallery = ({ images, inStock }: ImageGalleryProps) => {
         <span
           className={`absolute top-0 left-0 rounded-br-lg rounded-tl-lg ${inStock ? "bg-green-500" : "bg-red-500"} px-3 py-1.5 text-sm uppercase tracking-wider text-white`}
         >
-          {inStock ? "In Stock" : "Out of Stock"}
+          {inStock ? "In Stock" : "Sold Out"}
         </span>
       </div>
     </div>

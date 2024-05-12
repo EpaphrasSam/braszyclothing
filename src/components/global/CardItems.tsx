@@ -113,7 +113,7 @@ const CardItems = ({ product }: CardItemsProps) => {
         <span
           className={`absolute top-0 left-0 rounded-br-lg rounded-tl-lg ${product.inStock ? "bg-green-500" : "bg-red-500"} px-3 py-1.5 text-sm uppercase tracking-wider text-white`}
         >
-          {product.inStock ? "In Stock" : "Out of Stock"}
+          {product.inStock ? "In Stock" : "Sold Out"}
         </span>
       </Card>
     </div>

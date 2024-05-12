@@ -25,7 +25,7 @@ const Shop = ({ slug, search, allProducts, total }: ShopProps) => {
   const [sortKey, setSortKey] = useState<any>(productsSortOptions[0].value);
   const [filters, setFilters] = useState({});
   const [page, setPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 10;
   const [showNav, setShowNav] = useState({
     leftNav: false,
   });
@@ -117,7 +117,9 @@ const Shop = ({ slug, search, allProducts, total }: ShopProps) => {
         </div>
         <div className="flex flex-row w-full max-[670px]:justify-center gap-4 flex-wrap">
           {isLoading ? (
-            <SkeletonLoader array={4} />
+            <SkeletonLoader
+              array={totalPages && totalPages === page ? itemsPerPage : 4}
+            />
           ) : products.length === 0 ? (
             <div className="w-full my-20 text-center text-4xl font-bold text-gray-600">
               No products available

@@ -109,8 +109,6 @@ const FilterDrawer = ({
     return !!tempFilters.error;
   };
 
-  console.log(tempFilters);
-
   return (
     <>
       <Drawer
@@ -239,7 +237,7 @@ const FilterDrawer = ({
                         })
                       }
                     >
-                      Out of Stock
+                      Sold Out
                     </Checkbox>
                   </div>
                 </AccordionItem>

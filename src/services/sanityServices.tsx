@@ -75,6 +75,7 @@ export const getLatestProducts = async () => {
       name,
       price,
       description,
+      inStock,
       "apparel": apparel-> title,
       "categoryName": category->title,
       "categorySlug": category->slug.current,
