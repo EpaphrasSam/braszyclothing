@@ -11,7 +11,9 @@ export default async function CategoryPage({
   const { AllProducts, totalPages, error } = await getAllProductsByCategory(
     params.slug,
     searchParams?.apparel ? { apparel: searchParams?.apparel } : {},
-    "a-z"
+    "a-z",
+    searchParams?.page ? Number(searchParams.page) : 1,
+    10
   );
 
   return (

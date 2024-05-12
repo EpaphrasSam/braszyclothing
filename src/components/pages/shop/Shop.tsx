@@ -24,7 +24,7 @@ const Shop = ({ slug, search, allProducts, total }: ShopProps) => {
   const searchParams = useSearchParams();
   const [sortKey, setSortKey] = useState<any>(productsSortOptions[0].value);
   const [filters, setFilters] = useState({});
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(search.page ? Number(search.page) : 1);
   const itemsPerPage = 10;
   const [showNav, setShowNav] = useState({
     leftNav: false,
@@ -35,6 +35,8 @@ const Shop = ({ slug, search, allProducts, total }: ShopProps) => {
       [key: string]: any;
     } = {};
     for (const [key, value] of searchParams.entries()) {
+      if (key === "page") continue;
+
       if (value.includes(",")) {
         initialFilters[key] = value.split(",");
       } else {
@@ -46,13 +48,37 @@ const Shop = ({ slug, search, allProducts, total }: ShopProps) => {
 
   useEffect(() => {
     if (slug) {
-      const filterString = Object.entries(filters)
-        .map(([key, value]) => `${key}=${value}`)
-        .join("&");
-      const path = `/shop/${slug}` + (filterString ? `?${filterString}` : "");
+      const searchParams = new URLSearchParams();
+
+      Object.entries(filters).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          searchParams.set(key, value.join(","));
+        } else {
+          searchParams.set(key, String(value));
+        }
+      });
+
+      if (page > 1) {
+        searchParams.set("page", String(page));
+      } else {
+        searchParams.delete("page");
+      }
+
+      const path = `/shop/${slug}?${searchParams.toString()}`;
+
       router.push(path, undefined);
     }
-  }, [slug, router, filters]);
+  }, [slug, router, filters, page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [
+    search.apparel,
+    search.price,
+    search.inStock,
+    search.newRelease,
+    sortKey,
+  ]);
 
   const fetcher = async () => {
     const { AllProducts, totalPages, error } = await getAllProductsByCategory(
@@ -135,7 +161,7 @@ const Shop = ({ slug, search, allProducts, total }: ShopProps) => {
           )}
         </div>
       </div>
-      {!isLoading && totalPages && totalPages > 1 && (
+      {totalPages && totalPages > 1 && (
         <div className="flex justify-center my-4">
           <Pagination
             isCompact

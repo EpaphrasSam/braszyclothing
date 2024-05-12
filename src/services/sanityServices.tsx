@@ -115,7 +115,7 @@ export const getAllProductsByCategory = async (
   filters?: { [key: string]: any },
   sortBy?: string,
   page: number = 1,
-  itemsPerPage: number = 1
+  itemsPerPage: number = 10
 ) => {
   try {
     let baseQuery = `*[_type == "product" && category->slug.current == "${slug}"`;
@@ -137,7 +137,11 @@ export const getAllProductsByCategory = async (
             case "price":
               return ` && price >= ${value[0]} && price <= ${value[1]}`;
             default:
-              return ` && ${key} == ${typeof value === "string" && (value.toLowerCase() === "true" || value.toLowerCase() === "false") ? JSON.parse(value) : `"${value}"`}`;
+              if (value.toLowerCase() === "false") {
+                return ` && ${key} == null`;
+              } else {
+                return ` && ${key} == ${value}`;
+              }
           }
         })
         .join("");
@@ -190,6 +194,7 @@ export const getAllProductsByCategory = async (
       fieldsQuery;
 
     const response: ProductType[] = await client.fetch(query);
+
     return { AllProducts: response, totalPages: totalPages, error: null };
   } catch (error: any) {
     return { AllProducts: [], error };
