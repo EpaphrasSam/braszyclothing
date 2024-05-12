@@ -31,7 +31,7 @@ function useDebounce(value: string, delay: number) {
 
 const SearchBar = ({ isOpen, onClose }: SearchBarProps) => {
   const [query, setQuery] = useState("");
-  const debouncedQuery = useDebounce(query, 1000);
+  const debouncedQuery = useDebounce(query, 500);
   const [hasSearched, setHasSearched] = useState(false);
 
   const fetcher = async () => {
