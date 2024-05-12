@@ -43,7 +43,7 @@ const SearchBar = ({ isOpen, onClose }: SearchBarProps) => {
       throw error;
     }
 
-    setHasSearched(true); // Add this line
+    setHasSearched(true);
 
     return search;
   };
@@ -67,7 +67,7 @@ const SearchBar = ({ isOpen, onClose }: SearchBarProps) => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (query !== "") {
+    if (query === "") {
       setHasSearched(false);
     }
   }, [query]);

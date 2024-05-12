@@ -37,7 +37,8 @@ const SearchResults = ({ data, loading, onClose }: SearchResultsProps) => {
           <div key={categoryName} className="flex flex-col">
             <p className="text-base font-bold text-gray-600">{categoryName}</p>
             <Divider className="my-2" />
-            <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden scrollbar-none">
+            {/* <div className="flex flex-col gap-2 overflow-y-scroll overflow-x-hidden scrollbar-none"> */}
+            <div className="flex flex-wrap">
               {Object.entries(apparels).map(([apparel, products]) => (
                 <div key={apparel} className="p-1 px-4">
                   <p className="pb-2 font-semibold text-gray-600">{apparel}</p>
