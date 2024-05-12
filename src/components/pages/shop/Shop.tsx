@@ -144,7 +144,7 @@ const Shop = ({ slug, search, allProducts, total }: ShopProps) => {
         <div className="flex flex-row w-full max-[670px]:justify-center gap-4 flex-wrap">
           {isLoading ? (
             <SkeletonLoader
-              array={totalPages && totalPages === page ? itemsPerPage : 4}
+              array={totalPages && totalPages !== page ? itemsPerPage : 4}
             />
           ) : products.length === 0 ? (
             <div className="w-full my-20 text-center text-4xl font-bold text-gray-600">
@@ -161,7 +161,7 @@ const Shop = ({ slug, search, allProducts, total }: ShopProps) => {
           )}
         </div>
       </div>
-      {totalPages && totalPages > 1 && (
+      {products.length > 0 && totalPages && totalPages > 1 && (
         <div className="flex justify-center my-4">
           <Pagination
             isCompact

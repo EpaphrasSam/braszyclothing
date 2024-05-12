@@ -92,6 +92,11 @@ const FilterDrawer = ({
   useEffect(() => {
     if (validation !== undefined) {
       dispatch({ type: "SET_ERROR", payload: validation });
+    } else {
+      dispatch({
+        type: "SET_ERROR",
+        payload: { fromError: null, toError: null },
+      });
     }
   }, [validation]);
 
@@ -171,6 +176,9 @@ const FilterDrawer = ({
                   </CheckboxGroup>
                 </AccordionItem>
                 <AccordionItem title="Price" key="price">
+                  <div className="px-5">
+                    The highest price is ${data?.highestPrice}
+                  </div>
                   <div className="flex gap-5 justify-evenly px-5 py-3">
                     <Input
                       startContent="$"
@@ -199,7 +207,6 @@ const FilterDrawer = ({
                           : ""
                       }
                       max={data?.highestPrice}
-                      description={`Highest Price: $${data?.highestPrice}`}
                       isInvalid={!!tempFilters.error?.toError}
                       errorMessage={tempFilters.error?.toError}
                       onChange={(e) => handlePriceChange(e.target.value, 1)}
