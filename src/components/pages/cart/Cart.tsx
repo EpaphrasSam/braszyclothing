@@ -58,7 +58,7 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
               cartItems.map((item) => (
                 <>
                   <div key={item.id}>
-                    <div className="flex justify-between w-full">
+                    <div className="flex w-full relative">
                       <Image
                         src={item.imageUrls[0]}
                         alt={item.name}
@@ -66,7 +66,7 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
                         height={100}
                         className="object-cover object-center rounded-sm"
                       />
-                      <div className="flex flex-col ml-4">
+                      <div className="flex flex-col ml-4 w-40">
                         <div className="text-lg font-semibold">{item.name}</div>
                         <div>
                           <span className="text-base font-semibold">
@@ -100,7 +100,7 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
                           />
                         </div>
                       </div>
-                      <span className="flex justify-end text-gray-500 font-semibold">
+                      <span className="absolute top-0 right-0 text-gray-500 font-semibold">
                         ${(item.price * item.quantity!).toFixed(2)}
                       </span>
                     </div>

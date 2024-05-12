@@ -43,3 +43,14 @@ export interface ApparelType {
     slug: string;
   }[];
 }
+
+export interface SearchType {
+  [categoryName: string]: {
+    [apparel: string]: {
+      id: string;
+      name: string;
+      slug: string;
+      imageUrls: string[];
+    }[];
+  };
+}

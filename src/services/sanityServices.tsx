@@ -5,8 +5,10 @@ import {
   BannerTypes,
   CategoryType,
   ProductType,
+  SearchType,
 } from "@/types/SanityTypes";
 import { client } from "../../sanity/lib/client";
+import _ from "lodash";
 
 export const getBanners = async () => {
   try {
@@ -223,5 +225,36 @@ export const getUniqueApparelsAndPrices = async (slug: string) => {
     };
   } catch (error: any) {
     return { category: null, highestPrice: null, error };
+  }
+};
+
+export const searchProducts = async (searchQuery: string) => {
+  if (!searchQuery) {
+    return { search: {}, error: null };
+  }
+
+  try {
+    const query = `*[_type == "product" && name match "${searchQuery}*"]{
+      "id": _id,
+      name,
+      "apparel": apparel-> title,
+      "categoryName": category->title,
+      "slug": slug.current,
+      "imageUrls": images[].asset->url
+    }`;
+    const response: SearchType[] = await client.fetch(query);
+
+    const groupedByCategory = _.groupBy(response, "categoryName");
+
+    const groupedByCategoryAndApparel = _.mapValues(
+      groupedByCategory,
+      (products) => {
+        return _.groupBy(products, "apparel");
+      }
+    );
+
+    return { search: groupedByCategoryAndApparel, error: null };
+  } catch (error: any) {
+    return { search: {}, error };
   }
 };
