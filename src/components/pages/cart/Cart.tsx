@@ -67,8 +67,10 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
                         className="object-cover object-center rounded-sm"
                       />
                       <div className="flex flex-col ml-4 w-40">
-                        <div className="text-lg font-semibold">{item.name}</div>
-                        <div>
+                        <div className="text-lg font-semibold w-32">
+                          {item.name}
+                        </div>
+                        <div className="w-32">
                           <span className="text-base font-semibold">
                             ${item.price}
                           </span>
