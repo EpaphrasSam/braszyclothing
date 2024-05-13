@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "../globals.css";
 import "react-multi-carousel/lib/styles.css";
 import { Providers } from "../providers";
 import NavBar from "@/components/layout/NavBar";
 import Footer from "@/components/layout/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Braszy Clothing",
