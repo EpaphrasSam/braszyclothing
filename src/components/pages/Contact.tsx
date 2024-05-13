@@ -33,7 +33,7 @@ const Contact = () => {
       </Head>
 
       <main className="bg-white min-h-screen flex items-center justify-center p-10">
-        <div className="max-w-4xl w-full bg-white rounded-lg shadow-2xl overflow-hidden flex md:flex-row flex-col">
+        <div className="max-w-4xl w-full bg-white rounded-lg shadow-2xl  flex md:flex-row flex-col">
           <div className="md:w-1/2 p-5">
             <Image src={image} alt="Contact Us" layout="responsive" width={500} height={500} objectFit="cover" />
           </div>
@@ -42,7 +42,7 @@ const Contact = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <input type="text" name="name" id="name" placeholder="Name" required
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  focus:border-black sm:text-sm" />
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-black focus:border-black sm:text-sm" />
               </div>
               <div>
                 <input type="email" name="email" id="email" placeholder="Email" required
