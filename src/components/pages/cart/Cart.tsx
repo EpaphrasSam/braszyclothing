@@ -55,7 +55,7 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
           <Divider className="my-4" />
           <div className="flex flex-col gap-4 scrollbar-thin scrollbar-thumb-gray-500  overflow-y-scroll flex-grow">
             {cartItems &&
-              cartItems.map((item) => (
+              cartItems.map((item, index) => (
                 <>
                   <div key={item.id}>
                     <div className="flex w-full relative">
@@ -67,11 +67,11 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
                         className="object-cover object-center rounded-sm"
                       />
                       <div className="flex flex-col ml-4 w-40">
-                        <div className="text-lg font-semibold w-32">
+                        <div className="text-sm text-gray-700 font-semibold w-32">
                           {item.name}
                         </div>
                         <div className="w-32">
-                          <span className="text-base font-semibold">
+                          <span className="text-sm font-semibold">
                             ${item.price}
                           </span>
                           {item.oldPrice && (
@@ -107,7 +107,10 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
                       </span>
                     </div>
                   </div>
-                  <Divider className="my-1" />
+                  {!cartItems?.length ||
+                    (index !== cartItems.length - 1 && (
+                      <Divider className="my-1" />
+                    ))}
                 </>
               ))}
           </div>
@@ -126,10 +129,15 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
                     .toFixed(2)}
               </p>
             </div>
-            <p className="mb-4 text-sm text-gray-400">
-              Taxes, shipping and discounts will be calculated at checkout
+            <p className="mb-4 text-[13px] text-gray-400">
+              Taxes, shipping and discounts calculated at checkout
             </p>
-            <Button className="text-lg" fullWidth color="secondary" radius="sm">
+            <Button
+              className="text-lg rounded-sm"
+              fullWidth
+              color="secondary"
+              radius="none"
+            >
               Checkout
             </Button>
           </div>
