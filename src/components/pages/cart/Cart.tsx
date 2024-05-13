@@ -71,7 +71,7 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
                           {item.name}
                         </div>
                         <div className="w-32">
-                          <span className="text-sm font-semibold">
+                          <span className="text-sm font-semibold text-gray-500">
                             ${item.price}
                           </span>
                           {item.oldPrice && (

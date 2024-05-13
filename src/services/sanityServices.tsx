@@ -205,13 +205,22 @@ export const getAllProductsByCategory = async (
 
 export const getUniqueApparelsAndPrices = async (slug: string) => {
   try {
-    const apparelQuery = `*[_type == "apparel" && category->slug.current == "${slug}"]{
+    const apparelQuery = `*[_type == "apparel"]{
       "id": _id,
       title,
-      "slug": slug.current
+      "slug": slug.current,
+      "categories": categories[]->{
+        "slug": slug.current
+      }
     }`;
 
     const apparelResponse = await client.fetch(apparelQuery);
+
+    const filteredApparel = apparelResponse
+      .filter((apparel: any) =>
+        apparel.categories.some((category: any) => category.slug === slug)
+      )
+      .map(({ categories, ...rest }: any) => rest);
 
     const priceQuery = `*[_type == "product" && category->slug.current == "${slug}"] | order(price desc)[0]{
       "highestPrice": price
@@ -219,7 +228,7 @@ export const getUniqueApparelsAndPrices = async (slug: string) => {
     const priceResponse = await client.fetch(priceQuery);
 
     return {
-      apparel: apparelResponse,
+      apparel: filteredApparel,
       highestPrice: priceResponse?.highestPrice || null,
       error: null,
     };
