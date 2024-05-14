@@ -30,20 +30,7 @@ const Product = ({ product }: ProductProps) => {
             {product.name}
           </h2>
         </div>
-        {/* <div className="mb-6 flex items-center gap-3 md:mb-10">
-          <Button
-            radius="full"
-            size="sm"
-            className="text-sm"
-            color="secondary"
-            endContent={<CiStar size={20} />}
-          >
-            4.2
-          </Button>
-          <span className="text-sm text-gray-500 transition duration-100">
-            56 ratings
-          </span>
-        </div> */}
+
         <div className="mb-4">
           <div className="flex gap-2 items-end">
             <span className="text-xl font-bold text-gray-800 md:text-2xl">
@@ -55,32 +42,39 @@ const Product = ({ product }: ProductProps) => {
               </span>
             )}
           </div>
-          <span className="text-sm text-gray-500">Incl. Vat plus shipping</span>
+          {/* <span className="text-sm text-gray-500">Incl. Vat plus shipping</span> */}
         </div>
-        <div className="mb-6 flex items-center gap-2 text-gray-500">
+        {/* <div className="mb-6 flex items-center gap-2 text-gray-500">
           <FiTruck size={20} />
           <span className="text-sm">2-4 days</span>
-        </div>
-        <div className="flex gap-2.5">
+        </div> */}
+        <div className="flex sm:w-1/2 w-full flex-col gap-2.5">
           <Button
-            radius="sm"
+            radius="none"
             color={`${isDisabled ? "default" : "primary"}`}
+            className="rounded-md"
+            size="lg"
             onClick={() => addToCart(product)}
             isDisabled={isDisabled}
           >
             Add To Cart
           </Button>
           <Button
-            radius="sm"
+            radius="none"
+            size="lg"
+            className="rounded-md"
             color={`${isDisabled ? "default" : "secondary"}`}
             isDisabled={isDisabled}
           >
             Checkout Now
           </Button>
         </div>
-        <p className="mt-12 text-base text-gray-500 tracking-wide">
-          {product.description}
-        </p>
+        <div className="mt-8 text-base text-gray-500 tracking-wide">
+          <p className="text-sm font-semibold text-gray-400">Description</p>
+          <p className="mt-2 text-base text-gray-700 tracking-wide">
+            {product.description}
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ const ImageGallery = ({ images, inStock }: ImageGalleryProps) => {
         {images.map((image, index) => (
           <div
             key={index}
-            className="overflow-hidden max-h-36 lg:max-h-[300px] lg:h-auto lg:w-full rounded-lg bg-gray-100"
+            className="overflow-hidden w-1/5 lg:w-full rounded-lg bg-gray-100"
           >
             <motion.img
               src={image}

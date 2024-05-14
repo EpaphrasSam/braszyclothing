@@ -53,7 +53,7 @@ const Cart = ({ onClose }: { onClose: () => void }) => {
             <p className="text-xs text-gray-600 font-semibold">TOTAL</p>
           </div>
           <Divider className="my-4" />
-          <div className="flex flex-col gap-4 scrollbar-thin scrollbar-thumb-gray-500  overflow-y-scroll flex-grow">
+          <div className="flex flex-col gap-4 scrollbar-thin scrollbar-thumb-gray-500  overflow-y-auto flex-grow">
             {cartItems &&
               cartItems.map((item, index) => (
                 <>

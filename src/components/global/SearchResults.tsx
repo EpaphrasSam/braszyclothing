@@ -30,7 +30,7 @@ const SearchResults = ({ data, loading, onClose }: SearchResultsProps) => {
   }
   return (
     <div
-      className={`absolute scrollbar-hide max-h-[250px] top-16 left-0 right-0 z-50 flex sm:flex-row flex-col overflow-scroll justify-evenly max-sm:gap-5 bg-white p-5`}
+      className={`absolute scrollbar-hide max-sm:max-h-[85vh] top-16 left-0 right-0 z-50 flex sm:flex-row flex-col overflow-auto justify-evenly max-sm:gap-5 bg-white p-5`}
     >
       {Object.entries(data).map(([categoryName, apparels]) => (
         <>
@@ -42,7 +42,7 @@ const SearchResults = ({ data, loading, onClose }: SearchResultsProps) => {
               {Object.entries(apparels).map(([apparel, products]) => (
                 <div key={apparel} className="p-1 px-4">
                   <p className="pb-2 font-semibold text-gray-600">{apparel}</p>
-                  <div className="flex flex-col max-h-[130px] p-1 gap-4 overflow-y-scroll overflow-x-hidden scrollbar-hide">
+                  <div className="flex flex-col max-h-[130px] p-1 gap-4 overflow-y-auto overflow-x-hidden scrollbar-hide">
                     {products.map((product) => (
                       <div key={product.id}>
                         <motion.div

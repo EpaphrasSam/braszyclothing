@@ -147,7 +147,7 @@ const FilterDrawer = ({
               <Spinner size="lg" />
             </div>
           ) : (
-            <div className="flex flex-col gap-4 scrollbar-hide scrollbar-thumb-gray-500  overflow-y-scroll flex-grow">
+            <div className="flex flex-col gap-4 scrollbar-hide scrollbar-thumb-gray-500  overflow-y-auto flex-grow">
               <Accordion variant="light" selectionMode="multiple">
                 <AccordionItem title="Product" key="product">
                   <CheckboxGroup
