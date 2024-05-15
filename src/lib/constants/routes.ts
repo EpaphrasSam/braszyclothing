@@ -31,10 +31,10 @@ export const NavbarLinks: NavLinkTypes[] = [
     name: "Unisex",
     route: "/shop/unisex",
   },
-  {
-    name: "Gifts",
-    route: "/gift",
-  },
+  // {
+  //   name: "Gifts",
+  //   route: "/gift",
+  // },
   {
     name: "Contact",
     route: "/contact",

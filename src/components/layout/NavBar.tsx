@@ -284,6 +284,7 @@ const NavBar = () => {
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             />
             <Badge
+              isInvisible={!cartItems || cartItems.length === 0}
               content={
                 cartItems && cartItems.length > 0 ? cartItems.length : null
               }

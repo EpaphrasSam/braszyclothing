@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import { TextField } from "@mui/material";
 import { Input } from "@nextui-org/react";
 import { FaArrowRightLong } from "react-icons/fa6";
 
@@ -31,14 +30,14 @@ const Footer = () => {
                   Shipping & Returns
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="/faq"
                   className="hover:text-gray-400 hover:underline"
                 >
                   FAQ
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
           <div>
@@ -52,7 +51,7 @@ const Footer = () => {
                   About Us
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="/careers"
                   className="hover:text-gray-400 hover:underline"
@@ -67,14 +66,14 @@ const Footer = () => {
                 >
                   Blog
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
           <div>
             <h3 className="text-lg font-bold mb-4">Follow Us</h3>
             <div className="flex space-x-4 justify-center">
               <Link
-                href="https://www.facebook.com/elcuzioclothing"
+                href="https://www.facebook.com/braszyclothing"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gray-400 hover:underline"
@@ -82,7 +81,7 @@ const Footer = () => {
                 <FaFacebook size={24} />
               </Link>
               <Link
-                href="https://www.instagram.com/elcuzioclothing/"
+                href="https://www.instagram.com/braszyclothing/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gray-400 hover:underline"
@@ -90,7 +89,7 @@ const Footer = () => {
                 <FaInstagram size={24} />
               </Link>
               <Link
-                href="https://twitter.com/elcuzioclothing"
+                href="https://twitter.com/braszyclothing"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gray-400 hover:underline"
