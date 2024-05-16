@@ -221,8 +221,8 @@ const Cart = () => {
                             </span>
                           )}
                         </div>
-                        <div className="md:hidden flex-grow flex gap-3 mt-8 items-center justify-center my-2">
-                          <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
+                        <div className="md:hidden flex-grow flex gap-1 mt-8 items-center justify-center my-2">
+                          <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4 sm:px-2">
                             <FiMinus
                               onClick={() => decrementQuantity(item.id)}
                               className="cursor-pointer hover:scale-105"
