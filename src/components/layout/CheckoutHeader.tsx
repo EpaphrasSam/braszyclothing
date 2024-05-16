@@ -7,23 +7,6 @@ import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 const CheckoutHeader = () => {
   const pathname = usePathname();
 
-  const getIdFromPathname = () => {
-    const pathSegments = pathname
-      .split("/")
-      .filter((segment) => segment !== "");
-    let id;
-
-    if (pathSegments.length > 2) {
-      id = pathSegments[1];
-    } else if (pathSegments.length === 2) {
-      id = pathSegments[1];
-    }
-
-    return id;
-  };
-
-  const id = getIdFromPathname();
-
   const isActive = (path: string) => {
     return pathname === path;
   };
@@ -39,20 +22,20 @@ const CheckoutHeader = () => {
           Cart
         </BreadcrumbItem>
         <BreadcrumbItem
-          href={`/checkouts/${id}/information`}
-          isCurrent={isActive(`/checkouts/${id}/information`)}
+          href={`/checkouts/information`}
+          isCurrent={isActive(`/checkouts/information`)}
         >
           Information
         </BreadcrumbItem>
         <BreadcrumbItem
-          href={`/checkouts/${id}/shipping`}
-          isCurrent={isActive(`/checkouts/${id}/shipping`)}
+          href={`/checkouts/shipping`}
+          isCurrent={isActive(`/checkouts/shipping`)}
         >
           Shipping
         </BreadcrumbItem>
         <BreadcrumbItem
-          href={`/checkouts/${id}/payment`}
-          isCurrent={isActive(`/checkouts/${id}/payment`)}
+          href={`/checkouts/payment`}
+          isCurrent={isActive(`/checkouts/payment`)}
         >
           Payment
         </BreadcrumbItem>

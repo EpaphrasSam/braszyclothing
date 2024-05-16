@@ -23,8 +23,7 @@ const Cart = () => {
   );
 
   const handleCheckout = () => {
-    const id = 1;
-    router.push(`/checkouts/${id}/information`);
+    router.push(`/checkouts/information`);
   };
 
   if (!cartItems)

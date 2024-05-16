@@ -22,8 +22,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
   );
 
   const handleCheckout = () => {
-    const id = 1;
-    router.push(`/checkouts/${id}/information`);
+    router.push(`/checkouts/information`);
   };
 
   return (

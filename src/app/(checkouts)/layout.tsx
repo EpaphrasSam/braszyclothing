@@ -11,7 +11,8 @@ export default function CheckLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="flex h-screen lg:overflow-hidden">
+    <main className="flex">
+      {/* <main className="flex h-screen lg:overflow-hidden"> */}
       <div className="lg:w-[70%] w-full py-5 sm:px-5 px-2">
         <Image
           src="/logo.png"
@@ -19,13 +20,13 @@ export default function CheckLayout({
           height={100}
           alt="Logo"
           className="w-auto h-auto"
+          priority
         />
         <OrderAccordion />
         <CheckoutHeader />
         <Divider className="mb-6 mt-4" />
-        <div className="overflow-y-auto scrollbar-thin h-full mb-6">
-          {children}
-        </div>
+        {/* <div className="overflow-y-auto scrollbar-thin">{children}</div> */}
+        {children}
       </div>
       <div className="max-lg:hidden w-[30%] sticky top-0">
         <OrderSummary />
