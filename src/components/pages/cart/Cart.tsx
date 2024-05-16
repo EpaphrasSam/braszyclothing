@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useStore } from "@/store/useStore";
 import useCartStore from "@/store/cart";
 import { IoCloseOutline } from "react-icons/io5";
@@ -14,6 +14,7 @@ import {
   TableRow,
   TableColumn,
   TableCell,
+  Pagination,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { FiMinus, FiPlus } from "react-icons/fi";
@@ -21,6 +22,8 @@ import { MdDeleteOutline } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
 const Cart = () => {
+  const rowsPerPage = 10;
+  const [page, setPage] = useState(1);
   const router = useRouter();
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
 
@@ -32,6 +35,15 @@ const Cart = () => {
     })
   );
 
+  const pages = Math.ceil(cartItems ? cartItems?.length / rowsPerPage : 0);
+
+  const items = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return cartItems?.slice(start, end);
+  }, [page, cartItems]);
+
   const handleCheckout = () => {
     router.push(`/checkouts/information`);
   };
@@ -42,6 +54,7 @@ const Cart = () => {
         <Spinner />
       </div>
     );
+
   return (
     <div className="py-5 sm:px-5 px-3  h-full">
       {cartItems && cartItems.length === 0 ? (
@@ -159,91 +172,107 @@ const Cart = () => {
               ))}
           </div> */}
 
-          <Table aria-label="Your Cart">
+          <Table
+            aria-label="Your Cart"
+            bottomContent={
+              pages > 1 && (
+                <div className="flex w-full justify-center">
+                  <Pagination
+                    isCompact
+                    showControls
+                    showShadow
+                    color="primary"
+                    page={page}
+                    total={pages}
+                    onChange={(page) => setPage(page)}
+                  />
+                </div>
+              )
+            }
+          >
             <TableHeader>
               <TableColumn>Product</TableColumn>
               <TableColumn className="hidden md:block">Quantity</TableColumn>
               <TableColumn>Total</TableColumn>
             </TableHeader>
-            <TableBody>
-              {cartItems &&
-                cartItems.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>
-                      <div className="flex w-full relative">
-                        <Image
-                          src={item.imageUrls[0]}
-                          alt={item.name}
-                          width={80}
-                          height={80}
-                          className="object-cover object-center rounded-sm"
-                        />
-                        <div className="flex flex-col sm:ml-4 ml-2 w-40">
-                          <div className="text-sm text-gray-700 font-semibold">
-                            {item.name}
-                          </div>
-                          <div>
-                            <span className="text-sm font-semibold text-gray-500">
-                              ${item.price}
+            <TableBody items={items}>
+              {(item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <div className="flex w-full relative">
+                      <Image
+                        src={item.imageUrls[0]}
+                        alt={item.name}
+                        width={80}
+                        height={80}
+                        className="object-cover object-center rounded-sm"
+                      />
+                      <div className="flex flex-col sm:ml-4 ml-2 w-40">
+                        <div className="text-sm text-gray-700 font-semibold">
+                          {item.name}
+                        </div>
+                        <div>
+                          <span className="text-sm font-semibold text-gray-500">
+                            ${item.price}
+                          </span>
+                          {item.oldPrice && (
+                            <span className="ml-1 line-through text-xs">
+                              ${item.oldPrice}
                             </span>
-                            {item.oldPrice && (
-                              <span className="ml-1 line-through text-xs">
-                                ${item.oldPrice}
-                              </span>
-                            )}
-                          </div>
-                          <div className="md:hidden flex-grow flex gap-3 mt-8 items-center justify-center my-2">
-                            <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
-                              <FiMinus
-                                onClick={() => decrementQuantity(item.id)}
-                                className="cursor-pointer hover:scale-105"
-                              />
-                              <span className="text-gray-500">
-                                {item.quantity}
-                              </span>
-                              <FiPlus
-                                onClick={() => incrementQuantity(item.id)}
-                                className="mr-2 cursor-pointer hover:scale-110 hover:opacity-75 transition ease-in-out duration-300"
-                              />
-                            </div>
-                            <MdDeleteOutline
-                              size={24}
-                              className="cursor-pointer hover:opacity-75 transition ease-in-out duration-300"
-                              onClick={() => removeFromCart(item.id)}
-                              color="red"
+                          )}
+                        </div>
+                        <div className="md:hidden flex-grow flex gap-3 mt-8 items-center justify-center my-2">
+                          <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
+                            <FiMinus
+                              onClick={() => decrementQuantity(item.id)}
+                              className="cursor-pointer hover:scale-105"
+                            />
+                            <span className="text-gray-500">
+                              {item.quantity}
+                            </span>
+                            <FiPlus
+                              onClick={() => incrementQuantity(item.id)}
+                              className="mr-2 cursor-pointer hover:scale-110 hover:opacity-75 transition ease-in-out duration-300"
                             />
                           </div>
+                          <MdDeleteOutline
+                            size={24}
+                            className="cursor-pointer hover:opacity-75 transition ease-in-out duration-300"
+                            onClick={() => removeFromCart(item.id)}
+                            color="red"
+                          />
                         </div>
                       </div>
-                    </TableCell>
-                    <TableCell className="max-md:hidden">
-                      <div className="flex gap-3 items-center">
-                        <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
-                          <FiMinus
-                            onClick={() => decrementQuantity(item.id)}
-                            className="cursor-pointer hover:scale-105"
-                          />
-                          <span className="text-gray-500">{item.quantity}</span>
-                          <FiPlus
-                            onClick={() => incrementQuantity(item.id)}
-                            className="mr-2 cursor-pointer hover:scale-110 hover:opacity-75 transition ease-in-out duration-300"
-                          />
-                        </div>
-                        <MdDeleteOutline
-                          size={24}
-                          className="cursor-pointer hover:opacity-75 transition ease-in-out duration-300"
-                          onClick={() => removeFromCart(item.id)}
-                          color="red"
+                    </div>
+                  </TableCell>
+                  <TableCell className="max-md:hidden">
+                    <div className="flex gap-3 items-center">
+                      <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
+                        <FiMinus
+                          onClick={() => decrementQuantity(item.id)}
+                          className="cursor-pointer hover:scale-105"
+                        />
+                        <span className="text-gray-500">{item.quantity}</span>
+                        <FiPlus
+                          onClick={() => incrementQuantity(item.id)}
+                          className="mr-2 cursor-pointer hover:scale-110 hover:opacity-75 transition ease-in-out duration-300"
                         />
                       </div>
-                    </TableCell>
-                    <TableCell className="flex items-start">
-                      <span className="text-gray-500 font-semibold">
-                        ${(item.price * item.quantity!).toFixed(2)}
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      <MdDeleteOutline
+                        size={24}
+                        className="cursor-pointer hover:opacity-75 transition ease-in-out duration-300"
+                        onClick={() => removeFromCart(item.id)}
+                        color="red"
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell className="flex items-start">
+                    <span className="text-gray-500 font-semibold">
+                      ${(item.price * item.quantity!).toFixed(2)}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
 
