@@ -4,7 +4,17 @@ import React from "react";
 import { useStore } from "@/store/useStore";
 import useCartStore from "@/store/cart";
 import { IoCloseOutline } from "react-icons/io5";
-import { Button, Divider, Spinner } from "@nextui-org/react";
+import {
+  Button,
+  Divider,
+  Spinner,
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableColumn,
+  TableCell,
+} from "@nextui-org/react";
 import Image from "next/image";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
@@ -33,7 +43,7 @@ const Cart = () => {
       </div>
     );
   return (
-    <div className="p-5 h-full">
+    <div className="py-5 sm:px-5 px-3  h-full">
       {cartItems && cartItems.length === 0 ? (
         <div className="h-full flex justify-center items-center">
           <div className="flex items-center justify-center flex-col gap-y-6">
@@ -62,7 +72,7 @@ const Cart = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4">
             <div className="text-xs text-gray-600 font-semibold">Product</div>
             <div className="max-md:hidden text-xs text-gray-600 font-semibold">
               Quantity
@@ -147,7 +157,95 @@ const Cart = () => {
                   </div>
                 </React.Fragment>
               ))}
-          </div>
+          </div> */}
+
+          <Table aria-label="Your Cart">
+            <TableHeader>
+              <TableColumn>Product</TableColumn>
+              <TableColumn className="hidden md:block">Quantity</TableColumn>
+              <TableColumn>Total</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {cartItems &&
+                cartItems.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <div className="flex w-full relative">
+                        <Image
+                          src={item.imageUrls[0]}
+                          alt={item.name}
+                          width={80}
+                          height={80}
+                          className="object-cover object-center rounded-sm"
+                        />
+                        <div className="flex flex-col sm:ml-4 ml-2 w-40">
+                          <div className="text-sm text-gray-700 font-semibold">
+                            {item.name}
+                          </div>
+                          <div>
+                            <span className="text-sm font-semibold text-gray-500">
+                              ${item.price}
+                            </span>
+                            {item.oldPrice && (
+                              <span className="ml-1 line-through text-xs">
+                                ${item.oldPrice}
+                              </span>
+                            )}
+                          </div>
+                          <div className="md:hidden flex-grow flex gap-3 mt-8 items-center justify-center my-2">
+                            <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
+                              <FiMinus
+                                onClick={() => decrementQuantity(item.id)}
+                                className="cursor-pointer hover:scale-105"
+                              />
+                              <span className="text-gray-500">
+                                {item.quantity}
+                              </span>
+                              <FiPlus
+                                onClick={() => incrementQuantity(item.id)}
+                                className="mr-2 cursor-pointer hover:scale-110 hover:opacity-75 transition ease-in-out duration-300"
+                              />
+                            </div>
+                            <MdDeleteOutline
+                              size={24}
+                              className="cursor-pointer hover:opacity-75 transition ease-in-out duration-300"
+                              onClick={() => removeFromCart(item.id)}
+                              color="red"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="max-md:hidden">
+                      <div className="flex gap-3 items-center">
+                        <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
+                          <FiMinus
+                            onClick={() => decrementQuantity(item.id)}
+                            className="cursor-pointer hover:scale-105"
+                          />
+                          <span className="text-gray-500">{item.quantity}</span>
+                          <FiPlus
+                            onClick={() => incrementQuantity(item.id)}
+                            className="mr-2 cursor-pointer hover:scale-110 hover:opacity-75 transition ease-in-out duration-300"
+                          />
+                        </div>
+                        <MdDeleteOutline
+                          size={24}
+                          className="cursor-pointer hover:opacity-75 transition ease-in-out duration-300"
+                          onClick={() => removeFromCart(item.id)}
+                          color="red"
+                        />
+                      </div>
+                    </TableCell>
+                    <TableCell className="flex items-start">
+                      <span className="text-gray-500 font-semibold">
+                        ${(item.price * item.quantity!).toFixed(2)}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
 
           <Divider className="my-4" />
 
