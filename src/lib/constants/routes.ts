@@ -43,8 +43,12 @@ export const NavbarLinks: NavLinkTypes[] = [
     name: "About",
     route: "/about",
   },
-  // {
-  //   name: "New Releases",
-  //   route: "/new-releases",
-  // },
+   {
+     name: "Login",
+     route: "/login",
+   },
+   {
+     name: "SignUp",
+     route: "/signup",
+   }
 ];
