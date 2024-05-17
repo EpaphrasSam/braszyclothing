@@ -1,6 +1,8 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
+const token = process.env.NEXT_PUBLIC_UNIVERSAL_AUTH_TOKEN as string;
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -11,7 +13,7 @@ export async function POST(req: Request) {
       {
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${process.env.UNIVERSAL_AUTH_TOKEN}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -19,7 +21,7 @@ export async function POST(req: Request) {
       status: 200,
     });
   } catch (error: any) {
-    console.log(error);
+    // console.log(error);
     return new NextResponse(error, { status: 500 });
   }
 }

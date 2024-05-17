@@ -13,7 +13,7 @@ const OrderAccordion = () => {
   };
   return (
     <div className="my-2">
-      <Accordion variant="splitted" isCompact className="lg:hidden">
+      <Accordion variant="light" isCompact className="lg:hidden">
         <AccordionItem
           key={1}
           startContent={<CiShoppingCart size={28} />}

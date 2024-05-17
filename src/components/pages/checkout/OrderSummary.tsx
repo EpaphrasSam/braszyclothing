@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const OrderSummary = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
+  const totalAmount = useCartStore((state) => state.totalAmount);
   const [isCouponVisible, setIsCouponVisible] = useState(false);
 
   if (!cartItems) {
@@ -112,11 +113,7 @@ const OrderSummary = () => {
         </div>
         <Divider className="my-4" />
         <div className="flex justify-between font-bold text-lg">
-          <span>Estimated Total</span>$
-          {cartItems &&
-            cartItems
-              .reduce((total, item) => total + item.price * item.quantity!, 0)
-              .toFixed(2)}
+          <span>Estimated Total</span>${totalAmount(cartItems).toFixed(2)}
         </div>
       </div>
     </div>

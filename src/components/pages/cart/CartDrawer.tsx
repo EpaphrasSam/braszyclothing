@@ -13,13 +13,13 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
   const router = useRouter();
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
 
-  const { removeFromCart, incrementQuantity, decrementQuantity } = useCartStore(
-    (state) => ({
+  const { removeFromCart, incrementQuantity, decrementQuantity, totalAmount } =
+    useCartStore((state) => ({
       removeFromCart: state.removeFromCart,
       incrementQuantity: state.incrementQuantity,
       decrementQuantity: state.decrementQuantity,
-    })
-  );
+      totalAmount: state.totalAmount,
+    }));
 
   const handleCheckout = () => {
     router.push(`/checkouts/information`);
@@ -125,14 +125,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
             <div className="my-2 flex justify-between">
               <p className="text-lg text-gray-600 font-semibold">Total</p>
               <p className="text-lg text-gray-600 font-semibold">
-                $
-                {cartItems &&
-                  cartItems
-                    .reduce(
-                      (total, item) => total + item.price * item.quantity!,
-                      0
-                    )
-                    .toFixed(2)}
+                ${totalAmount(cartItems!).toFixed(2)}
               </p>
             </div>
             <p className="mb-4 text-[13px] text-gray-400">

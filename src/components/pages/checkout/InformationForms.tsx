@@ -48,8 +48,10 @@ const InformationForms = () => {
       const response = await axios.post("/api/universal-tutorial/states", {
         country: country,
       });
+
       return response.data;
     } catch (error: any) {
+      console.log(error);
       throw new Error(error);
     }
   };
@@ -169,6 +171,7 @@ const InformationForms = () => {
               labelPlacement="outside"
               placeholder="Select your country"
               className="text-black text-lg py-3"
+              disallowEmptySelection
               {...register("country")}
             >
               {countries.map((country) => (

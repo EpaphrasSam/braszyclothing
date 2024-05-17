@@ -8,6 +8,7 @@ export interface CartState {
   removeFromCart: (itemId: string) => void;
   incrementQuantity: (itemId: string) => void;
   decrementQuantity: (itemId: string) => void;
+  totalAmount: (items: ProductType[]) => number;
 }
 
 const useCartStore = create<CartState>()(
@@ -46,6 +47,11 @@ const useCartStore = create<CartState>()(
             )
             .filter((item) => item.quantity! > 0),
         })),
+      totalAmount: (items: ProductType[]) =>
+        items.reduce(
+          (acc, item) => acc + (item.price || 0) * (item.quantity || 0),
+          0
+        ),
     }),
     {
       name: "cart-storage",
