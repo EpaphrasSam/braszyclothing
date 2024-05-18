@@ -2,7 +2,7 @@
 
 import useCartStore from "@/store/cart";
 import { useStore } from "@/store/useStore";
-import { Badge, Button, Divider, Input } from "@nextui-org/react";
+import { Badge, Button, Divider, Input, Skeleton } from "@nextui-org/react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { FiMinus, FiPlus } from "react-icons/fi";
@@ -10,11 +10,99 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const OrderSummary = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
-  const totalAmount = useCartStore((state) => state.totalAmount);
+  const paymentIntent = useStore(useCartStore, (state) => state.paymentIntent);
+  const discount = useStore(useCartStore, (state) => state.discount);
+  const netAmount = useCartStore((state) => state.netAmount);
   const [isCouponVisible, setIsCouponVisible] = useState(false);
 
   if (!cartItems) {
-    return null;
+    return (
+      <div className="bg-white h-screen flex flex-col p-4 pt-8 rounded-md shadow-md">
+        <div className="text-lg font-bold">
+          <Skeleton className="rounded-lg">
+            <div className="h-6 w-40 rounded-lg bg-default-300"></div>
+          </Skeleton>
+        </div>
+        <Divider className="my-4" />
+        <div className="scrollbar-thin scrollbar-thumb-gray-500 my-2 overflow-y-auto flex-grow">
+          {[...Array(3)].map((_, index) => (
+            <div key={index} className="flex justify-between mb-4 mt-2">
+              <div className="flex">
+                <div className="mr-4">
+                  <Skeleton className="rounded-lg">
+                    <div className="h-12 w-20 rounded-lg bg-default-300"></div>
+                  </Skeleton>
+                </div>
+                <div>
+                  <Skeleton className="rounded-lg">
+                    <div className="h-4 w-32 rounded-lg bg-default-300 mb-2"></div>
+                  </Skeleton>
+                  <Skeleton className="rounded-lg">
+                    <div className="h-4 w-16 rounded-lg bg-default-300"></div>
+                  </Skeleton>
+                </div>
+              </div>
+              <Skeleton className="rounded-lg">
+                <div className="h-4 w-12 rounded-lg bg-default-300"></div>
+              </Skeleton>
+            </div>
+          ))}
+        </div>
+        <div className="pt-4">
+          <Divider className="my-4" />
+          <div className="mb-4 flex justify-between">
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-32 rounded-lg bg-default-300"></div>
+            </Skeleton>
+            <Skeleton className="rounded-lg">
+              <div className="h-6 w-6 rounded-lg bg-default-300"></div>
+            </Skeleton>
+          </div>
+          <Divider className="my-4" />
+          <div className="flex justify-between mb-2">
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-24 rounded-lg bg-default-300"></div>
+            </Skeleton>
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-16 rounded-lg bg-default-300"></div>
+            </Skeleton>
+          </div>
+          <div className="flex justify-between mb-2">
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-24 rounded-lg bg-default-300"></div>
+            </Skeleton>
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-16 rounded-lg bg-default-300"></div>
+            </Skeleton>
+          </div>
+          <div className="flex justify-between mb-2">
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-24 rounded-lg bg-default-300"></div>
+            </Skeleton>
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-16 rounded-lg bg-default-300"></div>
+            </Skeleton>
+          </div>
+          <div className="flex justify-between mb-4">
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-24 rounded-lg bg-default-300"></div>
+            </Skeleton>
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-16 rounded-lg bg-default-300"></div>
+            </Skeleton>
+          </div>
+          <Divider className="my-4" />
+          <div className="flex justify-between font-bold text-lg">
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-24 rounded-lg bg-default-300"></div>
+            </Skeleton>
+            <Skeleton className="rounded-lg">
+              <div className="h-4 w-16 rounded-lg bg-default-300"></div>
+            </Skeleton>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -107,13 +195,17 @@ const OrderSummary = () => {
           <span className="text-gray-500">Shipping</span>
           <span className="font-bold">FREE</span>
         </div>
+        <div className="flex justify-between mb-2">
+          <span className="text-gray-500">Discount</span>
+          <span className="font-bold">${discount!.toFixed(2)}</span>
+        </div>
         <div className="flex justify-between mb-4">
-          <span className="text-gray-500">Estimated Tax</span>
-          FREE
+          <span className="text-gray-500">Estimated Tax</span>$
+          {paymentIntent?.fee?.toFixed(2) || "0.00"}
         </div>
         <Divider className="my-4" />
         <div className="flex justify-between font-bold text-lg">
-          <span>Estimated Total</span>${totalAmount(cartItems).toFixed(2)}
+          <span>Estimated Total</span>${netAmount()}
         </div>
       </div>
     </div>

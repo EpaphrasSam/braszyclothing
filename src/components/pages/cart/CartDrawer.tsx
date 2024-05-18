@@ -125,7 +125,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
             <div className="my-2 flex justify-between">
               <p className="text-lg text-gray-600 font-semibold">Total</p>
               <p className="text-lg text-gray-600 font-semibold">
-                ${totalAmount(cartItems!).toFixed(2)}
+                ${totalAmount()}
               </p>
             </div>
             <p className="mb-4 text-[13px] text-gray-400">

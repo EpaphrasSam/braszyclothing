@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       signature!,
       webhookSecret
     );
-    console.log("event", event.type);
+    console.log("event", event);
 
     return new NextResponse("Success", { status: 200 });
   } catch (error: any) {

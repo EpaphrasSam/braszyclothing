@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
-const token = process.env.NEXT_PUBLIC_UNIVERSAL_AUTH_TOKEN as string;
+const token = process.env.UNIVERSAL_AUTH_TOKEN as string;
 
 export async function POST(req: Request) {
   try {

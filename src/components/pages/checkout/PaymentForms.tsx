@@ -15,17 +15,20 @@ import {
   CardFooter,
   CardHeader,
   Chip,
+  Divider,
   Skeleton,
 } from "@nextui-org/react";
 import useCartStore from "@/store/cart";
 import { useStore } from "@/store/useStore";
-import useSWR from "swr";
 import { createPaymentIntent } from "@/services/stripeServices";
 import toast from "react-hot-toast";
+import Link from "next/link";
+import { IoChevronBack } from "react-icons/io5";
 
-const CardForms = ({ amount }: { amount: number | undefined }) => {
+const CardForms = ({ netAmount }: { netAmount: number | undefined }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const resetAmount = useCartStore((state) => state.resetAmount);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const [isPaymentElementComplete, setIsPaymentElementComplete] =
@@ -90,17 +93,16 @@ const CardForms = ({ amount }: { amount: number | undefined }) => {
         console.log(error);
       }
     }
-    localStorage.removeItem("clientSecret");
+    resetAmount();
     setIsProcessing(false);
   };
+
   return (
     <>
-      <form className="sm:w-[60%] w-full" onSubmit={confirmPayment}>
-        <div className="flex justify-center pb-4">
-          {/* <Chip color="default" startContent="💳">
-            Only Card Payments are allowed
-          </Chip> */}
-        </div>
+      <form
+        className="sm:w-[60%] w-full p-2 flex-grow"
+        onSubmit={confirmPayment}
+      >
         <Card radius="none" className="rounded-md">
           <CardBody className="p-4">
             <PaymentElement />
@@ -115,7 +117,7 @@ const CardForms = ({ amount }: { amount: number | undefined }) => {
               disabled={isDisabled}
               isLoading={isProcessing}
             >
-              Pay ${amount!}
+              Pay ${netAmount}
             </Button>
           </CardFooter>
         </Card>
@@ -126,36 +128,29 @@ const CardForms = ({ amount }: { amount: number | undefined }) => {
 
 const PaymentForms = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
+  const discount = useStore(useCartStore, (state) => state.discount);
+  // const paymentIntent = useStore(useCartStore, (state) => state.paymentIntent);
+  const paymentIntent = useCartStore((state) => state.paymentIntent);
   const totalAmount = useCartStore((state) => state.totalAmount);
+  const setPaymentIntent = useCartStore((state) => state.setPaymentIntent);
 
-  const { data, error, isLoading } = useSWR(
-    cartItems ? `/api/create-payment-intent` : null,
-    async () => {
-      const storedClientSecret = localStorage.getItem("clientSecret");
-      if (storedClientSecret) {
-        return {
-          clientSecret: storedClientSecret,
-          amount: totalAmount(cartItems!),
-        };
-      } else {
-        const result = await createPaymentIntent(totalAmount(cartItems!));
-        localStorage.setItem("clientSecret", result?.clientSecret!);
-        return result;
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!paymentIntent?.clientSecret && cartItems) {
+        const result = await createPaymentIntent(totalAmount());
+        if (result) {
+          setPaymentIntent(result);
+        }
       }
-    }
-  );
+    };
 
-  const { clientSecret, amount } = data || {};
+    fetchData();
+  }, [paymentIntent, cartItems, totalAmount]);
 
-  if (!clientSecret || !cartItems) {
+  if (!paymentIntent?.clientSecret || !cartItems) {
     return (
       <>
         <Card className="sm:w-[60%] w-full h-[400px] space-y-5 p-4" radius="lg">
-          {/* <div className="flex justify-center">
-            <Skeleton className="w-52 h-8 rounded-lg">
-              <div className="h-3 w-3/5 rounded-lg bg-default-200"></div>
-            </Skeleton>
-          </div> */}
           <Skeleton className="rounded-lg">
             <div className="h-[300px] rounded-lg bg-default-300"></div>
           </Skeleton>
@@ -168,15 +163,28 @@ const PaymentForms = () => {
       </>
     );
   }
+
+  const { netAmount, clientSecret } = paymentIntent;
+
   return (
-    <>
+    <div className="flex items-center justify-center flex-col h-full">
       <Elements
         stripe={stripePromise}
         options={{ clientSecret, appearance: { theme: "stripe" } }}
       >
-        <CardForms amount={amount} />
+        <CardForms netAmount={netAmount} />
       </Elements>
-    </>
+      <Divider className="my-4" />
+      <div className="w-full">
+        <Link
+          href={"/checkouts/shipping"}
+          className="flex gap-2 items-center cursor-pointer hover:opacity-75 hover:underline underline-offset-4"
+        >
+          <IoChevronBack size={20} />
+          <p>Return to Shipping</p>
+        </Link>
+      </div>
+    </div>
   );
 };
 
