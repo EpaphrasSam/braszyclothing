@@ -13,8 +13,6 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
-  Chip,
   Divider,
   Skeleton,
 } from "@nextui-org/react";
@@ -80,21 +78,27 @@ const CardForms = ({ netAmount }: { netAmount: number | undefined }) => {
 
     setIsProcessing(true);
 
-    const { error }: any = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: "http://localhost:3000/checkouts/payment",
-      },
-    });
-    if (error) {
-      if (error.type === "card_error" || error.type === "validation_error") {
+    try {
+      const { error }: any = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: "http://localhost:3000/cart?success=true",
+        },
+      });
+
+      if (error) {
         toast.error(error.message);
       } else {
-        console.log(error);
+        resetAmount();
       }
+    } catch (error) {
+      console.error("Error confirming payment:", error);
+      toast.error(
+        "An unexpected error occurred while processing your payment."
+      );
+    } finally {
+      setIsProcessing(false);
     }
-    resetAmount();
-    setIsProcessing(false);
   };
 
   return (
@@ -129,15 +133,24 @@ const CardForms = ({ netAmount }: { netAmount: number | undefined }) => {
 const PaymentForms = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
   const discount = useStore(useCartStore, (state) => state.discount);
-  // const paymentIntent = useStore(useCartStore, (state) => state.paymentIntent);
   const paymentIntent = useCartStore((state) => state.paymentIntent);
   const totalAmount = useCartStore((state) => state.totalAmount);
   const setPaymentIntent = useCartStore((state) => state.setPaymentIntent);
+  const shippingDetails = useCartStore((state) => state.shippingDetails);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!paymentIntent?.clientSecret && cartItems) {
-        const result = await createPaymentIntent(totalAmount());
+      if (
+        !paymentIntent?.clientSecret &&
+        cartItems &&
+        shippingDetails &&
+        discount
+      ) {
+        const result = await createPaymentIntent(
+          totalAmount(),
+          shippingDetails,
+          discount
+        );
         if (result) {
           setPaymentIntent(result);
         }
@@ -145,7 +158,7 @@ const PaymentForms = () => {
     };
 
     fetchData();
-  }, [paymentIntent, cartItems, totalAmount]);
+  }, [paymentIntent, cartItems, totalAmount, shippingDetails, discount]);
 
   if (!paymentIntent?.clientSecret || !cartItems) {
     return (

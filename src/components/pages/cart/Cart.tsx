@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useStore } from "@/store/useStore";
 import useCartStore from "@/store/cart";
 import {
@@ -18,21 +18,43 @@ import {
 import Image from "next/image";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 const Cart = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const rowsPerPage = 10;
   const [page, setPage] = useState(1);
-  const router = useRouter();
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
 
-  const { removeFromCart, incrementQuantity, decrementQuantity, totalAmount } =
-    useCartStore((state) => ({
-      removeFromCart: state.removeFromCart,
-      incrementQuantity: state.incrementQuantity,
-      decrementQuantity: state.decrementQuantity,
-      totalAmount: state.totalAmount,
-    }));
+  const paymentIntent = searchParams.get("payment_intent");
+  const redirectStatus = searchParams.get("redirect_status");
+
+  const {
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    totalAmount,
+    resetCart,
+  } = useCartStore((state) => ({
+    removeFromCart: state.removeFromCart,
+    incrementQuantity: state.incrementQuantity,
+    decrementQuantity: state.decrementQuantity,
+    totalAmount: state.totalAmount,
+    resetCart: state.resetCart,
+  }));
+
+  useEffect(() => {
+    if (paymentIntent && redirectStatus === "succeeded") {
+      toast.success("Payment has been made successfully", {
+        id: redirectStatus,
+        duration: 5000,
+      });
+      router.push("/cart");
+      resetCart();
+    }
+  }, [paymentIntent, redirectStatus, router]);
 
   const pages = Math.ceil(cartItems ? cartItems?.length / rowsPerPage : 0);
 
@@ -57,7 +79,7 @@ const Cart = () => {
   return (
     <div className="py-5 sm:px-5 px-3  h-full">
       {cartItems && cartItems.length === 0 ? (
-        <div className="h-full flex justify-center items-center">
+        <div className="h-screen flex justify-center items-center">
           <div className="flex items-center justify-center flex-col gap-y-6">
             <div className="text-xl text-gray-600 tracking-wider font-semibold">
               YOUR CART IS EMPTY
@@ -66,6 +88,7 @@ const Cart = () => {
               onClick={() => router.push("/")}
               color="primary"
               radius="none"
+              size="lg"
               className="w-[200px]"
             >
               Continue Shopping
@@ -191,7 +214,7 @@ const Cart = () => {
           >
             <TableHeader>
               <TableColumn>Product</TableColumn>
-              <TableColumn className="hidden md:block">Quantity</TableColumn>
+              <TableColumn className="max-md:hidden">Quantity</TableColumn>
               <TableColumn>Total</TableColumn>
             </TableHeader>
             <TableBody items={items}>

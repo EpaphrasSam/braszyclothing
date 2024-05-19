@@ -1,14 +1,19 @@
 "use server";
 
 import { calculateStripeFee } from "@/helpers/feeCalculators";
+import { ShippingDetails } from "@/store/cart";
 import { stripe } from "@/utils/stripe";
 
-export const createPaymentIntent = async (amt: number) => {
+export const createPaymentIntent = async (
+  amt: number,
+  shippingDetails: ShippingDetails,
+  discount: number
+) => {
   try {
     if (amt === undefined) return;
 
     const fee = calculateStripeFee(amt);
-    const netAmount = amt + fee;
+    const netAmount = amt + fee - discount;
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(netAmount * 100),
@@ -19,6 +24,7 @@ export const createPaymentIntent = async (amt: number) => {
       metadata: {
         fee: fee.toFixed(2),
         net_amount: netAmount.toFixed(2),
+        shippingDetails: JSON.stringify(shippingDetails),
       },
     });
 

@@ -3,6 +3,7 @@ import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import "react-multi-carousel/lib/styles.css";
 import { Providers } from "./providers";
+import { Toaster } from "react-hot-toast";
 
 const inter = Open_Sans({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} `}>
+        <Toaster position="top-center" />
         <Providers>
           <main>{children}</main>
         </Providers>

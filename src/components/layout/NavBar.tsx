@@ -54,6 +54,11 @@ const NavBar = () => {
   const { scrollY } = useScroll();
 
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
+  const resetAmount = useCartStore((state) => state.resetAmount);
+
+  useEffect(() => {
+    resetAmount();
+  }, []);
 
   useEffect(() => {
     return scrollY.on("change", (y) => {
