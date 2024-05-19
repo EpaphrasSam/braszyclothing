@@ -21,6 +21,7 @@
     "@stripe/react-stripe-js": "^2.7.1",
     "@stripe/stripe-js": "^3.4.0",
     "axios": "^1.6.8",
+    "bcrypt": "^5.1.1",
     "framer-motion": "^11.1.7",
     "icons": "^1.0.0",
     "install": "^0.13.0",
@@ -35,6 +36,7 @@
     "react-icons": "^5.2.1",
     "react-intersection-observer": "^9.10.2",
     "react-multi-carousel": "^2.8.5",
+    "resend": "^3.2.0",
     "sanity": "^3.41.1",
     "stripe": "^15.7.0",
     "styled-components": "^6.1.10",
@@ -46,13 +48,14 @@
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.4.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
-    "prisma": "^5.13.0",
+    "prisma": "^5.14.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

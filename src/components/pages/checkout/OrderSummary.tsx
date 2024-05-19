@@ -13,6 +13,7 @@ const OrderSummary = () => {
   const paymentIntent = useStore(useCartStore, (state) => state.paymentIntent);
   const discount = useStore(useCartStore, (state) => state.discount);
   const netAmount = useCartStore((state) => state.netAmount);
+  const totalAmount = useCartStore((state) => state.totalAmount);
   const [isCouponVisible, setIsCouponVisible] = useState(false);
 
   if (!cartItems) {
@@ -186,10 +187,7 @@ const OrderSummary = () => {
         <Divider className="my-4" />
         <div className="flex justify-between mb-2">
           <span className="text-gray-500">Subtotal</span>$
-          {cartItems &&
-            cartItems
-              .reduce((total, item) => total + item.price * item.quantity!, 0)
-              .toFixed(2)}
+          {totalAmount().toFixed(2)}
         </div>
         <div className="flex justify-between mb-2">
           <span className="text-gray-500">Shipping</span>
@@ -205,7 +203,7 @@ const OrderSummary = () => {
         </div>
         <Divider className="my-4" />
         <div className="flex justify-between font-bold text-lg">
-          <span>Estimated Total</span>${netAmount()}
+          <span>Estimated Total</span>${netAmount().toFixed(2)}
         </div>
       </div>
     </div>
