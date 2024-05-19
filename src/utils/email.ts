@@ -57,9 +57,7 @@ export const storeOTP = async (otp: string, email: string): Promise<void> => {
       update: { otp, expiry },
       create: { email, otp, expiry },
     });
-    console.log("OTP stored successfully");
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -70,7 +68,6 @@ export const validateOTP = async (otp: string, email: string) => {
       where: { email },
     });
 
-    console.log(storedOTPData);
     if (!storedOTPData) {
       return false;
     }

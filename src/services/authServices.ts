@@ -23,12 +23,12 @@ export const sendOtpAction = async (email: string) => {
 
 export const verifyOtpAction = async (otp: string, email: string) => {
   try {
-    const isValid = validateOTP(otp, email);
+    const isValid = await validateOTP(otp, email);
     if (!isValid) {
-      throw new Error("Invalid OTP");
+      throw Error("Invalid OTP");
     }
     return { message: "OTP verified successfully" };
   } catch (error: any) {
-    throw new Error(error);
+    throw Error(error.message);
   }
 };
