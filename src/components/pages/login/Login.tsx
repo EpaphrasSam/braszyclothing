@@ -15,9 +15,9 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    // resolver: zodResolver(UserSchema),
+    
   });
-  //   co
+  
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data);
