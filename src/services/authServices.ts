@@ -1,5 +1,6 @@
 "use server";
 
+import { signIn, signOut } from "@/utils/auth";
 import {
   encryptOTP,
   generateOTP,
@@ -7,6 +8,7 @@ import {
   storeOTP,
   validateOTP,
 } from "@/utils/email";
+import { AuthError } from "next-auth";
 
 export const sendOtpAction = async (email: string) => {
   try {
@@ -30,5 +32,26 @@ export const verifyOtpAction = async (otp: string, email: string) => {
     return { message: "OTP verified successfully" };
   } catch (error: any) {
     throw Error(error.message);
+  }
+};
+
+export const loginAction = async (email: string, password: string) => {
+  try {
+    // await signIn("credentials", { email, password, redirectTo: "/" });
+    await signIn("credentials", { email, password, redirect: false });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      throw new Error(error.cause?.err?.message);
+    } else {
+      throw new Error("Something went wrong");
+    }
+  }
+};
+
+export const logoutAction = async () => {
+  try {
+    await signOut({ redirect: false });
+  } catch (error) {
+    throw new Error("Something went wrong");
   }
 };

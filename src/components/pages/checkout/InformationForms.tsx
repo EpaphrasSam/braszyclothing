@@ -1,20 +1,12 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  Button,
-  Divider,
-  Input,
-  Select,
-  SelectItem,
-  Spinner,
-} from "@nextui-org/react";
+import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
 import { CiMail } from "react-icons/ci";
+import { RiLockPasswordLine } from "react-icons/ri";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { MdOutlinePhone } from "react-icons/md";
 import { countries, provinces, states } from "@/lib/constants/countries";
-import useSWR from "swr";
-import axios from "axios";
 import { IoChevronBack } from "react-icons/io5";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

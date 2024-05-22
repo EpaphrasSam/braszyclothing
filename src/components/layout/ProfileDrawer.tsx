@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import { Drawer } from "@mui/material";
-import ProfileDisplay from "./ProfileDisplay";
+import ProfileDisplay from "../pages/profile/ProfileDisplay";
 import { MdLogout } from "react-icons/md"; //
+import ProfileLogin from "../pages/profile/ProfileLogin";
+import { IoCloseOutline } from "react-icons/io5";
 
 type ProfileDrawerProps = {
   isOpen: boolean;
@@ -11,6 +13,7 @@ type ProfileDrawerProps = {
 };
 
 const ProfileDrawer = ({ isOpen, onClose }: ProfileDrawerProps) => {
+  const isLoggedIn = true;
   return (
     <>
       <Drawer
@@ -23,19 +26,16 @@ const ProfileDrawer = ({ isOpen, onClose }: ProfileDrawerProps) => {
         open={isOpen}
         onClose={onClose}
         variant="temporary"
+        className="relative"
       >
-        <div className="flex flex-col h-full">
-          <ProfileDisplay />
-          <div className="mt-auto p-4">
-            <button
-              // onClick={/* Add your logout function here */}
-              className="flex items-center w-full px-4 py-2 bg-gray-800 text-white font-bold rounded hover:bg-gray-700"
-            >
-              <MdLogout size={24} className="mr-2" />
-              Logout
-            </button>
-          </div>
+        <div className="absolute top-4 right-4">
+          <IoCloseOutline
+            onClick={onClose}
+            size={30}
+            className="cursor-pointer hover:opacity-75"
+          />
         </div>
+        {isLoggedIn ? <ProfileDisplay /> : <ProfileLogin />}
       </Drawer>
     </>
   );

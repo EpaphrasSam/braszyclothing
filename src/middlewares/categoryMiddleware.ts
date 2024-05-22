@@ -15,9 +15,8 @@ export const categoryMiddleware = (request: NextRequest) => {
   }
 
   if (!slug) {
-    return NextResponse.rewrite(
-      new URL(`/shop/${allowedSlugs[0]}`, request.url)
-    );
+    const url = new URL(`/shop/${allowedSlugs[0]}`, request.url);
+    return NextResponse.redirect(url);
   }
 
   if (!allowedSlugs.includes(slug)) {

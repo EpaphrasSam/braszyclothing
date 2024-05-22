@@ -1,14 +1,14 @@
 "use client";
+
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import picture from "@/../public/images/img14.png";
 import { Button, Input } from "@nextui-org/react";
 
 const OtpScreen = () => {
-  const [otp, setOtp] = useState(new Array(6).fill("")); // Adjusted to 4 as in the provided image
-  const [isFilled, setIsFilled] = useState(false); // State to check if all fields are filled
+  const [otp, setOtp] = useState(new Array(6).fill(""));
+  const [isFilled, setIsFilled] = useState(false);
 
-  // Create refs for the input fields
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleChange = (element: HTMLInputElement, index: number) => {
@@ -18,21 +18,18 @@ const OtpScreen = () => {
     newOtp[index] = element.value;
     setOtp(newOtp);
 
-    // Focus next input
     if (element.value && inputRefs.current[index + 1]) {
       inputRefs.current[index + 1]?.focus();
     }
   };
 
   useEffect(() => {
-    // Check if all fields are filled
     setIsFilled(otp.every((value) => value !== ""));
   }, [otp]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log("Entered OTP:", otp.join(""));
-    // Add your submit logic here
   };
 
   return (
@@ -72,7 +69,7 @@ const OtpScreen = () => {
               })}
             </div>
             <p className="text-gray-600 mb-4 text-center lg:text-left">
-              Didn't receive an OTP?{" "}
+              Didn&apos;t receive an OTP?
               <a href="#" className="text-gray-500 font-bold">
                 Resend OTP
               </a>

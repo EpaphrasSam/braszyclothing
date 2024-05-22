@@ -1,4 +1,6 @@
-import { z } from "zod";
+import { z, ZodType } from "zod";
+import { FormData as SignUpFormData } from "@/components/pages/login/Login";
+import { FormData as LoginFormData } from "@/components/pages/login/Login";
 
 export const shippingSchemaBase = z.object({
   email: z.string().email("Invalid email address"),
@@ -45,3 +47,35 @@ export const validateShippingDetails = (data: any) => {
     return { form: "An unexpected error occurred" };
   }
 };
+
+export const SignUpSchema: ZodType<SignUpFormData> = z
+  .object({
+    name: z
+      .string()
+      .min(1, { message: "Name is required" })
+      .min(4, { message: "Name must be more than 3 characters" }),
+    email: z
+      .string()
+      .email({ message: "Email is invalid" })
+      .min(1, { message: "Email is required" }),
+    password: z
+      .string()
+      .min(1, { message: "Password is required" })
+      .min(8, { message: "Password must be more than 8 characters" }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export const LoginSchema: ZodType<LoginFormData> = z.object({
+  email: z
+    .string()
+    .email({ message: "Email is invalid" })
+    .min(1, { message: "Email is required" }),
+  password: z
+    .string()
+    .min(1, { message: "Password is required" })
+    .min(8, { message: "Password must be more than 8 characters" }),
+});

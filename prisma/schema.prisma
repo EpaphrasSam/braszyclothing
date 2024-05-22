@@ -14,6 +14,7 @@ model User {
   name            String
   contact         String?
   orders          Order[]
+  admin           Boolean      @default(false)
   billingAccounts BillingAccount[]
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
