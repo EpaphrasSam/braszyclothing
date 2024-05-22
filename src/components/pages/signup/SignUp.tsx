@@ -32,8 +32,8 @@ const SignUp = () => {
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-custom-gradient">
-      <div className="m-4 sm:w-4/5 w-full bg-white shadow-3xl rounded-lg md:p-8 p-2 flex justify-center items-center lg:flex-row flex-col-reverse ">
-        <div className="sm:w-1/2 w-full max-sm:p-4 flex flex-col justify-center items-center flex-grow">
+      <div className="m-4 sm:w-3/5 w-full bg-white shadow-3xl rounded-lg md:p-8 p-2 flex justify-center items-center lg:flex-row flex-col-reverse ">
+        <div className="p-8 w-full max-sm:p-4 flex flex-col justify-center items-center flex-grow">
           <h1 className="text-3xl font-bold mb-4">Sign Up</h1>
           <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-sm">
             <div className="mb-6 flex flex-col gap-4">
@@ -100,7 +100,7 @@ const SignUp = () => {
               <div>
                 <Link
                   href="/login"
-                  className="inline-block align-baseline font-bold text-base underline-offset-4 hover:underline text-blue-700 hover:text-blue-800"
+                  className="inline-block align-baseline sm:flex flex-row-bold text-base underline-offset-4 hover:underline text-blue-700 hover:text-blue-800"
                 >
                   Log in
                 </Link>

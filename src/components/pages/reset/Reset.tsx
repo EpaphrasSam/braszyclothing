@@ -35,8 +35,8 @@ function ResetPassword() {
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  required
-                  radius="sm"
+                  variant="bordered"
+                  radius="none"
                   label=" New Password"
                   labelPlacement="outside"
                 />
@@ -46,15 +46,15 @@ function ResetPassword() {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  radius="sm"
+                  variant="bordered"
+                  radius="none"
                   label="Confirm Password"
                   labelPlacement="outside"
                 />
               </div>
               <Button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="w-full bg-black hover:opacity-75 text-white font-bold py-2 px-4 rounded"
               >
                 Reset Password
               </Button>

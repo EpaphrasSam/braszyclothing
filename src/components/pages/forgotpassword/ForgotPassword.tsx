@@ -33,6 +33,7 @@ function ForgotPassword() {
         </p>
         <form className="mt-4 space-y-6" onSubmit={handleSubmit}>
           <Input
+            variant="bordered"
             type="email"
             name="email"
             fullWidth
@@ -41,12 +42,12 @@ function ForgotPassword() {
             size="lg"
             label="Email"
             value={email}
-            radius="sm"
+            radius="none"
             onChange={(e) => setEmail(e.target.value)}
           />
           <Button
             type="submit"
-            className="w-full flex justify-center py-2 px-4 text-sm sm:text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="w-full flex justify-center py-2 px-4 text-sm sm:text-base font-medium rounded-md text-white bg-black hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             Reset Password
           </Button>
