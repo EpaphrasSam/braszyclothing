@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Drawer } from "@mui/material";
 import ProfileDisplay from "../pages/profile/ProfileDisplay";
-import { MdLogout } from "react-icons/md"; //
 import ProfileLogin from "../pages/profile/ProfileLogin";
 import { IoCloseOutline } from "react-icons/io5";
+import { Session } from "next-auth";
 
 type ProfileDrawerProps = {
   isOpen: boolean;
   onClose: any;
+  session: Session | null;
 };
 
-const ProfileDrawer = ({ isOpen, onClose }: ProfileDrawerProps) => {
-  const isLoggedIn = true;
+const ProfileDrawer = ({ isOpen, onClose, session }: ProfileDrawerProps) => {
   return (
     <>
       <Drawer
@@ -35,7 +35,11 @@ const ProfileDrawer = ({ isOpen, onClose }: ProfileDrawerProps) => {
             className="cursor-pointer hover:opacity-75"
           />
         </div>
-        {isLoggedIn ? <ProfileDisplay /> : <ProfileLogin />}
+        {session ? (
+          <ProfileDisplay onClose={onClose} />
+        ) : (
+          <ProfileLogin onClose={onClose} />
+        )}
       </Drawer>
     </>
   );

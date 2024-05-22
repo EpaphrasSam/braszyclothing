@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn, signOut } from "@/utils/auth";
+import { signIn, signOut } from "@/utils/auth/auth";
 import {
   encryptOTP,
   generateOTP,

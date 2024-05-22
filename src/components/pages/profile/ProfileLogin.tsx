@@ -1,19 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Input, Button, Divider } from "@nextui-org/react";
+import React from "react";
+import { Divider } from "@nextui-org/react";
 import LoginForm from "@/components/global/LoginForm";
 import Link from "next/link";
 
-const ProfileLogin = () => {
+type ProfileLoginProps = {
+  onClose: any;
+};
+
+const ProfileLogin = ({ onClose }: ProfileLoginProps) => {
   return (
     <div className="max-w-md mx-auto mt-10 p-4 ">
       <div className="rounded-lg">
         <h2 className="text-xl font-bold text-center mb-4">
           I already have an account
         </h2>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
       </div>
       <Divider className="my-8" />
       <div className="text-center">

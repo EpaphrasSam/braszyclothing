@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
-import { auth } from "@/utils/auth";
-
-const protectedRoutes = ["/admin"];
-const publicRoutes = ["/login", "/register"];
+import { auth } from "@/utils/auth/auth";
+import { protectedRoutes, publicRoutes } from "@/lib/constants/routes";
 
 export async function authMiddleware(request: NextRequest) {
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET!,
-    salt: process.env.NEXTAUTH_SALT || "random_salt",
-  });
+  const session = await auth();
+  const token = session?.user;
 
   const { pathname } = request.nextUrl;
 

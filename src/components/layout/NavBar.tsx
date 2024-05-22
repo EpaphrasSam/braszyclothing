@@ -14,14 +14,13 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Navbar,
-  NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/react";
-import { FaBars, FaChevronDown, FaChevronUp, FaSearch } from "react-icons/fa";
+import { FaBars, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
 import { CiShoppingCart } from "react-icons/ci";
 import SearchBar from "./SearchBar";
@@ -31,6 +30,7 @@ import { FaArrowRight } from "react-icons/fa6";
 import { useStore } from "@/store/useStore";
 import useCartStore from "@/store/cart";
 import ProfileDrawer from "./ProfileDrawer";
+import { useSession } from "next-auth/react";
 
 const chevronVariants = {
   down: { rotate: 0 },
@@ -56,6 +56,10 @@ const NavBar = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
   const resetAmount = useCartStore((state) => state.resetAmount);
 
+  const { data: session, status } = useSession();
+
+  console.log(session, status);
+
   useEffect(() => {
     resetAmount();
   }, []);
@@ -78,23 +82,23 @@ const NavBar = () => {
   };
 
   const navHandler = (anchor: any, open: any) => (event: any) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
+    // if (
+    //   event.type === "keydown" &&
+    //   (event.key === "Tab" || event.key === "Shift")
+    // ) {
+    //   return;
+    // }
     setShowNav({ ...showNav, [anchor]: open });
     return;
   };
 
   const profileHandler = (anchor: any, open: any) => (event: any) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
+    // if (
+    //   event.type === "keydown" &&
+    //   (event.key === "Tab" || event.key === "Shift")
+    // ) {
+    //   return;
+    // }
     setShowProfileNav({ ...showNav, [anchor]: open });
     return;
   };
@@ -321,10 +325,14 @@ const NavBar = () => {
         isOpen={showNav["leftNav"]}
         onClose={navHandler("leftNav", false)}
       />
-      <ProfileDrawer
-        isOpen={showProfileNav["leftNav"]}
-        onClose={profileHandler("leftNav", false)}
-      />
+
+      {status !== "loading" && (
+        <ProfileDrawer
+          isOpen={showProfileNav["leftNav"]}
+          onClose={profileHandler("leftNav", false)}
+          session={session}
+        />
+      )}
     </>
   );
 };

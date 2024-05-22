@@ -43,12 +43,15 @@ export const NavbarLinks: NavLinkTypes[] = [
     name: "About",
     route: "/about",
   },
-   {
-     name: "Login",
-     route: "/login",
-   },
-   {
-     name: "SignUp",
-     route: "/signup",
-   }
+  {
+    name: "Login",
+    route: "/login",
+  },
+  {
+    name: "SignUp",
+    route: "/signup",
+  },
 ];
+
+export const protectedRoutes = ["/admin"];
+export const publicRoutes = ["/login", "/signup"];

@@ -1,6 +1,6 @@
 import { z, ZodType } from "zod";
-import { FormData as SignUpFormData } from "@/components/pages/login/Login";
-import { FormData as LoginFormData } from "@/components/pages/login/Login";
+import { FormData as SignUpFormData } from "@/components/pages/signup/SignUp";
+import { FormData as LoginFormData } from "@/components/global/LoginForm";
 
 export const shippingSchemaBase = z.object({
   email: z.string().email("Invalid email address"),

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button, Input } from "@nextui-org/react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,9 +18,10 @@ export type FormData = {
 
 type LoginFormProps = {
   isVisible?: boolean;
+  onClose?: any;
 };
 
-const LoginForm = ({ isVisible }: LoginFormProps = {}) => {
+const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,7 +38,13 @@ const LoginForm = ({ isVisible }: LoginFormProps = {}) => {
     try {
       await loginAction(data.email, data.password);
       toast.success("Login successful");
-      router.push("/");
+      if (onClose) {
+        // router.refresh();
+        window.location.reload();
+        onClose();
+      } else {
+        router.push("/");
+      }
     } catch (error: any) {
       toast.error(error.message);
     } finally {

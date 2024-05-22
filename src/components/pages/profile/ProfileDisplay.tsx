@@ -1,6 +1,7 @@
 import { logoutAction } from "@/services/authServices";
 import { Button, Divider } from "@nextui-org/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
 import {
@@ -33,11 +34,19 @@ const sections = [
   },
 ];
 
-const ProfileDisplay = () => {
+interface ProfileDisplayProps {
+  onClose: any;
+}
+
+const ProfileDisplay = ({ onClose }: ProfileDisplayProps) => {
+  const router = useRouter();
   const logOut = async () => {
     try {
       await logoutAction();
+      onClose();
       toast.success("Logout successful");
+      // router.refresh();
+      window.location.reload();
     } catch (error) {
       toast.error("Something went wrong");
     }

@@ -4,6 +4,7 @@ import "./globals.css";
 import "react-multi-carousel/lib/styles.css";
 import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Open_Sans({ subsets: ["latin"] });
 
@@ -21,9 +22,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} `}>
         <Toaster position="top-center" />
-        <Providers>
-          <main>{children}</main>
-        </Providers>
+        <SessionProvider>
+          <Providers>
+            <main>{children}</main>
+          </Providers>
+        </SessionProvider>
       </body>
     </html>
   );
