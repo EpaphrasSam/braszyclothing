@@ -3,8 +3,6 @@
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
-import useCartStore from "@/store/cart";
-import { useStore } from "@/store/useStore";
 
 const routes = [
   { path: "/cart", label: "Cart" },

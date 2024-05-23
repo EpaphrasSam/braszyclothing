@@ -1,6 +1,6 @@
-// SignUp.tsx
 "use client";
-import React from "react";
+
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -9,6 +9,13 @@ import { SignUpSchema } from "@/helpers/validators";
 import Link from "next/link";
 import { CiMail, CiUser } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import {
+  checkIfEmailExistsAction,
+  sendOtpAction,
+} from "@/services/authServices";
+import useUserStore from "@/store/user";
 
 export type FormData = {
   name: string;
@@ -18,6 +25,10 @@ export type FormData = {
 };
 
 const SignUp = () => {
+  const router = useRouter();
+  const setUserData = useUserStore((state) => state.setUserData);
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -26,8 +37,20 @@ const SignUp = () => {
     resolver: zodResolver(SignUpSchema),
   });
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setIsLoading(true);
+    try {
+      const checkIfEmailExists = await checkIfEmailExistsAction(data.email);
+      if (!checkIfEmailExists) {
+        await sendOtpAction(data.email);
+        setUserData(data);
+        router.push("/otp-verification");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -91,6 +114,7 @@ const SignUp = () => {
                 fullWidth
                 className="bg-black hover:opacity-75 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="submit"
+                isLoading={isLoading}
               >
                 Sign Up
               </Button>

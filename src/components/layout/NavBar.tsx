@@ -58,8 +58,6 @@ const NavBar = () => {
 
   const { data: session, status } = useSession();
 
-  console.log(session, status);
-
   useEffect(() => {
     resetAmount();
   }, []);

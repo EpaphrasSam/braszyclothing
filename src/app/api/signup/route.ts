@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       return new NextResponse(JSON.stringify(user), { status: 200 });
     }
 
-    return new NextResponse("Invalid OTP", { status: 400 });
+    throw new Error("Invalid OTP");
   } catch (error: any) {
     switch (error.code) {
       case "P2002":

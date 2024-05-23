@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Drawer } from "@mui/material";
 import ProfileDisplay from "../pages/profile/ProfileDisplay";
 import ProfileLogin from "../pages/profile/ProfileLogin";
 import { IoCloseOutline } from "react-icons/io5";
 import { Session } from "next-auth";
+import { usePathname } from "next/navigation";
 
 type ProfileDrawerProps = {
   isOpen: boolean;
@@ -14,6 +15,12 @@ type ProfileDrawerProps = {
 };
 
 const ProfileDrawer = ({ isOpen, onClose, session }: ProfileDrawerProps) => {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    onClose();
+  }, [pathname]);
+
   return (
     <>
       <Drawer
