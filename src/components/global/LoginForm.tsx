@@ -9,7 +9,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { loginAction } from "@/services/authServices";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export type FormData = {
   email: string;
@@ -23,7 +23,10 @@ type LoginFormProps = {
 
 const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+
+  const redirect = searchParams.get("redirect");
 
   const {
     register,
@@ -39,11 +42,10 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
       await loginAction(data.email, data.password);
       toast.success("Login successful");
       if (onClose) {
-        // router.refresh();
         window.location.reload();
         onClose();
       } else {
-        router.push("/");
+        router.push(redirect || "/");
       }
     } catch (error: any) {
       toast.error(error.message);

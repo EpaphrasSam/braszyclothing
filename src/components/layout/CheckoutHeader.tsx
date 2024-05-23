@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 
 const routes = [

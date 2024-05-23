@@ -1,24 +1,60 @@
 "use client";
 
-import { Button, Divider } from "@nextui-org/react";
+import useCartStore from "@/store/cart";
+import { Button, Divider, RadioGroup, Radio } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 
 const ShippingForms = () => {
   const router = useRouter();
+  const setShippingDetails = useCartStore((state) => state.setShippingDetails);
+  const shippingDetails = useCartStore((state) => state.shippingDetails);
+  const [selectedMethod, setSelectedMethod] = useState("");
+
+  useEffect(() => {
+    if (shippingDetails && shippingDetails.shippingMethod) {
+      setSelectedMethod(shippingDetails.shippingMethod);
+    }
+  }, [shippingDetails]);
+
   const onSubmit = () => {
+    if (!selectedMethod || !shippingDetails) {
+      return;
+    }
+
+    const updatedShippingDetails = {
+      ...shippingDetails,
+      shippingMethod: selectedMethod,
+    };
+
+    setShippingDetails(updatedShippingDetails);
     router.push("/checkouts/payment");
   };
+
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-grow"></div>
+      <div className="flex-grow p-6">
+        <RadioGroup
+          label="Select shipping method"
+          size="lg"
+          value={selectedMethod}
+          onValueChange={setSelectedMethod}
+        >
+          <Radio className="my-1" value="UPS">
+            UPS
+          </Radio>
+          <Radio className="my-1" value="DHL">
+            DHL
+          </Radio>
+        </RadioGroup>
+      </div>
       <Divider className="my-4" />
 
       <div className="flex justify-between ">
         <Link
-          href={"/checkout/information"}
+          href={"/checkouts/information"}
           className="flex gap-2 items-center cursor-pointer hover:opacity-75 hover:underline underline-offset-4"
         >
           <IoChevronBack size={20} />

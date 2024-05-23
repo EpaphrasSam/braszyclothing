@@ -19,6 +19,7 @@ export interface ShippingDetails {
   state?: string;
   city: string;
   code: string;
+  shippingMethod?: string;
 }
 
 export interface CartState {

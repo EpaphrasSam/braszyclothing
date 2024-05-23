@@ -1,7 +1,6 @@
 import { logoutAction } from "@/services/authServices";
 import { Button, Divider } from "@nextui-org/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
 import {
@@ -36,16 +35,20 @@ const sections = [
 
 interface ProfileDisplayProps {
   onClose: any;
+  user: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    admin?: Boolean;
+  };
 }
 
-const ProfileDisplay = ({ onClose }: ProfileDisplayProps) => {
-  const router = useRouter();
+const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
   const logOut = async () => {
     try {
       await logoutAction();
       onClose();
       toast.success("Logout successful");
-      // router.refresh();
       window.location.reload();
     } catch (error) {
       toast.error("Something went wrong");
@@ -56,9 +59,9 @@ const ProfileDisplay = ({ onClose }: ProfileDisplayProps) => {
     <div className="flex flex-col h-full p-4">
       <div className="text-center">
         <MdPersonOutline size={60} className="mx-auto text-gray-800" />
-        <h2 className="font-semibold text-lg mt-2">Jane Doe</h2>
+        <h2 className="font-semibold text-lg mt-2">{user.name}</h2>
         <Divider className="my-2" />
-        <p className="text-gray-600">jane.doe@example.com</p>
+        <p className="text-gray-600">{user.email}</p>
         <Divider className="my-2" />
       </div>
       <div className="flex flex-col gap-4 mt-4 overflow-y-auto flex-grow scrollbar-thin">

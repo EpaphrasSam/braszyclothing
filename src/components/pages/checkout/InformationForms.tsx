@@ -3,7 +3,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
 import { CiMail } from "react-icons/ci";
-import { RiLockPasswordLine } from "react-icons/ri";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { MdOutlinePhone } from "react-icons/md";
 import { countries, provinces, states } from "@/lib/constants/countries";
@@ -12,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { validateShippingDetails } from "@/helpers/validators";
 import useCartStore, { ShippingDetails } from "@/store/cart";
+import { useSession } from "next-auth/react";
 
 const defaultShippingDetails: ShippingDetails = {
   email: "",
@@ -21,23 +21,31 @@ const defaultShippingDetails: ShippingDetails = {
   address: "",
   city: "",
   state: "",
-  country: "",
+  country: countries[0].name,
   code: "",
 };
 
 const InformationForms = () => {
   const router = useRouter();
+  const { data: session } = useSession();
   const setShippingDetails = useCartStore((state) => state.setShippingDetails);
   const shippingDetails = useCartStore((state) => state.shippingDetails);
   const [manualChange, setManualChange] = useState(false);
 
-  const formDefaultValues = useMemo(
-    () =>
-      shippingDetails && Object.keys(shippingDetails).length > 0
-        ? shippingDetails
-        : defaultShippingDetails,
-    [shippingDetails]
-  );
+  const formDefaultValues = useMemo(() => {
+    const sessionDefaults = session
+      ? {
+          email: session.user.email || "",
+          contact: session.user.contact || "",
+        }
+      : {};
+
+    return {
+      ...defaultShippingDetails,
+      ...shippingDetails,
+      ...sessionDefaults,
+    };
+  }, [session, shippingDetails]);
 
   const {
     register,
@@ -52,6 +60,7 @@ const InformationForms = () => {
   });
 
   const country = watch("country");
+  const state = watch("state");
 
   // const fetcher = async () => {
   //   try {
@@ -82,7 +91,10 @@ const InformationForms = () => {
   }, [formDefaultValues]);
 
   useEffect(() => {
-    setValue("state", "");
+    if (manualChange) {
+      setValue("state", "");
+      setManualChange(false);
+    }
   }, [manualChange]);
 
   const getStateOrProvinceOptions = () => {
@@ -100,7 +112,10 @@ const InformationForms = () => {
 
   const handleCountryChange = (e: any) => {
     setValue("country", e.target.value);
-    setManualChange(!manualChange);
+    setManualChange(true);
+  };
+  const handleStateChange = (e: any) => {
+    setValue("state", e.target.value);
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -131,13 +146,19 @@ const InformationForms = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex justify-between items-center">
             <div className="text-2xl text-gray-500 font-medium">Contact</div>
-            <div className="text-sm font-medium underline underline-offset-2 hover:opacity-75">
-              Log in
-            </div>
+            {!session && (
+              <Link
+                href="/login?redirect=/checkouts/information"
+                className="text-sm font-medium underline underline-offset-2 hover:opacity-75"
+              >
+                Log in
+              </Link>
+            )}
           </div>
 
           <div className="flex sm:gap-3 sm:flex-row flex-col">
             <Input
+              isDisabled={!!session}
               variant="bordered"
               radius="sm"
               label="Email"
@@ -248,7 +269,7 @@ const InformationForms = () => {
                 label={country === "Canada" ? "Province" : "State"}
                 radius="sm"
                 size="lg"
-                value={watch("state")}
+                value={state}
                 selectedKeys={[watch("state")]}
                 labelPlacement="outside"
                 placeholder={
@@ -261,6 +282,7 @@ const InformationForms = () => {
                 isInvalid={!!errors.state}
                 classNames={{ value: "text-black" }}
                 {...register("state")}
+                onChange={handleStateChange}
               >
                 {getStateOrProvinceOptions().map((location) => (
                   <SelectItem

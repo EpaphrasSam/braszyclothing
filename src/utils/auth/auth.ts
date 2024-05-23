@@ -11,6 +11,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.admin = user.admin;
+        token.contact = user.contact;
       }
       return token;
     },
@@ -18,6 +19,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (token) {
         session.user.id = token.id;
         session.user.admin = token.admin;
+        session.user.contact = token.contact;
       }
       return session;
     },

@@ -56,6 +56,10 @@ const Cart = () => {
     }
   }, [paymentIntent, redirectStatus, router]);
 
+  // useEffect(() => {
+  //   resetCart();
+  // }, []);
+
   const pages = Math.ceil(cartItems ? cartItems?.length / rowsPerPage : 0);
 
   const items = useMemo(() => {

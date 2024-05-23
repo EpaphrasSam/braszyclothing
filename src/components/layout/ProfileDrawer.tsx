@@ -43,7 +43,7 @@ const ProfileDrawer = ({ isOpen, onClose, session }: ProfileDrawerProps) => {
           />
         </div>
         {session ? (
-          <ProfileDisplay onClose={onClose} />
+          <ProfileDisplay onClose={onClose} user={session?.user} />
         ) : (
           <ProfileLogin onClose={onClose} />
         )}
