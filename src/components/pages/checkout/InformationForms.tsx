@@ -158,7 +158,7 @@ const InformationForms = () => {
 
           <div className="flex sm:gap-3 sm:flex-row flex-col">
             <Input
-              isDisabled={!!session}
+              isReadOnly={!!session}
               variant="bordered"
               radius="sm"
               label="Email"

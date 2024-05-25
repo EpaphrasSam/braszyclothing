@@ -28,8 +28,9 @@ const Cart = () => {
   const [page, setPage] = useState(1);
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
 
-  const paymentIntent = searchParams.get("payment_intent");
-  const redirectStatus = searchParams.get("redirect_status");
+  // const paymentIntent = searchParams.get("payment_intent");
+  // const redirectStatus = searchParams.get("redirect_status");
+  const success = searchParams.get("success");
 
   const {
     removeFromCart,
@@ -46,19 +47,15 @@ const Cart = () => {
   }));
 
   useEffect(() => {
-    if (paymentIntent && redirectStatus === "succeeded") {
+    if (success) {
       toast.success("Payment has been made successfully", {
-        id: redirectStatus,
+        id: success,
         duration: 5000,
       });
       router.push("/cart");
       resetCart();
     }
-  }, [paymentIntent, redirectStatus, router]);
-
-  // useEffect(() => {
-  //   resetCart();
-  // }, []);
+  }, [success, router]);
 
   const pages = Math.ceil(cartItems ? cartItems?.length / rowsPerPage : 0);
 
@@ -110,93 +107,6 @@ const Cart = () => {
               Continue Shopping
             </p>
           </div>
-
-          {/* <div className="grid grid-cols-2 gap-4">
-            <div className="text-xs text-gray-600 font-semibold">Product</div>
-            <div className="max-md:hidden text-xs text-gray-600 font-semibold">
-              Quantity
-            </div>
-            <div className="text-xs text-gray-600 font-semibold">Total</div>
-            <Divider className="col-span-2 md:col-span-3 my-4" />
-            {cartItems &&
-              cartItems.map((item) => (
-                <React.Fragment key={item.id}>
-                  <div>
-                    <div className="flex w-full relative">
-                      <Image
-                        src={item.imageUrls[0]}
-                        alt={item.name}
-                        width={80}
-                        height={80}
-                        className="object-cover object-center rounded-sm"
-                      />
-                      <div className="flex flex-col ml-4 w-40">
-                        <div className="text-sm text-gray-700 font-semibold">
-                          {item.name}
-                        </div>
-                        <div>
-                          <span className="text-sm font-semibold text-gray-500">
-                            ${item.price}
-                          </span>
-                          {item.oldPrice && (
-                            <span className="ml-1 line-through text-xs">
-                              ${item.oldPrice}
-                            </span>
-                          )}
-                        </div>
-                        <div className="md:hidden flex gap-3 mt-8 items-center justify-center my-2">
-                          <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
-                            <FiMinus
-                              onClick={() => decrementQuantity(item.id)}
-                              className="cursor-pointer hover:scale-105"
-                            />
-                            <span className="text-gray-500">
-                              {item.quantity}
-                            </span>
-                            <FiPlus
-                              onClick={() => incrementQuantity(item.id)}
-                              className="mr-2 cursor-pointer hover:scale-110 hover:opacity-75 transition ease-in-out duration-300"
-                            />
-                          </div>
-                          <MdDeleteOutline
-                            size={24}
-                            className="cursor-pointer hover:opacity-75 transition ease-in-out duration-300"
-                            onClick={() => removeFromCart(item.id)}
-                            color="red"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-span-1 max-md:hidden">
-                    <div className="flex gap-3 items-center">
-                      <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
-                        <FiMinus
-                          onClick={() => decrementQuantity(item.id)}
-                          className="cursor-pointer hover:scale-105"
-                        />
-                        <span className="text-gray-500">{item.quantity}</span>
-                        <FiPlus
-                          onClick={() => incrementQuantity(item.id)}
-                          className="mr-2 cursor-pointer hover:scale-110 hover:opacity-75 transition ease-in-out duration-300"
-                        />
-                      </div>
-                      <MdDeleteOutline
-                        size={24}
-                        className="cursor-pointer hover:opacity-75 transition ease-in-out duration-300"
-                        onClick={() => removeFromCart(item.id)}
-                        color="red"
-                      />
-                    </div>
-                  </div>
-                  <div className="md:col-span-1">
-                    <span className="text-gray-500 font-semibold">
-                      ${(item.price * item.quantity!).toFixed(2)}
-                    </span>
-                  </div>
-                </React.Fragment>
-              ))}
-          </div> */}
 
           <Table
             aria-label="Your Cart"

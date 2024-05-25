@@ -36,7 +36,8 @@ export const sendOTP = async (otp: string, email: string): Promise<void> => {
   try {
     const { error, data }: any = await resend.emails.send({
       from: `Braszy Clothing <${process.env.RESEND_DOMAIN_EMAIL}>`,
-      to: [email],
+      // to: [email],
+      to: ["isinesam@gmail.com"],
       subject: "Your OTP",
       html: message,
     });
