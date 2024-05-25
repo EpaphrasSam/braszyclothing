@@ -119,7 +119,9 @@ const Product = ({ product }: ProductProps) => {
                 >
                   <CardBody
                     className={`text-center ${
-                      cartItem && cartItem.size === size ? "bg-blue-500" : ""
+                      cartItem && cartItem.size === size
+                        ? "bg-gray-500 text-white"
+                        : ""
                     }`}
                   >
                     {size}
@@ -141,7 +143,9 @@ const Product = ({ product }: ProductProps) => {
                 >
                   <CardBody
                     className={`text-center capitalize ${
-                      cartItem && cartItem.color === color ? "bg-blue-500" : ""
+                      cartItem && cartItem.color === color
+                        ? "bg-gray-500 text-white"
+                        : ""
                     }`}
                   >
                     {color}
