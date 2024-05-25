@@ -27,6 +27,7 @@ const Cart = () => {
   const rowsPerPage = 10;
   const [page, setPage] = useState(1);
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
+  const color = "blue";
 
   // const paymentIntent = searchParams.get("payment_intent");
   // const redirectStatus = searchParams.get("redirect_status");
@@ -143,9 +144,14 @@ const Cart = () => {
                         height={80}
                         className="object-cover object-center rounded-sm"
                       />
+
                       <div className="flex flex-col sm:ml-4 ml-2 w-40">
                         <div className="text-sm text-gray-700 font-semibold">
                           {item.name}
+                          <span
+                            className="block rounded-full w-4 h-4" // Increased size for better visibility
+                            style={{ backgroundColor: color.toLowerCase() }}
+                          ></span>
                         </div>
                         <div>
                           <span className="text-sm font-semibold text-gray-500">
