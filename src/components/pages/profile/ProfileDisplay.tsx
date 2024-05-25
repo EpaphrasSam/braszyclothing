@@ -10,6 +10,7 @@ import {
   MdPersonOutline,
   MdLogout,
 } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
 
 const sections = [
   {
@@ -58,7 +59,17 @@ const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
   return (
     <div className="flex flex-col h-full p-4">
       <div className="text-center">
-        <MdPersonOutline size={60} className="mx-auto text-gray-800" />
+        <div className="flex justify-center items-center">
+          <MdPersonOutline size={60} className="mx-auto text-gray-800" />
+
+          <Link href="/edit">
+            <FiEdit
+              size={15}
+              className="text-gray-600 ml-[-20px] cursor-pointer hover:text-gray-800 mt-4"
+              title="Edit Profile"
+            />
+          </Link>
+        </div>
         <h2 className="font-semibold text-lg mt-2">{user.name}</h2>
         <Divider className="my-2" />
         <p className="text-gray-600">{user.email}</p>

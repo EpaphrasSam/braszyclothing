@@ -3,15 +3,43 @@
 import { useStore } from "@/store/useStore";
 import useCartStore from "@/store/cart";
 import { IoCloseOutline } from "react-icons/io5";
-import { Button, Divider } from "@nextui-org/react";
+// import { Button, Divider } from "@nextui-org/react";
 import Image from "next/image";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import { useState, useMemo } from "react";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+  Divider,
+} from "@nextui-org/react";
 
 const CartDrawer = ({ onClose }: { onClose: () => void }) => {
   const router = useRouter();
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
+  const [selectedColors, setSelectedColors] = useState(() => {
+    return cartItems ? Array(cartItems.length).fill(null) : [];
+  });
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["Sm"]));
+
+  const sizeOptions = {
+    sm: "Sm",
+    lg: "Lg",
+    xl: "XL",
+    xxl: "XXL",
+  };
+  const selectedValue = useMemo(
+    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+    [selectedKeys]
+  );
+  const handleSelectionChange = (keys: any) => {
+    // Assuming keys is a Set, directly update the state
+    setSelectedKeys(new Set(keys));
+  };
 
   const { removeFromCart, incrementQuantity, decrementQuantity, totalAmount } =
     useCartStore((state) => ({
@@ -21,9 +49,23 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
       totalAmount: state.totalAmount,
     }));
 
+  const handleSelectColor = (color: string, index: number) => {
+    const newSelectedColors = [...selectedColors];
+    newSelectedColors[index] = color;
+    setSelectedColors(newSelectedColors);
+  };
+
   const handleCheckout = () => {
     router.push(`/checkouts/information`);
   };
+  const colors = [
+    [
+      { name: "blue", color: "blue" },
+      { name: "green", color: "green" },
+    ],
+    [{ name: "red", color: "red" }],
+    // Add more arrays of colors for each item
+  ];
 
   return (
     <>
@@ -72,11 +114,12 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                         height={100}
                         className="object-cover object-center rounded-sm"
                       />
+
                       <div className="flex flex-col ml-4 w-40">
                         <div className="text-sm text-gray-700 font-semibold w-32">
                           {item.name}
                         </div>
-                        <div className="w-32">
+                        <div className="w-32 ">
                           <span className="text-sm font-semibold text-gray-500">
                             ${item.price}
                           </span>
@@ -85,6 +128,50 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                               ${item.oldPrice}
                             </span>
                           )}
+                          <div>
+                            <Dropdown>
+                              <DropdownTrigger>
+                                <div className="w-10 border border-gray-400 p-1 border-radius-sm text-sm">
+                                  {selectedValue || "Select Size"}
+                                </div>
+                              </DropdownTrigger>
+                              <DropdownMenu
+                                aria-label="Sizes"
+                                variant="flat"
+                                disallowEmptySelection
+                                selectionMode="single"
+                                selectedKeys={selectedKeys}
+                                onSelectionChange={handleSelectionChange}
+                              >
+                                {Object.entries(sizeOptions).map(
+                                  ([key, label]) => (
+                                    <DropdownItem key={key}>
+                                      {label}
+                                    </DropdownItem>
+                                  )
+                                )}
+                              </DropdownMenu>
+                            </Dropdown>
+                          </div>
+                          <div className="flex mt-1">
+                            {colors[index] &&
+                              colors[index].map((color: any) => (
+                                <div
+                                  key={color}
+                                  className="w-6 h-6 flex rounded-full border m-1"
+                                  style={{
+                                    backgroundColor: color.color,
+                                    opacity:
+                                      selectedColors[index] === color.color
+                                        ? 1
+                                        : 0.5,
+                                  }}
+                                  onClick={() =>
+                                    handleSelectColor(color.color, index)
+                                  }
+                                ></div>
+                              ))}
+                          </div>
                         </div>
                         <div className="flex gap-3 mt-8 items-center justify-center my-2">
                           <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
