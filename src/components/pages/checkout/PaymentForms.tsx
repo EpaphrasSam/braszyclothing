@@ -17,6 +17,7 @@ import {
   Radio,
   RadioGroup,
   Skeleton,
+  Spinner,
 } from "@nextui-org/react";
 import useCartStore, { ShippingDetails } from "@/store/cart";
 import { useStore } from "@/store/useStore";
@@ -51,11 +52,14 @@ const CardForms = ({
   const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<string>("");
+  const [paymentElementError, setPaymentElementError] = useState(false);
+  const [loadingPaymentMethods, setLoadingPaymentMethods] = useState(false);
 
   useEffect(() => {
     const fetchPaymentMethod = async () => {
       if (!elements || !email) return;
       try {
+        setLoadingPaymentMethods(true);
         const result = await getPaymentMethod(email);
 
         if (result && result.success && result.paymentMethods) {
@@ -63,6 +67,8 @@ const CardForms = ({
         }
       } catch (error) {
         toast.error("Failed in fetching payment methods");
+      } finally {
+        setLoadingPaymentMethods(false);
       }
     };
 
@@ -79,6 +85,7 @@ const CardForms = ({
 
     const handleChange = (event: any) => {
       setIsPaymentElementComplete(event.complete);
+      setPaymentElementError(!!event.error);
     };
 
     if (paymentElement) {
@@ -100,15 +107,19 @@ const CardForms = ({
       !stripe ||
       !elements ||
       isProcessing ||
+      paymentElementError ||
+      !selectedPaymentMethod ||
       (isNewCardSelected && !isPaymentElementComplete) ||
-      (!isNewCardSelected && !isPaymentMethodSelected)
+      (!isNewCardSelected && !isPaymentMethodSelected && !email)
     );
   }, [
     stripe,
     elements,
     isProcessing,
+    paymentElementError,
     isPaymentElementComplete,
     selectedPaymentMethod,
+    email,
   ]);
 
   const confirmPayment = async (e: any) => {
@@ -221,6 +232,7 @@ const CardForms = ({
             value={selectedPaymentMethod}
             onChange={(e) => setSelectedPaymentMethod(e.target.value)}
           >
+            {loadingPaymentMethods && <Spinner />}
             {paymentMethods.map((paymentMethod) => (
               <Card radius="sm" key={paymentMethod.id}>
                 <CardBody>
@@ -249,13 +261,15 @@ const CardForms = ({
               Enter new card details
             </Radio>
           </RadioGroup>
-          {selectedPaymentMethod === "new" && (
-            <Card radius="none" className="rounded-md mb-4">
-              <CardBody className="p-4">
-                <PaymentElement />
-              </CardBody>
-            </Card>
-          )}
+          <Card
+            isDisabled={selectedPaymentMethod !== "new"}
+            radius="none"
+            className="rounded-md mb-4"
+          >
+            <CardBody className="p-4">
+              <PaymentElement />
+            </CardBody>
+          </Card>
           <div className="flex justify-center ">
             <Button
               type="submit"
