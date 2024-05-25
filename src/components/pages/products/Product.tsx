@@ -1,21 +1,82 @@
 "use client";
 
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import ImageGallery from "@/components/pages/products/ImageGallery";
-import { Button } from "@nextui-org/react";
+import { Button, Card, CardBody } from "@nextui-org/react";
 import { CiStar } from "react-icons/ci";
 import { FiTruck } from "react-icons/fi";
 import useCartStore from "@/store/cart";
 import { ProductType } from "@/types/SanityTypes";
+import { useRouter } from "next/navigation";
+import { useStore } from "@/store/useStore";
 
 type ProductProps = {
   product: ProductType;
 };
 
 const Product = ({ product }: ProductProps) => {
-  const addToCart = useCartStore((state) => state.addToCart);
+  const router = useRouter();
+  const cartItems = useStore(useCartStore, (state) => state.cartItems);
+  const { addToCart, updateItemColor, updateItemSize } = useCartStore(
+    (state) => ({
+      addToCart: state.addToCart,
+      updateItemColor: state.updateItemColor,
+      updateItemSize: state.updateItemSize,
+    })
+  );
+
+  const cartItem = useMemo(
+    () => cartItems && cartItems.find((item) => item.id === product.id),
+    [cartItems, product.id]
+  );
+
+  const defaultCardColor = cartItem ? "gray" : "blue";
+
+  const handleUpdate = useCallback(
+    (type: "color" | "size", value: string) => {
+      if (cartItem) {
+        if (type === "color") {
+          updateItemColor(product.id, value);
+        } else if (type === "size") {
+          updateItemSize(product.id, value);
+        }
+      } else {
+        addToCart(product);
+        if (type === "color") {
+          updateItemColor(product.id, value);
+        } else if (type === "size") {
+          updateItemSize(product.id, value);
+        }
+      }
+    },
+    [addToCart, updateItemColor, updateItemSize, cartItem, product.id]
+  );
+
+  if (!product)
+    return (
+      <div className="flex  items-center justify-center min-h-screen">
+        <div className="flex flex-col gap-6 items-center">
+          <div className="text-5xl text-gray-600 font-bold">
+            No product found
+          </div>
+          <Button
+            onClick={() => router.push("/")}
+            color="primary"
+            radius="none"
+            size="lg"
+            className="w-[200px]"
+          >
+            Continue Shopping
+          </Button>
+        </div>
+      </div>
+    );
 
   const isDisabled = !product.inStock;
+  const handleCheckOut = () => {
+    addToCart(product);
+    router.push("/checkouts/information");
+  };
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
@@ -42,12 +103,54 @@ const Product = ({ product }: ProductProps) => {
               </span>
             )}
           </div>
-          {/* <span className="text-sm text-gray-500">Incl. Vat plus shipping</span> */}
         </div>
-        {/* <div className="mb-6 flex items-center gap-2 text-gray-500">
-          <FiTruck size={20} />
-          <span className="text-sm">2-4 days</span>
-        </div> */}
+
+        <div className="mb-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <div className="font-bold text-gray-700 text-xl">Size</div>
+            <div className="flex gap-2">
+              {product.sizes.map((size) => (
+                <Card
+                  isPressable
+                  radius="none"
+                  className="w-12"
+                  key={size}
+                  onClick={() => handleUpdate("size", size)}
+                >
+                  <CardBody
+                    className={`text-center ${
+                      cartItem && cartItem.size === size ? "bg-blue-500" : ""
+                    }`}
+                  >
+                    {size}
+                  </CardBody>
+                </Card>
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="font-bold text-gray-700 text-xl">Colors</div>
+            <div className="flex gap-2">
+              {product.colors.map((color) => (
+                <Card
+                  isPressable
+                  radius="none"
+                  className="w-fit"
+                  key={color}
+                  onClick={() => handleUpdate("color", color)}
+                >
+                  <CardBody
+                    className={`text-center capitalize ${
+                      cartItem && cartItem.color === color ? "bg-blue-500" : ""
+                    }`}
+                  >
+                    {color}
+                  </CardBody>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
         <div className="flex sm:w-1/2 w-full flex-col gap-2.5">
           <Button
             radius="none"
@@ -65,6 +168,7 @@ const Product = ({ product }: ProductProps) => {
             className="rounded-md"
             color={`${isDisabled ? "default" : "secondary"}`}
             isDisabled={isDisabled}
+            onClick={handleCheckOut}
           >
             Checkout Now
           </Button>

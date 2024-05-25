@@ -68,7 +68,7 @@ const CardItems = ({ product }: CardItemsProps) => {
           />
           {isHovered && (
             <motion.div
-              className="flex ml-4 justify-evenly absolute bottom-20 -translate-x-1/2"
+              className="flex ml-2 justify-evenly absolute bottom-20 -translate-x-1/2"
               initial={{ y: 60, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 50, opacity: 0 }}

@@ -52,6 +52,37 @@ export default defineType({
         }),
     }),
     defineField({
+      name: "color",
+      type: "array",
+      title: "Colors",
+      of: [{ type: "string" }],
+      options: {
+        list: [
+          { title: "Red", value: "red" },
+          { title: "Green", value: "green" },
+          { title: "Blue", value: "blue" },
+          { title: "Black", value: "black" },
+          { title: "White", value: "white" },
+        ],
+      },
+      validation: (Rule) => Rule.required().min(1),
+    }),
+    defineField({
+      name: "size",
+      type: "array",
+      title: "Sizes",
+      of: [{ type: "string" }],
+      options: {
+        list: [
+          { title: "Small", value: "S" },
+          { title: "Medium", value: "M" },
+          { title: "Large", value: "L" },
+          { title: "Extra Large", value: "XL" },
+        ],
+      },
+      validation: (Rule) => Rule.required().min(1),
+    }),
+    defineField({
       name: "category",
       type: "reference",
       title: "Category",

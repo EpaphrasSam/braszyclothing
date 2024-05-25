@@ -3,12 +3,12 @@
 import { useStore } from "@/store/useStore";
 import useCartStore from "@/store/cart";
 import { IoCloseOutline } from "react-icons/io5";
-// import { Button, Divider } from "@nextui-org/react";
 import Image from "next/image";
 import { FiMinus, FiPlus } from "react-icons/fi";
+import { IoIosArrowDown } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
-import { useRouter } from "next/navigation";
-import { useState, useMemo } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import {
   Dropdown,
   DropdownTrigger,
@@ -19,53 +19,33 @@ import {
 } from "@nextui-org/react";
 
 const CartDrawer = ({ onClose }: { onClose: () => void }) => {
+  const pathname = usePathname();
   const router = useRouter();
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
-  const [selectedColors, setSelectedColors] = useState(() => {
-    return cartItems ? Array(cartItems.length).fill(null) : [];
-  });
-  const [selectedKeys, setSelectedKeys] = useState(new Set(["Sm"]));
 
-  const sizeOptions = {
-    sm: "Sm",
-    lg: "Lg",
-    xl: "XL",
-    xxl: "XXL",
-  };
-  const selectedValue = useMemo(
-    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-    [selectedKeys]
-  );
-  const handleSelectionChange = (keys: any) => {
-    // Assuming keys is a Set, directly update the state
-    setSelectedKeys(new Set(keys));
-  };
-
-  const { removeFromCart, incrementQuantity, decrementQuantity, totalAmount } =
-    useCartStore((state) => ({
-      removeFromCart: state.removeFromCart,
-      incrementQuantity: state.incrementQuantity,
-      decrementQuantity: state.decrementQuantity,
-      totalAmount: state.totalAmount,
-    }));
-
-  const handleSelectColor = (color: string, index: number) => {
-    const newSelectedColors = [...selectedColors];
-    newSelectedColors[index] = color;
-    setSelectedColors(newSelectedColors);
-  };
+  const {
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    totalAmount,
+    updateItemColor,
+    updateItemSize,
+  } = useCartStore((state) => ({
+    removeFromCart: state.removeFromCart,
+    incrementQuantity: state.incrementQuantity,
+    decrementQuantity: state.decrementQuantity,
+    totalAmount: state.totalAmount,
+    updateItemColor: state.updateItemColor,
+    updateItemSize: state.updateItemSize,
+  }));
 
   const handleCheckout = () => {
     router.push(`/checkouts/information`);
   };
-  const colors = [
-    [
-      { name: "blue", color: "blue" },
-      { name: "green", color: "green" },
-    ],
-    [{ name: "red", color: "red" }],
-    // Add more arrays of colors for each item
-  ];
+
+  // useEffect(() => {
+  //   onClose();
+  // }, [pathname]);
 
   return (
     <>
@@ -112,7 +92,8 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                         alt={item.name}
                         width={100}
                         height={100}
-                        className="object-cover object-center rounded-sm"
+                        className="w-24 h-24 object-cover object-center rounded-sm cursor-pointer hover:opacity-75 transition ease-in-out duration-300"
+                        onClick={() => router.push(`/products/${item.slug}`)}
                       />
 
                       <div className="flex flex-col ml-4 w-40">
@@ -128,11 +109,13 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                               ${item.oldPrice}
                             </span>
                           )}
-                          <div>
+                          <div className="flex gap-4 mt-2">
                             <Dropdown>
                               <DropdownTrigger>
-                                <div className="w-10 border border-gray-400 p-1 border-radius-sm text-sm">
-                                  {selectedValue || "Select Size"}
+                                <div className="capitalize text-base text-gray-500 flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
+                                  Size
+                                  <IoIosArrowDown color="gray" />
+                                  {": "}
                                 </div>
                               </DropdownTrigger>
                               <DropdownMenu
@@ -140,40 +123,60 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                                 variant="flat"
                                 disallowEmptySelection
                                 selectionMode="single"
-                                selectedKeys={selectedKeys}
-                                onSelectionChange={handleSelectionChange}
+                                selectedKeys={[item.size]}
+                                onSelectionChange={(key: any) =>
+                                  updateItemSize(item.id, key.currentKey)
+                                }
                               >
-                                {Object.entries(sizeOptions).map(
-                                  ([key, label]) => (
-                                    <DropdownItem key={key}>
-                                      {label}
-                                    </DropdownItem>
-                                  )
-                                )}
+                                {item.sizes.map((size) => (
+                                  <DropdownItem
+                                    className="capitalize"
+                                    key={size}
+                                  >
+                                    {size}
+                                  </DropdownItem>
+                                ))}
                               </DropdownMenu>
                             </Dropdown>
+                            <div className="text-gray-600 font-semibold">
+                              {item.size}
+                            </div>
                           </div>
-                          <div className="flex mt-1">
-                            {colors[index] &&
-                              colors[index].map((color: any) => (
-                                <div
-                                  key={color}
-                                  className="w-6 h-6 flex rounded-full border m-1"
-                                  style={{
-                                    backgroundColor: color.color,
-                                    opacity:
-                                      selectedColors[index] === color.color
-                                        ? 1
-                                        : 0.5,
-                                  }}
-                                  onClick={() =>
-                                    handleSelectColor(color.color, index)
-                                  }
-                                ></div>
-                              ))}
+                          <div className="flex gap-2 mt-1">
+                            <Dropdown>
+                              <DropdownTrigger>
+                                <div className="capitalize text-base text-gray-500 flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
+                                  Color
+                                  <IoIosArrowDown color="gray" />
+                                  {": "}
+                                </div>
+                              </DropdownTrigger>
+                              <DropdownMenu
+                                aria-label="Colors"
+                                variant="flat"
+                                disallowEmptySelection
+                                selectionMode="single"
+                                selectedKeys={[item.color]}
+                                onSelectionChange={(key: any) =>
+                                  updateItemColor(item.id, key.currentKey)
+                                }
+                              >
+                                {item.colors.map((color) => (
+                                  <DropdownItem
+                                    className="capitalize"
+                                    key={color}
+                                  >
+                                    {color}
+                                  </DropdownItem>
+                                ))}
+                              </DropdownMenu>
+                            </Dropdown>
+                            <div className="text-gray-600 font-semibold capitalize">
+                              {item.color}
+                            </div>
                           </div>
                         </div>
-                        <div className="flex gap-3 mt-8 items-center justify-center my-2">
+                        <div className="flex gap-3 mt-2 items-center justify-center my-2">
                           <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4">
                             <FiMinus
                               onClick={() => decrementQuantity(item.id)}

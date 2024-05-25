@@ -14,12 +14,17 @@ import {
   TableColumn,
   TableCell,
   Pagination,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
+import { IoIosArrowDown } from "react-icons/io";
 
 const Cart = () => {
   const router = useRouter();
@@ -39,12 +44,16 @@ const Cart = () => {
     decrementQuantity,
     totalAmount,
     resetCart,
+    updateItemColor,
+    updateItemSize,
   } = useCartStore((state) => ({
     removeFromCart: state.removeFromCart,
     incrementQuantity: state.incrementQuantity,
     decrementQuantity: state.decrementQuantity,
     totalAmount: state.totalAmount,
     resetCart: state.resetCart,
+    updateItemColor: state.updateItemColor,
+    updateItemSize: state.updateItemSize,
   }));
 
   useEffect(() => {
@@ -142,28 +151,92 @@ const Cart = () => {
                         alt={item.name}
                         width={80}
                         height={80}
-                        className="object-cover object-center rounded-sm"
+                        className=" w-28 h-28 object-cover object-center rounded-sm"
                       />
 
-                      <div className="flex flex-col sm:ml-4 ml-2 w-40">
-                        <div className="text-sm text-gray-700 font-semibold">
-                          {item.name}
-                          <span
-                            className="block rounded-full w-4 h-4" // Increased size for better visibility
-                            style={{ backgroundColor: color.toLowerCase() }}
-                          ></span>
-                        </div>
-                        <div>
-                          <span className="text-sm font-semibold text-gray-500">
-                            ${item.price}
-                          </span>
-                          {item.oldPrice && (
-                            <span className="ml-1 line-through text-xs">
-                              ${item.oldPrice}
+                      <div className="flex flex-col ml-1 w-40">
+                        <div className="flex flex-col ml-2 w-40">
+                          <div className="text-sm text-gray-700 font-semibold w-32">
+                            {item.name}
+                          </div>
+                          <div className="w-32 ">
+                            <span className="text-sm font-semibold text-gray-500">
+                              ${item.price}
                             </span>
-                          )}
+                            {item.oldPrice && (
+                              <span className="ml-1 line-through text-xs">
+                                ${item.oldPrice}
+                              </span>
+                            )}
+                            <div className="flex gap-4 mt-4">
+                              <Dropdown>
+                                <DropdownTrigger>
+                                  <div className="capitalize flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
+                                    Size
+                                    <IoIosArrowDown color="gray" />
+                                    {": "}
+                                  </div>
+                                </DropdownTrigger>
+                                <DropdownMenu
+                                  aria-label="Sizes"
+                                  variant="flat"
+                                  disallowEmptySelection
+                                  selectionMode="single"
+                                  selectedKeys={[item.size]}
+                                  onSelectionChange={(key: any) =>
+                                    updateItemSize(item.id, key.currentKey)
+                                  }
+                                >
+                                  {item.sizes.map((size) => (
+                                    <DropdownItem
+                                      className="capitalize"
+                                      key={size}
+                                    >
+                                      {size}
+                                    </DropdownItem>
+                                  ))}
+                                </DropdownMenu>
+                              </Dropdown>
+                              <div className="text-gray-600 font-semibold">
+                                {item.size}
+                              </div>
+                            </div>
+                            <div className="flex gap-2 mt-2">
+                              <Dropdown>
+                                <DropdownTrigger>
+                                  <div className="capitalize flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
+                                    Color
+                                    <IoIosArrowDown color="gray" />
+                                    {": "}
+                                  </div>
+                                </DropdownTrigger>
+                                <DropdownMenu
+                                  aria-label="Colors"
+                                  variant="flat"
+                                  disallowEmptySelection
+                                  selectionMode="single"
+                                  selectedKeys={[item.color]}
+                                  onSelectionChange={(key: any) =>
+                                    updateItemColor(item.id, key.currentKey)
+                                  }
+                                >
+                                  {item.colors.map((color) => (
+                                    <DropdownItem
+                                      className="capitalize"
+                                      key={color}
+                                    >
+                                      {color}
+                                    </DropdownItem>
+                                  ))}
+                                </DropdownMenu>
+                              </Dropdown>
+                              <div className="text-gray-600 font-semibold capitalize">
+                                {item.color}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="md:hidden flex-grow flex gap-1 mt-8 items-center justify-center my-2">
+                        <div className="md:hidden flex-grow flex gap-1 mt-2 items-center justify-center my-2">
                           <div className="border-1 border-gray-400 border-solid grid grid-cols-3 items-center gap-7 p-3 px-4 sm:px-2">
                             <FiMinus
                               onClick={() => decrementQuantity(item.id)}

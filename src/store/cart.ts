@@ -23,7 +23,10 @@ export interface ShippingDetails {
 }
 
 export interface CartState {
-  cartItems: ProductType[];
+  cartItems: (ProductType & {
+    color: string;
+    size: string;
+  })[];
   paymentIntent: PaymentIntentType | null;
   shippingDetails: ShippingDetails | null;
   discount: number;
@@ -34,6 +37,8 @@ export interface CartState {
   removeFromCart: (itemId: string) => void;
   incrementQuantity: (itemId: string) => void;
   decrementQuantity: (itemId: string) => void;
+  updateItemColor: (itemId: string, color: string) => void;
+  updateItemSize: (itemId: string, size: string) => void;
   totalAmount: () => number;
   netAmount: () => number;
   resetCart: () => void;
@@ -50,15 +55,19 @@ const useCartStore = create<CartState>()(
       setPaymentIntent: (paymentIntent) => set({ paymentIntent }),
       setShippingDetails: (details) => set({ shippingDetails: details }),
       setDiscount: (discount) => set({ discount }),
-      addToCart: (item) =>
+      addToCart: (item: ProductType) =>
         set((state) => ({
           cartItems: state.cartItems.some((cartItem) => cartItem.id === item.id)
-            ? state.cartItems.map((cartItem) =>
-                cartItem.id === item.id
-                  ? { ...cartItem, quantity: (cartItem.quantity || 0) + 1 }
-                  : cartItem
-              )
-            : [...state.cartItems, { ...item, quantity: 1 }],
+            ? state.cartItems
+            : [
+                ...state.cartItems,
+                {
+                  ...item,
+                  quantity: 1,
+                  color: item.colors[0],
+                  size: item.sizes[0],
+                },
+              ],
         })),
       removeFromCart: (itemId) =>
         set((state) => ({
@@ -81,6 +90,19 @@ const useCartStore = create<CartState>()(
                 : item
             )
             .filter((item) => item.quantity! > 0),
+        })),
+      updateItemColor: (itemId, color) =>
+        set((state) => ({
+          cartItems: state.cartItems.map((item) =>
+            item.id === itemId && color ? { ...item, color } : item
+          ),
+        })),
+
+      updateItemSize: (itemId, size) =>
+        set((state) => ({
+          cartItems: state.cartItems.map((item) =>
+            item.id === itemId && size ? { ...item, size } : item
+          ),
         })),
       totalAmount: () =>
         get().cartItems.reduce(

@@ -82,8 +82,11 @@ export const getLatestProducts = async () => {
       "categoryName": category->title,
       "categorySlug": category->slug.current,
       "slug": slug.current,
-      "imageUrls": images[].asset->url
+      "imageUrls": images[].asset->url,
+      "colors": color,
+      "sizes": size
     }`;
+
     const latestProducts: ProductType[] = await client.fetch(query);
     return { latestProducts, error: null };
   } catch (error: any) {
@@ -103,7 +106,9 @@ export const getProduct = async (slug: string) => {
       "categoryName": category->title,
       "categorySlug": category->slug.current,
       "slug": slug.current,
-      "imageUrls": images[].asset->url
+      "imageUrls": images[].asset->url,
+      "colors": color,
+      "sizes": size
     }`;
     const response: ProductType = await client.fetch(query);
     return { product: response, error: null };

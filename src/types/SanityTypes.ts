@@ -30,6 +30,25 @@ export interface ProductType {
   inStock: boolean;
   slug: string;
   imageUrls: string[];
+  colors: string[];
+  sizes: string[];
+}
+
+export interface CartProductType {
+  id: string;
+  name: string;
+  price: number;
+  oldPrice: number;
+  description: string;
+  quantity?: number;
+  apparel: string;
+  categoryName: string;
+  categorySlug: string;
+  inStock: boolean;
+  slug: string;
+  imageUrls: string[];
+  color: string;
+  size: string;
 }
 
 export interface ApparelType {

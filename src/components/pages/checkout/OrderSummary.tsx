@@ -121,9 +121,9 @@ const OrderSummary = () => {
                   <Image
                     src={item.imageUrls[0]}
                     alt={item.name}
-                    width={80}
-                    height={50}
-                    className="rounded-md"
+                    width={100}
+                    height={100}
+                    className="w-20 h-20 object-cover object-center rounded-md"
                   />
                 </Badge>
               </div>
@@ -133,6 +133,12 @@ const OrderSummary = () => {
                 </h3>
                 <p className="text-sm text-gray-500 font-semibold">
                   ${item.price.toFixed(2)}
+                </p>
+                <p className="text-sm text-gray-500 font-semibold">
+                  Size: {item.size}
+                </p>
+                <p className="text-sm text-gray-500 font-semibold capitalize">
+                  Color: {item.color}
                 </p>
               </div>
             </div>
