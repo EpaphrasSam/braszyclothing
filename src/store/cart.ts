@@ -10,8 +10,9 @@ export interface PaymentIntentType {
 }
 
 export interface ShippingDetails {
-  email: string;
-  contact: string;
+  id?: string;
+  email?: string;
+  contact?: string;
   firstName: string;
   lastName: string;
   address: string;

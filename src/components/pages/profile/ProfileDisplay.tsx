@@ -1,5 +1,5 @@
 import { logoutAction } from "@/services/authServices";
-import { Button, Divider } from "@nextui-org/react";
+import { Badge, Button, Divider } from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
 import toast from "react-hot-toast";
@@ -60,15 +60,21 @@ const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
     <div className="flex flex-col h-full p-4">
       <div className="text-center">
         <div className="flex justify-center items-center">
-          <MdPersonOutline size={60} className="mx-auto text-gray-800" />
-
-          <Link href="/edit">
-            <FiEdit
-              size={15}
-              className="text-gray-600 ml-[-20px] cursor-pointer hover:text-gray-800 mt-4"
-              title="Edit Profile"
-            />
-          </Link>
+          <Badge
+            className="bg-white"
+            content={
+              <Link href="/edit-profile">
+                <FiEdit
+                  size={20}
+                  className=" cursor-pointer  transition ease-in-out duration-300 hover:opacity-50"
+                  title="Edit Profile"
+                />
+              </Link>
+            }
+            placement="bottom-right"
+          >
+            <MdPersonOutline size={60} className="mx-auto text-gray-800" />
+          </Badge>
         </div>
         <h2 className="font-semibold text-lg mt-2">{user.name}</h2>
         <Divider className="my-2" />
