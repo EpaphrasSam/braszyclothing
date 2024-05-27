@@ -17,7 +17,7 @@ export interface ShippingDetails {
   lastName: string;
   address: string;
   country: string;
-  state?: string;
+  state?: string | null;
   city: string;
   code: string;
   shippingMethod?: string;
@@ -44,6 +44,7 @@ export interface CartState {
   netAmount: () => number;
   resetCart: () => void;
   resetAmount: () => void;
+  resetShippingDetails: () => void;
 }
 
 const useCartStore = create<CartState>()(
@@ -117,6 +118,7 @@ const useCartStore = create<CartState>()(
         return totalAmount + fee - discount;
       },
       resetAmount: () => set({ paymentIntent: null, discount: 0 }),
+      resetShippingDetails: () => set({ shippingDetails: null }),
       resetCart: () =>
         set({
           paymentIntent: null,

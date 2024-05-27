@@ -201,7 +201,7 @@ const Cart = () => {
                                 {item.size}
                               </div>
                             </div>
-                            <div className="flex gap-2 mt-2">
+                            <div className="flex gap-2">
                               <Dropdown>
                                 <DropdownTrigger>
                                   <div className="capitalize flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">

@@ -14,24 +14,24 @@ import { FiEdit } from "react-icons/fi";
 
 const sections = [
   {
-    href: "#orders",
-    icon: <MdOutlineShoppingBag size={32} className="text-gray-800 " />,
+    href: "/orders",
+    icon: <MdOutlineShoppingBag size={32} className="text-gray-800" />,
     title: "Your Orders",
     description:
       "Track, return, cancel an order, download invoice or buy again",
   },
   {
-    href: "#addresses",
+    href: "/shipping-address",
     icon: <MdOutlineLocationOn size={32} className="text-gray-800" />,
     title: "Your Addresses",
-    description: "Edit, remove or set default address",
+    description: "Edit, remove and add address",
   },
-  {
-    href: "#payments",
-    icon: <MdOutlineCreditCard size={32} className="text-gray-800" />,
-    title: "Your Payments",
-    description: "View all transactions, manage payment methods and settings",
-  },
+  // {
+  //   href: "#payments",
+  //   icon: <MdOutlineCreditCard size={32} className="text-gray-800" />,
+  //   title: "Your Payments",
+  //   description: "View all transactions, manage payment methods and settings",
+  // },
 ];
 
 interface ProfileDisplayProps {
@@ -105,7 +105,7 @@ const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
           fullWidth
           radius="none"
           startContent={<MdLogout size={20} />}
-          className="bg-gray-800 text-white font-bold rounded hover:bg-gray-700"
+          className="bg-red-800 text-white font-bold rounded hover:bg-gray-700"
           onClick={logOut}
         >
           Logout

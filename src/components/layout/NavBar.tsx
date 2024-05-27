@@ -55,12 +55,18 @@ const NavBar = () => {
 
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
   const resetAmount = useCartStore((state) => state.resetAmount);
+  const resetShippingDetails = useCartStore(
+    (state) => state.resetShippingDetails
+  );
 
   const { data: session, status } = useSession();
 
   useEffect(() => {
     resetAmount();
-  }, []);
+    if (!session) {
+      resetShippingDetails();
+    }
+  }, [session]);
 
   useEffect(() => {
     return scrollY.on("change", (y) => {

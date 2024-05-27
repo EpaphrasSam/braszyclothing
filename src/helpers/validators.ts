@@ -3,8 +3,11 @@ import { FormData as SignUpFormData } from "@/components/pages/signup/SignUp";
 import { FormData as LoginFormData } from "@/components/global/LoginForm";
 
 export const shippingSchemaBase = z.object({
-  email: z.string().email("Invalid email address"),
-  contact: z.string().min(10, "Contact number should be at least 10 digits"),
+  email: z.string().email("Invalid email address").optional(),
+  contact: z
+    .string()
+    .min(10, "Contact number should be at least 10 digits")
+    .optional(),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   address: z.string().min(1, "Address is required"),

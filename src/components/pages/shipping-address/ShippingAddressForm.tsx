@@ -6,35 +6,45 @@ import { useForm, Controller } from "react-hook-form";
 import { ShippingDetails } from "@/store/cart";
 import { countries, provinces, states } from "@/lib/constants/countries";
 import { Session } from "next-auth";
+import { validateShippingDetails } from "@/helpers/validators";
+import { saveShippingAddress } from "@/services/cartServices";
+import toast from "react-hot-toast";
 
 interface ShippingAddressFormProps {
   addresses: ShippingDetails[];
-  setDetails: any;
-  errors: any;
   session: Session | null;
-  clearErrors: any;
-  formDefaultValues: ShippingDetails;
+  setDetails?: any;
+  Errors?: any;
+  clearErrors?: any;
+  formDefaultValues?: ShippingDetails;
 }
 
 const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
   addresses,
   setDetails,
-  errors,
+  Errors,
   session,
   clearErrors,
   formDefaultValues,
 }: ShippingAddressFormProps) => {
   const [selected, setSelected] = useState<ShippingDetails | null>(null);
-  const { control, watch, handleSubmit, setValue, reset } =
-    useForm<ShippingDetails>({
-      defaultValues: formDefaultValues,
-    });
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    control,
+    watch,
+    handleSubmit,
+    setValue,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm<ShippingDetails>({
+    defaultValues: formDefaultValues,
+  });
 
   const country = watch("country");
 
   const compareAddresses = useCallback(
     ({ email, contact, ...rest }: ShippingDetails, addr: ShippingDetails) => {
-      console.log(addr, rest);
       return Object.keys(rest).every(
         (key) =>
           rest[key as keyof typeof rest] === addr[key as keyof typeof addr]
@@ -45,28 +55,37 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
 
   useEffect(() => {
     if (session && addresses.length > 0) {
-      const matchedAddress = addresses.find((addr) =>
-        compareAddresses(formDefaultValues, addr)
-      );
-      if (matchedAddress) {
-        console.log(matchedAddress);
-        setSelected(matchedAddress);
-        reset(matchedAddress);
+      if (!formDefaultValues) {
+        setSelected(addresses[0]);
+        reset(addresses[0]);
       } else {
-        setSelected(null);
-        reset(formDefaultValues);
+        const matchedAddress = addresses.find((addr) =>
+          compareAddresses(formDefaultValues, addr)
+        );
+        if (matchedAddress) {
+          setSelected(matchedAddress);
+          reset(matchedAddress);
+        } else {
+          setSelected(null);
+          reset(formDefaultValues);
+        }
       }
     } else {
-      setSelected(null);
-      reset({
-        firstName: "",
-        lastName: "",
-        address: "",
-        city: "",
-        state: "",
-        country: "United States",
-        code: "",
-      });
+      if (formDefaultValues) {
+        setSelected(null);
+        reset(formDefaultValues);
+      } else {
+        setSelected(null);
+        reset({
+          firstName: "",
+          lastName: "",
+          address: "",
+          city: "",
+          state: "",
+          country: "United States",
+          code: "",
+        });
+      }
     }
   }, [addresses, session, formDefaultValues]);
 
@@ -87,26 +106,57 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
       const selectedAddress = addresses[index];
       setSelected(selectedAddress);
 
-      (
-        Object.keys(selectedAddress).filter((key) =>
-          isNaN(Number(key))
-        ) as Array<keyof Partial<ShippingDetails>>
-      ).forEach((key) => {
-        setDetails(key, selectedAddress[key]);
-      });
+      if (setDetails) {
+        (
+          Object.keys(selectedAddress).filter((key) =>
+            isNaN(Number(key))
+          ) as Array<keyof Partial<ShippingDetails>>
+        ).forEach((key) => {
+          setDetails(key, selectedAddress[key]);
+        });
+      }
 
       reset(selectedAddress);
+    }
+    if (clearErrors) {
+      clearErrors();
     }
   };
 
   const handleCountryChange = (value: string) => {
-    setDetails("country", value);
+    if (setDetails) {
+      setDetails("country", value);
+    }
     setValue("country", value);
     setValue("state", "");
   };
 
-  const handleFormSubmit = (data: ShippingDetails) => {
-    console.log(data);
+  const handleFormSubmit = async (data: ShippingDetails) => {
+    const validationErrors = validateShippingDetails(data);
+    if (validationErrors) {
+      Object.keys(validationErrors).forEach((field: any) => {
+        setError(field, {
+          type: "manual",
+          message: validationErrors[field as keyof typeof validationErrors],
+        });
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { message, error } = await saveShippingAddress(
+      data,
+      session?.user?.id as string
+    );
+
+    if (error) {
+      toast.error(error);
+    } else if (message) {
+      toast.success(message);
+    }
+
+    setIsLoading(false);
   };
 
   const getStateOrProvinceOptions = () => {
@@ -170,7 +220,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
           className="flex flex-col gap-4"
           onSubmit={handleSubmit(handleFormSubmit)}
         >
-          <div className="flex space-x-4">
+          <div className="flex sm:flex-row flex-col gap-4 items-center">
             <Controller
               name="firstName"
               control={control}
@@ -186,12 +236,17 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
                   label="First Name"
                   placeholder="First Name"
                   labelPlacement="outside"
-                  errorMessage={errors.firstName?.message as string}
-                  isInvalid={!!errors.firstName}
+                  errorMessage={
+                    (Errors?.firstName?.message as string) ||
+                    (errors?.firstName?.message as string)
+                  }
+                  isInvalid={!!Errors?.firstName || !!errors?.firstName}
                   onChange={(e) => {
                     field.onChange(e);
-                    setDetails("firstName", e.target.value);
-                    clearErrors("firstName");
+                    if (setDetails && clearErrors) {
+                      setDetails("firstName", e.target.value);
+                      clearErrors("firstName");
+                    }
                   }}
                 />
               )}
@@ -211,12 +266,17 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
                   label="Last Name"
                   placeholder="Last Name"
                   labelPlacement="outside"
-                  errorMessage={errors.lastName?.message as string}
-                  isInvalid={!!errors.lastName}
+                  errorMessage={
+                    (Errors?.lastName?.message as string) ||
+                    (errors?.lastName?.message as string)
+                  }
+                  isInvalid={!!Errors?.lastName || !!errors?.lastName}
                   onChange={(e) => {
                     field.onChange(e);
-                    setDetails("lastName", e.target.value);
-                    clearErrors("lastName");
+                    if (setDetails && clearErrors) {
+                      setDetails("lastName", e.target.value);
+                      clearErrors("lastName");
+                    }
                   }}
                 />
               )}
@@ -237,12 +297,17 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
                 label="Address"
                 placeholder="Address"
                 labelPlacement="outside"
-                errorMessage={errors.address?.message as string}
-                isInvalid={!!errors.address}
+                errorMessage={
+                  (Errors?.address?.message as string) ||
+                  (errors?.address?.message as string)
+                }
+                isInvalid={!!Errors?.address || !!errors?.address}
                 onChange={(e) => {
                   field.onChange(e);
-                  setDetails("address", e.target.value);
-                  clearErrors("address");
+                  if (setDetails && clearErrors) {
+                    setDetails("address", e.target.value);
+                    clearErrors("address");
+                  }
                 }}
               />
             )}
@@ -265,10 +330,15 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
                   classNames={{ value: "text-black" }}
                   onChange={(event) => {
                     handleCountryChange(event.target.value);
-                    clearErrors("country");
+                    if (clearErrors) {
+                      clearErrors("country");
+                    }
                   }}
-                  errorMessage={errors.country?.message as string}
-                  isInvalid={!!errors.country}
+                  errorMessage={
+                    (Errors?.country?.message as string) ||
+                    (errors?.country?.message as string)
+                  }
+                  isInvalid={!!Errors?.country || !!errors.country}
                 >
                   {countries.map((country) => (
                     <SelectItem key={country.name} value={country.name}>
@@ -285,11 +355,12 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
                 render={({ field }) => (
                   <Select
                     {...field}
+                    value={watch("state") || ""}
                     variant="bordered"
                     label={country === "Canada" ? "Province" : "State"}
                     radius="sm"
                     size="lg"
-                    selectedKeys={[watch("state")!]}
+                    selectedKeys={[watch("state") || ""]}
                     labelPlacement="outside"
                     placeholder={
                       country === "Canada"
@@ -300,11 +371,16 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
                     classNames={{ value: "text-black" }}
                     onChange={(event) => {
                       field.onChange(event);
-                      setDetails("state", event.target.value);
-                      clearErrors("state");
+                      if (setDetails && clearErrors) {
+                        setDetails("state", event.target.value);
+                        clearErrors("state");
+                      }
                     }}
-                    errorMessage={errors.state?.message as string}
-                    isInvalid={!!errors.state}
+                    errorMessage={
+                      (Errors?.state?.message as string) ||
+                      (errors?.state?.message as string)
+                    }
+                    isInvalid={Errors ? !!Errors.state : !!errors.state}
                   >
                     {getStateOrProvinceOptions().map((location) => (
                       <SelectItem
@@ -333,12 +409,17 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
                   label="City"
                   placeholder="City"
                   labelPlacement="outside"
-                  errorMessage={errors.city?.message as string}
-                  isInvalid={!!errors.city}
+                  errorMessage={
+                    (Errors?.city?.message as string) ||
+                    (errors?.city?.message as string)
+                  }
+                  isInvalid={!!Errors?.city || !!errors?.city}
                   onChange={(e) => {
                     field.onChange(e);
-                    setDetails("city", e.target.value);
-                    clearErrors("city");
+                    if (setDetails && clearErrors) {
+                      setDetails("city", e.target.value);
+                      clearErrors("city");
+                    }
                   }}
                 />
               )}
@@ -358,12 +439,17 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
                   label="Zip Code"
                   placeholder="Zip Code"
                   labelPlacement="outside"
-                  errorMessage={errors.code?.message as string}
-                  isInvalid={!!errors.code}
+                  errorMessage={
+                    (Errors?.code?.message as string) ||
+                    (errors?.code?.message as string)
+                  }
+                  isInvalid={!!Errors?.code || !!errors?.code}
                   onChange={(e) => {
                     field.onChange(e);
-                    setDetails("code", e.target.value);
-                    clearErrors("code");
+                    if (setDetails && clearErrors) {
+                      setDetails("code", e.target.value);
+                      clearErrors("code");
+                    }
                   }}
                 />
               )}
@@ -374,6 +460,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
               <Button
                 type="submit"
                 className="bg-black text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
+                isLoading={isLoading}
               >
                 Save Address
               </Button>

@@ -16,6 +16,7 @@ model User {
   orders          Order[]
   admin           Boolean      @default(false)
   billingAccounts BillingAccount[]
+  shippingAddress ShippingAddress[]
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 }
@@ -31,6 +32,8 @@ model Guest {
 
 model ShippingAddress {
   id         String    @id @default(cuid()) @map("_id") 
+  userId     String          
+  user       User      @relation(fields: [userId], references: [id])
   firstName  String
   lastName   String
   address    String

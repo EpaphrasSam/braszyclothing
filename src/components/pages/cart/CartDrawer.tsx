@@ -142,7 +142,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                               {item.size}
                             </div>
                           </div>
-                          <div className="flex gap-2 mt-1">
+                          <div className="flex gap-2">
                             <Dropdown>
                               <DropdownTrigger>
                                 <div className="capitalize text-base text-gray-500 flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
