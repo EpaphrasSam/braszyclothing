@@ -2,6 +2,7 @@
 
 import { calculateStripeFee } from "@/helpers/feeCalculators";
 import { ShippingDetails } from "@/store/cart";
+import { ProductType } from "@/types/SanityTypes";
 import { stripe } from "@/utils/stripe";
 import Stripe from "stripe";
 
@@ -17,17 +18,14 @@ export const createPaymentIntent = async (
     const netAmount = amt + fee;
 
     const paymentIntentParams: Stripe.PaymentIntentCreateParams = {
+      payment_method_types: ["card"],
       amount: Math.round(netAmount * 100),
       currency: "usd",
-      automatic_payment_methods: {
-        enabled: true,
-      },
       metadata: {
         fee: fee.toFixed(2),
         net_amount: netAmount.toFixed(2),
         shippingDetails: JSON.stringify(shippingDetails),
       },
-      setup_future_usage: "off_session",
     };
 
     if (email) {
@@ -38,6 +36,13 @@ export const createPaymentIntent = async (
 
       if (customer && customer.data && customer.data.length > 0) {
         paymentIntentParams.customer = customer.data[0].id;
+        paymentIntentParams.setup_future_usage = "off_session";
+      } else {
+        const newCustomer = await stripe.customers.create({
+          email: email,
+        });
+        paymentIntentParams.customer = newCustomer.id;
+        paymentIntentParams.setup_future_usage = "off_session";
       }
     }
 
@@ -75,21 +80,21 @@ export const savePaymentMethod = async (
       customer = customersResponse.data[0];
     }
 
-    const paymentMethods = await stripe.paymentMethods.list({
-      customer: customer.id,
-      type: "card",
-    });
+    // const paymentMethods = await stripe.paymentMethods.list({
+    //   customer: customer.id,
+    //   type: "card",
+    // });
 
-    const isPaymentMethodAttached = paymentMethods.data.some(
-      (method) => method.id === paymentMethodId
-    );
+    // const isPaymentMethodAttached = paymentMethods.data.some(
+    //   (method) => method.id === paymentMethodId
+    // );
 
-    if (isPaymentMethodAttached) {
-      return {
-        success: true,
-        message: "Payment method already attached to the customer",
-      };
-    }
+    // if (isPaymentMethodAttached) {
+    //   return {
+    //     success: true,
+    //     message: "Payment method already attached to the customer",
+    //   };
+    // }
 
     await stripe.paymentMethods.attach(paymentMethodId, {
       customer: customer.id,
@@ -124,5 +129,18 @@ export const getPaymentMethod = async (email: string) => {
     return { success: true, paymentMethods: paymentMethods.data };
   } catch (error: any) {
     return { success: false, error: error.message };
+  }
+};
+
+export const updatePaymentMethod = async (
+  paymentMethodId: string,
+  BillingDetails: any
+) => {
+  try {
+    await stripe.paymentMethods.update(paymentMethodId, {
+      billing_details: BillingDetails,
+    });
+  } catch (error: any) {
+    throw new Error(error);
   }
 };

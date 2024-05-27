@@ -456,10 +456,10 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
             />
           </div>
           {session && (
-            <div className="flex justify-end">
+            <div className="flex justify-center">
               <Button
                 type="submit"
-                className="bg-black text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
+                className="bg-black w-full sm:w-[50%] text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
                 isLoading={isLoading}
               >
                 Save Address

@@ -24,7 +24,7 @@ const CheckoutHeader = () => {
   };
 
   return (
-    <div className="p-5">
+    <div className="sm:p-5 p-2">
       <Breadcrumbs underline="hover" size="md" className="text-2xl font-bold">
         {routes.map((route) => (
           <BreadcrumbItem

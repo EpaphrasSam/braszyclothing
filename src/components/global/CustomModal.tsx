@@ -16,6 +16,7 @@ type CustomModalProps = {
   label: string;
   confirmLabel: string;
   message: string;
+  alertMessage?: string;
 };
 
 const CustomModal = ({
@@ -25,6 +26,7 @@ const CustomModal = ({
   message,
   label,
   confirmLabel,
+  alertMessage,
 }: CustomModalProps) => {
   return (
     <Modal
@@ -59,6 +61,9 @@ const CustomModal = ({
         </ModalHeader>
         <ModalBody>
           <p>{message}</p>
+          {alertMessage && (
+            <p className="text-red-500 text-xs">{alertMessage}</p>
+          )}
         </ModalBody>
         <ModalFooter>
           <Button radius="sm" onClick={onClose} color="default">

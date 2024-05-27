@@ -19,16 +19,6 @@ export async function POST(request: Request) {
       signature!,
       webhookSecret
     );
-    // console.log(
-    //   "event",
-    //   event?.data?.object?.metadata,
-    //   event.data?.object?.payment_method_details
-    // );
-    // console.log(event);
-    // if (event.type === "charge.updated") {
-    //   const paymentMethod = event.data.object.payment_method_details;
-    //   console.log(paymentMethod);
-    // }
 
     return new NextResponse("Success", { status: 200 });
   } catch (error: any) {

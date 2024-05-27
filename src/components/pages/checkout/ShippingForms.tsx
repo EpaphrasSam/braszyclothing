@@ -5,6 +5,7 @@ import { Button, Divider, RadioGroup, Radio } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { IoChevronBack } from "react-icons/io5";
 
 const ShippingForms = () => {
@@ -21,6 +22,9 @@ const ShippingForms = () => {
 
   const onSubmit = () => {
     if (!selectedMethod || !shippingDetails) {
+      if (!selectedMethod) {
+        toast.error("Please select a shipping method");
+      }
       return;
     }
 

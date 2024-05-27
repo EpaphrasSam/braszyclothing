@@ -1,7 +1,10 @@
 "use server";
 
+import { generateOrderID } from "@/helpers/generators";
 import { ShippingDetails } from "@/store/cart";
+import { ProductType } from "@/types/SanityTypes";
 import prisma from "@/utils/prisma";
+import { Session } from "next-auth";
 import { revalidatePath } from "next/cache";
 
 export const saveShippingAddress = async (
@@ -80,5 +83,86 @@ export const getShippingAddress = async (userId: string) => {
   } catch (error) {
     console.log(error);
     return { addresses: [], error: "Error in fetching shipping details" };
+  }
+};
+
+export const createOrder = async (
+  cartItems: (ProductType & { color: string; size: string })[],
+  shippingAddress: ShippingDetails,
+  paymentIntentId: string,
+  amountPaid: number,
+  session?: Session | null
+) => {
+  try {
+    const { email, contact, id, shippingMethod, ...data } = shippingAddress;
+    if (!email || !contact) {
+      throw new Error("Email and contact are required");
+    }
+
+    let guestId: string | undefined;
+    let shippingAddressId: string;
+    let userId: string | undefined;
+
+    const orderID = generateOrderID(8);
+
+    await prisma.$transaction(async (prisma) => {
+      if (!session) {
+        const guest = await prisma.guest.create({
+          data: { contact, email },
+        });
+        guestId = guest.id;
+        shippingAddressId = (
+          await prisma.shippingAddress.create({
+            data: {
+              ...data,
+              guest: { connect: { id: guest.id } },
+            },
+          })
+        ).id;
+      } else {
+        userId = session?.user.id!;
+        shippingAddressId = (
+          await prisma.shippingAddress.upsert({
+            where: { id: id || "" },
+            update: { ...data, user: { connect: { id: userId } } },
+            create: { ...data, user: { connect: { id: userId } } },
+          })
+        ).id;
+      }
+
+      const order = await prisma.order.create({
+        data: {
+          orderID,
+          shippingAddressId,
+          paymentIntentId,
+          totalAmount: amountPaid,
+          shippingMethod: shippingMethod!,
+          guestId,
+          userId,
+        },
+      });
+
+      await prisma.orderItem.createMany({
+        data: cartItems.map((item) => ({
+          quantity: item.quantity!,
+          productId: item.id,
+          color: item.color,
+          size: item.size,
+          orderId: order.id,
+        })),
+      });
+    });
+
+    return {
+      success: true,
+      error: null,
+    };
+  } catch (error: any) {
+    console.error(error);
+
+    return {
+      success: false,
+      error: error.message || "Error in creating order",
+    };
   }
 };
