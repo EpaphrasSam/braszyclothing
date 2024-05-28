@@ -134,11 +134,11 @@ const OrderSummary = () => {
                 <p className="text-sm text-gray-500 font-semibold">
                   ${item.price.toFixed(2)}
                 </p>
-                <p className="text-sm text-gray-500 font-semibold">
-                  Size: {item.size}
+                <p className="text-sm mt-1 text-gray-500 font-semibold">
+                  Size: <span className="text-gray-800">{item.size}</span>
                 </p>
                 <p className="text-sm text-gray-500 font-semibold capitalize">
-                  Color: {item.color}
+                  Color: <span className="text-gray-800">{item.color}</span>
                 </p>
               </div>
             </div>

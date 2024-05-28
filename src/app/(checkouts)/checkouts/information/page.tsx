@@ -1,5 +1,5 @@
 import InformationForms from "@/components/pages/checkout/InformationForms";
-import { getShippingAddress } from "@/services/cartServices";
+import { getShippingAddress } from "@/services/orderServices";
 import { auth } from "@/utils/auth/auth";
 
 export default async function CheckoutInformationPage() {

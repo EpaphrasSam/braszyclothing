@@ -1,11 +1,13 @@
 "use server";
 
 import { generateOrderID } from "@/helpers/generators";
-import { ShippingDetails } from "@/store/cart";
+import { PaymentIntentType, ShippingDetails } from "@/store/cart";
 import { ProductType } from "@/types/SanityTypes";
 import prisma from "@/utils/prisma";
 import { Session } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { client } from "../../sanity/lib/client";
+import { OrderWithProductDetails, Product } from "@/types/OrderTypes";
 
 export const saveShippingAddress = async (
   data: ShippingDetails,
@@ -90,7 +92,8 @@ export const createOrder = async (
   cartItems: (ProductType & { color: string; size: string })[],
   shippingAddress: ShippingDetails,
   paymentIntentId: string,
-  amountPaid: number,
+  paymentIntent: PaymentIntentType | null,
+  discount: number,
   session?: Session | null
 ) => {
   try {
@@ -134,11 +137,18 @@ export const createOrder = async (
         data: {
           orderID,
           shippingAddressId,
-          paymentIntentId,
-          totalAmount: amountPaid,
           shippingMethod: shippingMethod!,
           guestId,
           userId,
+          paymentIntent: {
+            create: {
+              paymentIntentId,
+              totalAmount: paymentIntent?.amount!,
+              netAmount: paymentIntent?.netAmount!,
+              fee: paymentIntent?.fee!,
+              discount,
+            },
+          },
         },
       });
 
@@ -163,6 +173,68 @@ export const createOrder = async (
     return {
       success: false,
       error: error.message || "Error in creating order",
+    };
+  }
+};
+
+export const fetchUserOrders = async (userId: string) => {
+  try {
+    const orders = await prisma.order.findMany({
+      where: { userId },
+      include: {
+        shippingAddress: true,
+        items: true,
+        paymentIntent: true,
+      },
+    });
+
+    if (!orders.length) {
+      throw new Error("No orders found for this user");
+    }
+
+    const productIds = [
+      ...new Set(
+        orders.flatMap((order) => order.items.map((item) => item.productId))
+      ),
+    ];
+
+    const query = `*[_type == "product" && _id in $productIds]{
+      "id": _id,
+      name,
+      price,
+      "slug": slug.current,
+      "images": images[].asset->url,
+    }`;
+
+    const products: Product[] = await client.fetch(query, { productIds });
+
+    const productMap = products.reduce(
+      (acc: { [key: string]: Product }, product: Product) => {
+        acc[product.id] = product;
+        return acc;
+      },
+      {}
+    );
+
+    const ordersWithProductDetails: OrderWithProductDetails[] = orders.map(
+      (order) => ({
+        ...order,
+        items: order.items.map((item) => ({
+          ...item,
+          product: productMap[item.productId],
+        })),
+      })
+    );
+
+    return {
+      data: ordersWithProductDetails,
+      error: null,
+    };
+  } catch (error: any) {
+    console.log(error);
+    return {
+      data: [],
+      error: error.message,
     };
   }
 };

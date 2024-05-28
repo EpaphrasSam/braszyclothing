@@ -19,7 +19,11 @@ import {
   Skeleton,
   Spinner,
 } from "@nextui-org/react";
-import useCartStore, { CartState, ShippingDetails } from "@/store/cart";
+import useCartStore, {
+  CartState,
+  PaymentIntentType,
+  ShippingDetails,
+} from "@/store/cart";
 import { useStore } from "@/store/useStore";
 import {
   createPaymentIntent,
@@ -34,24 +38,24 @@ import CustomModal from "@/components/global/CustomModal";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
-import { createOrder } from "@/services/cartServices";
+import { createOrder } from "@/services/orderServices";
 import { ProductType } from "@/types/SanityTypes";
 
 const CardForms = ({
-  netAmount,
   session,
   shippingDetails,
-  clientSecret,
   cartItems,
+  discount,
+  PaymentIntent,
 }: {
-  netAmount: number;
   session: Session | null;
   shippingDetails: ShippingDetails;
-  clientSecret: string;
   cartItems: (ProductType & {
     color: string;
     size: string;
   })[];
+  discount: number;
+  PaymentIntent: PaymentIntentType | null;
 }) => {
   const router = useRouter();
   const stripe = useStripe();
@@ -64,6 +68,8 @@ const CardForms = ({
   const [paymentElementError, setPaymentElementError] = useState(false);
   const [loadingPaymentMethods, setLoadingPaymentMethods] = useState(false);
   const { email } = session?.user || {};
+
+  const { clientSecret, netAmount } = PaymentIntent!;
 
   useEffect(() => {
     const fetchPaymentMethod = async () => {
@@ -181,7 +187,7 @@ const CardForms = ({
           return;
         }
 
-        paymentIntentResult = await stripe.confirmCardPayment(clientSecret, {
+        paymentIntentResult = await stripe.confirmCardPayment(clientSecret!, {
           payment_method: selectedPaymentMethod,
           receipt_email: shippingDetails.email,
           return_url: "http://localhost:3000/cart?success=true",
@@ -200,14 +206,15 @@ const CardForms = ({
           cartItems,
           shippingDetails,
           paymentIntent.id,
-          netAmount,
+          PaymentIntent,
+          discount,
           session
         );
 
         if (res.success) {
           toast.success("Order placed successfully");
         } else {
-          toast.error(res.error!!);
+          toast.error("An error occurred while placing order");
           setIsProcessing(false);
           return;
         }
@@ -350,6 +357,7 @@ const PaymentForms = () => {
   const { data: session } = useSession();
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
   const paymentIntent = useCartStore((state) => state.paymentIntent);
+  const discount = useCartStore((state) => state.discount);
   const netAmount = useCartStore((state) => state.netAmount);
   const setPaymentIntent = useCartStore((state) => state.setPaymentIntent);
   const shippingDetails = useCartStore((state) => state.shippingDetails);
@@ -360,6 +368,7 @@ const PaymentForms = () => {
         const result = await createPaymentIntent(
           netAmount(),
           shippingDetails,
+
           session?.user?.email!
         );
         if (result) {
@@ -397,11 +406,11 @@ const PaymentForms = () => {
         options={{ clientSecret, appearance: { theme: "stripe" } }}
       >
         <CardForms
-          netAmount={netAmount()}
           session={session!!}
           shippingDetails={shippingDetails!}
-          clientSecret={clientSecret}
           cartItems={cartItems}
+          discount={discount}
+          PaymentIntent={paymentIntent}
         />
       </Elements>
       <Divider className="my-4" />

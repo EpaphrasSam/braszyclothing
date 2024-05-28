@@ -1,5 +1,5 @@
 import ShippingAddressForm from "@/components/pages/shipping-address/ShippingAddressForm";
-import { getShippingAddress } from "@/services/cartServices";
+import { getShippingAddress } from "@/services/orderServices";
 import { auth } from "@/utils/auth/auth";
 
 export default async function ShippingAddress() {

@@ -6,6 +6,11 @@ import { ProductType } from "@/types/SanityTypes";
 import { stripe } from "@/utils/stripe";
 import Stripe from "stripe";
 
+interface PaymentMethodDetails {
+  last4: string;
+  brand: string;
+}
+
 export const createPaymentIntent = async (
   amt: number,
   shippingDetails: ShippingDetails,
@@ -142,5 +147,27 @@ export const updatePaymentMethod = async (
     });
   } catch (error: any) {
     throw new Error(error);
+  }
+};
+
+export const getPaymentMethodDetails = async (
+  paymentIntentId: string
+): Promise<PaymentMethodDetails> => {
+  try {
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+    const paymentMethodId = paymentIntent.payment_method as string;
+    if (!paymentMethodId) {
+      throw new Error("Payment method not found");
+    }
+
+    const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
+
+    return {
+      last4: paymentMethod.card?.last4 || "",
+      brand: paymentMethod.card?.brand || "",
+    };
+  } catch (error: any) {
+    throw new Error(error.message);
   }
 };

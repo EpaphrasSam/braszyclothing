@@ -14,7 +14,7 @@ import { FiEdit } from "react-icons/fi";
 
 const sections = [
   {
-    href: "/orders",
+    href: "/my-orders",
     icon: <MdOutlineShoppingBag size={32} className="text-gray-800" />,
     title: "Your Orders",
     description:

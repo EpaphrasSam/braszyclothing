@@ -151,7 +151,7 @@ const Cart = () => {
                         alt={item.name}
                         width={80}
                         height={80}
-                        className=" w-28 h-28 object-cover object-center rounded-sm"
+                        className=" w-24 h-24 object-cover object-center rounded-sm"
                       />
 
                       <div className="flex flex-col ml-1 w-40">
@@ -168,12 +168,12 @@ const Cart = () => {
                                 ${item.oldPrice}
                               </span>
                             )}
-                            <div className="flex gap-4 mt-4">
+                            <div className="flex gap-4 mt-1">
                               <Dropdown>
                                 <DropdownTrigger>
                                   <div className="capitalize flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
                                     Size
-                                    <IoIosArrowDown color="gray" />
+                                    {/* <IoIosArrowDown color="gray" /> */}
                                     {": "}
                                   </div>
                                 </DropdownTrigger>
@@ -206,7 +206,7 @@ const Cart = () => {
                                 <DropdownTrigger>
                                   <div className="capitalize flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
                                     Color
-                                    <IoIosArrowDown color="gray" />
+                                    {/* <IoIosArrowDown color="gray" /> */}
                                     {": "}
                                   </div>
                                 </DropdownTrigger>

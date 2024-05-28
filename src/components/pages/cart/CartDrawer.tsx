@@ -109,12 +109,12 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                               ${item.oldPrice}
                             </span>
                           )}
-                          <div className="flex gap-4 mt-2">
+                          <div className="flex gap-4 mt-1">
                             <Dropdown>
                               <DropdownTrigger>
                                 <div className="capitalize text-base text-gray-500 flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
                                   Size
-                                  <IoIosArrowDown color="gray" />
+                                  {/* <IoIosArrowDown color="gray" /> */}
                                   {": "}
                                 </div>
                               </DropdownTrigger>
@@ -147,7 +147,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                               <DropdownTrigger>
                                 <div className="capitalize text-base text-gray-500 flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
                                   Color
-                                  <IoIosArrowDown color="gray" />
+                                  {/* <IoIosArrowDown color="gray" /> */}
                                   {": "}
                                 </div>
                               </DropdownTrigger>

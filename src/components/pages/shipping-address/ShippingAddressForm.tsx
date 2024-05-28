@@ -7,7 +7,7 @@ import { ShippingDetails } from "@/store/cart";
 import { countries, provinces, states } from "@/lib/constants/countries";
 import { Session } from "next-auth";
 import { validateShippingDetails } from "@/helpers/validators";
-import { saveShippingAddress } from "@/services/cartServices";
+import { saveShippingAddress } from "@/services/orderServices";
 import toast from "react-hot-toast";
 
 interface ShippingAddressFormProps {
