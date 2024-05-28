@@ -177,8 +177,13 @@ export const createOrder = async (
   }
 };
 
-export const fetchUserOrders = async (userId: string) => {
+export const fetchUserOrders = async (
+  userId: string,
+  page: number = 1,
+  pageSize: number = 10
+) => {
   try {
+    const skip = (page - 1) * pageSize;
     const orders = await prisma.order.findMany({
       where: { userId },
       include: {
@@ -186,6 +191,8 @@ export const fetchUserOrders = async (userId: string) => {
         items: true,
         paymentIntent: true,
       },
+      skip,
+      take: pageSize,
     });
 
     if (!orders.length) {
@@ -229,12 +236,16 @@ export const fetchUserOrders = async (userId: string) => {
     return {
       data: ordersWithProductDetails,
       error: null,
+      totalPages: Math.ceil(
+        (await prisma.order.count({ where: { userId } })) / pageSize
+      ),
     };
   } catch (error: any) {
     console.log(error);
     return {
       data: [],
       error: error.message,
+      totalPages: 0,
     };
   }
 };

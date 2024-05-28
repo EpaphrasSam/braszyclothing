@@ -35,7 +35,6 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
     fetcher
   );
 
-  const { last4, brand } = data!;
   return (
     <Modal
       backdrop="opaque"
@@ -136,9 +135,9 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
                 </div>
               ) : (
                 <div className="flex gap-1 items-center">
-                  <div>**** **** **** {last4}</div>
+                  <div>**** **** **** {data?.last4!}</div>
                   <Chip size="sm" radius="sm" color="primary">
-                    {brand}
+                    {data?.brand!}
                   </Chip>
                 </div>
               )}
