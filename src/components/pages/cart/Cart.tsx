@@ -24,7 +24,6 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import { IoIosArrowDown } from "react-icons/io";
 
 const Cart = () => {
   const router = useRouter();
@@ -32,10 +31,7 @@ const Cart = () => {
   const rowsPerPage = 10;
   const [page, setPage] = useState(1);
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
-  const color = "blue";
 
-  // const paymentIntent = searchParams.get("payment_intent");
-  // const redirectStatus = searchParams.get("redirect_status");
   const success = searchParams.get("success");
 
   const {
