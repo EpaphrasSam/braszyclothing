@@ -16,6 +16,7 @@ import {
   sendOtpAction,
 } from "@/services/authServices";
 import useUserStore from "@/store/user";
+import { setEmailCookie } from "@/helpers/cookies";
 
 export type FormData = {
   name: string;
@@ -44,6 +45,7 @@ const SignUp = () => {
       if (!checkIfEmailExists) {
         await sendOtpAction(data.email);
         setUserData(data);
+        setEmailCookie(data.email);
         router.push("/otp-verification");
       }
     } catch (error: any) {

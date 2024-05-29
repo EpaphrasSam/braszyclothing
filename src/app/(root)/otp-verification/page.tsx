@@ -9,11 +9,8 @@ import useUserStore from "@/store/user";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import {
-  loginAction,
-  sendOtpAction,
-  verifyOtpAction,
-} from "@/services/authServices";
+import { loginAction, sendOtpAction } from "@/services/authServices";
+import { deleteEmailCookie } from "@/helpers/cookies";
 
 const OtpScreen = () => {
   const router = useRouter();
@@ -61,6 +58,7 @@ const OtpScreen = () => {
     } finally {
       setUserData(null);
       setIsLoading(false);
+      deleteEmailCookie();
     }
   };
 

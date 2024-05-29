@@ -1,13 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { categoryMiddleware } from "@/middlewares/categoryMiddleware";
 import { authMiddleware } from "./middlewares/authMiddleware";
-import { protectedRoutes, publicRoutes } from "./lib/constants/routes";
+import {
+  emailProtectedRoutes,
+  protectedRoutes,
+  publicRoutes,
+} from "./lib/constants/routes";
 
 export const config = {
   matcher: "/:path*",
 };
 
-const allAuthRoutes = [...protectedRoutes, ...publicRoutes];
+const allAuthRoutes = [
+  ...protectedRoutes,
+  ...publicRoutes,
+  ...emailProtectedRoutes,
+];
 
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

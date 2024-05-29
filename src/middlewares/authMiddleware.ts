@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/utils/auth/auth";
-import { protectedRoutes, publicRoutes } from "@/lib/constants/routes";
+import {
+  emailProtectedRoutes,
+  protectedRoutes,
+  publicRoutes,
+} from "@/lib/constants/routes";
 
 export async function authMiddleware(request: NextRequest) {
   const session = await auth();
   const token = session?.user;
+  const email = request.cookies.get("email")?.value;
 
   const { pathname } = request.nextUrl;
 
@@ -16,6 +21,15 @@ export async function authMiddleware(request: NextRequest) {
 
   if (token && publicRoutes.some((route) => pathname.startsWith(route))) {
     const url = new URL("/", request.url);
+    return NextResponse.redirect(url);
+  }
+
+  if (
+    !email &&
+    emailProtectedRoutes.some((route) => pathname.startsWith(route))
+  ) {
+    const url = new URL("/", request.url);
+    url.searchParams.set("error", "You cannot have access to this page.");
     return NextResponse.redirect(url);
   }
 
@@ -34,5 +48,5 @@ export async function authMiddleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/login", "/register"],
+  matcher: ["/:path*"],
 };

@@ -52,3 +52,5 @@ export const protectedRoutes = [
   "/reset-password",
 ];
 export const publicRoutes = ["/login", "/signup", "/forgot-password"];
+
+export const emailProtectedRoutes = ["/reset-password", "/otp-verification"];
