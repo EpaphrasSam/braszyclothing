@@ -1,5 +1,6 @@
 import Shop from "@/components/pages/shop/Shop";
 import { getAllProductsByCategory } from "@/services/sanityServices";
+import { Suspense } from "react";
 
 export default async function CategoryPage({
   params,
@@ -17,13 +18,15 @@ export default async function CategoryPage({
   );
 
   return (
-    <div className="sm:m-10 m-5">
-      <Shop
-        allProducts={AllProducts}
-        slug={params.slug}
-        search={searchParams}
-        total={totalPages!}
-      />
-    </div>
+    <Suspense>
+      <div className="sm:m-10 m-5">
+        <Shop
+          allProducts={AllProducts}
+          slug={params.slug}
+          search={searchParams}
+          total={totalPages!}
+        />
+      </div>
+    </Suspense>
   );
 }

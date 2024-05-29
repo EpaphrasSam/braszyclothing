@@ -1,6 +1,7 @@
 import OrderHistory from "@/components/pages/orders/OrderHistory";
 import { fetchUserOrders } from "@/services/orderServices";
 import { auth } from "@/utils/auth/auth";
+import { Suspense } from "react";
 
 export default async function OrderPage({
   searchParams,
@@ -15,13 +16,15 @@ export default async function OrderPage({
   );
 
   return (
-    <div className="p-6 min-h-screen">
-      <OrderHistory
-        userId={session?.user.id!}
-        InitialOrders={data}
-        InitialTotalPages={totalPages}
-        search={searchParams}
-      />
-    </div>
+    <Suspense>
+      <div className="p-6 min-h-screen">
+        <OrderHistory
+          userId={session?.user.id!}
+          InitialOrders={data}
+          InitialTotalPages={totalPages}
+          search={searchParams}
+        />
+      </div>
+    </Suspense>
   );
 }
