@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
+import "react-multi-carousel/lib/styles.css";
 import { Providers } from "./providers";
+import { Toaster } from "react-hot-toast";
+import { SessionProvider } from "next-auth/react";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Braszy Clothing",
@@ -12,14 +15,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <Providers>
-      <html lang="en">
-        <body className={inter.className}>{children}</body>
-      </html>
-    </Providers>
+    <html lang="en">
+      <body className={`${inter.className} `}>
+        <Toaster position="top-center" />
+        <SessionProvider>
+          <Providers>
+            <main>{children}</main>
+          </Providers>
+        </SessionProvider>
+      </body>
+    </html>
   );
 }

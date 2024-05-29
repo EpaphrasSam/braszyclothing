@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,95 @@ generator client {
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String       @id @default(cuid()) @map("_id") 
+  email           String       @unique
+  password        String
+  name            String
+  contact         String?
+  orders          Order[]
+  admin           Boolean      @default(false)
+  shippingAddress ShippingAddress[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model Guest {
+  id              String      @id @default(cuid()) @map("_id") 
+  email           String
+  contact         String
+  orders          Order[]
+  shippingAddress ShippingAddress[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model ShippingAddress {
+  id         String    @id @default(cuid()) @map("_id") 
+  userId     String?          
+  user       User?      @relation(fields: [userId], references: [id])
+  guestId    String?
+  guest      Guest?     @relation(fields: [guestId], references: [id])
+  firstName  String
+  lastName   String
+  address    String
+  country    String
+  state      String?
+  code       String
+  city       String
+  orders     Order[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+
+
+model Order {
+  id               String           @id @default(cuid()) @map("_id") 
+  orderID          String           @unique 
+  userId           String?          
+  user             User?            @relation(fields: [userId], references: [id])
+  guestId          String?          
+  guest            Guest?           @relation(fields: [guestId], references: [id])
+  shippingAddressId String          
+  shippingAddress  ShippingAddress  @relation(fields: [shippingAddressId], references: [id])
+  items            OrderItem[]
+  paymentIntent    PaymentIntent?
+  shippingMethod   String
+  shippingStatus   String           @default("Pending")
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+model PaymentIntent {
+  id           String  @id @default(cuid()) @map("_id")
+  orderId      String  @unique
+  order        Order?   @relation(fields: [orderId], references: [id])
+  paymentIntentId String
+  totalAmount  Float
+  netAmount    Float
+  fee          Float
+  discount     Float
+}
+
+model OrderItem {
+  id         String  @id @default(cuid()) @map("_id") 
+  orderId    String  
+  order      Order   @relation(fields: [orderId], references: [id])
+  productId  String
+  quantity   Int
+  color      String
+  size       String
+}
+
+
+model Otp {
+  id        String      @id @default(cuid()) @map("_id") 
+  email     String      @unique
+  otp       String
+  expiry    DateTime
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }

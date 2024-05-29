@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-const { nextui } = require("@nextui-org/react");
+import { nextui } from "@nextui-org/react";
 
 const config: Config = {
   content: [
@@ -14,9 +14,19 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+          "custom-gradient": "linear-gradient(to bottom, #414442 50%, #EBE9E9 50%)"
       },
     },
   },
-  plugins: [nextui()],
+  plugins: [
+    nextui(),
+    //   {
+    //   layout: {
+    //     dividerWeight: "1.5px",
+    //   },
+    // }
+    require("tailwindcss-animate"),
+    require("tailwind-scrollbar"),
+  ],
 };
 export default config;
