@@ -9,13 +9,16 @@ import {
 export async function authMiddleware(request: NextRequest) {
   const session = await auth();
   const token = session?.user;
-  const email = request.cookies.get("email")?.value;
+  const emailCookie = request.cookies.get("email")?.value;
 
   const { pathname } = request.nextUrl;
 
   if (!token && protectedRoutes.some((route) => pathname.startsWith(route))) {
     const url = new URL("/", request.url);
-    url.searchParams.set("error", "You must be logged in to access this page.");
+    url.searchParams.set(
+      "error",
+      "You must be logged in to access this page hello."
+    );
     return NextResponse.redirect(url);
   }
 
@@ -24,13 +27,23 @@ export async function authMiddleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (
-    !email &&
-    emailProtectedRoutes.some((route) => pathname.startsWith(route))
-  ) {
-    const url = new URL("/", request.url);
-    url.searchParams.set("error", "You cannot have access to this page.");
-    return NextResponse.redirect(url);
+  const isEmailProtectedRoute = emailProtectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
+
+  if (isEmailProtectedRoute) {
+    if (emailCookie) {
+      const [email, expiration] = decodeURIComponent(emailCookie).split("|");
+      if (new Date() > new Date(expiration)) {
+        return NextResponse.redirect(
+          new URL("/?error=Email cookie expired", request.url)
+        );
+      }
+    } else {
+      const url = new URL("/", request.url);
+      url.searchParams.set("error", "You cannot have access to this page.");
+      return NextResponse.redirect(url);
+    }
   }
 
   if (pathname.startsWith("/admin")) {

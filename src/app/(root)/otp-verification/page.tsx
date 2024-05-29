@@ -9,8 +9,12 @@ import useUserStore from "@/store/user";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { loginAction, sendOtpAction } from "@/services/authServices";
-import { deleteEmailCookie } from "@/helpers/cookies";
+import {
+  loginAction,
+  sendOtpAction,
+  verifyOtpAction,
+} from "@/services/authServices";
+import { deleteEmailCookie, getEmailCookie } from "@/helpers/cookies";
 
 const OtpScreen = () => {
   const router = useRouter();
@@ -19,6 +23,16 @@ const OtpScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [isFilled, setIsFilled] = useState(false);
+  const [email, setEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchEmailCookie = async () => {
+      const emailCookie = getEmailCookie();
+      setEmail(emailCookie);
+    };
+
+    fetchEmailCookie();
+  }, []);
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -39,26 +53,31 @@ const OtpScreen = () => {
   }, [otp]);
 
   const handleSubmit = async (event: React.FormEvent) => {
-    if (!userData) return;
+    if (!email) return;
     event.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post("/api/signup", {
-        email: userData?.email,
-        otp: otp.join(""),
-        name: userData?.name,
-        password: userData?.password,
-      });
-      await loginAction(userData?.email, userData?.password);
-      toast.success("Account created successfully");
-      window.location.href = "/";
+      if (userData) {
+        await axios.post("/api/signup", {
+          email: userData?.email,
+          otp: otp.join(""),
+          name: userData?.name,
+          password: userData?.password,
+        });
+        await loginAction(userData?.email!, userData?.password!);
+        toast.success("Account created successfully");
+        window.location.href = "/";
+      } else {
+        await verifyOtpAction(otp.join(""), email);
+        router.push("/reset-password");
+      }
     } catch (error: any) {
       toast.error(error.response.data || "Something went wrong");
-      router.replace("/signup");
+      deleteEmailCookie();
+      router.replace(userData ? "/signup" : "/forgot-password");
     } finally {
       setUserData(null);
       setIsLoading(false);
-      deleteEmailCookie();
     }
   };
 
@@ -133,7 +152,7 @@ const OtpScreen = () => {
               color={!isFilled ? "default" : "primary"}
               className={`font-bold py-2 px-4 rounded w-full `}
               disabled={!isFilled}
-              isLoading={isLoading || !userData}
+              isLoading={isLoading || !email}
             >
               Submit
             </Button>

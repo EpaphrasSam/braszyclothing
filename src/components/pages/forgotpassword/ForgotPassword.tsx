@@ -3,14 +3,38 @@ import React, { useState } from "react";
 import illustration from "@/../public/images/img14.png"; // Ensure correct path
 import Image from "next/image";
 import { Button, Input } from "@nextui-org/react";
+import toast from "react-hot-toast";
+import {
+  checkIfEmailExistsAction,
+  sendOtpAction,
+} from "@/services/authServices";
+import { getEmailCookie, setEmailCookie } from "@/helpers/cookies";
+import { useRouter } from "next/navigation";
+import { CiMail } from "react-icons/ci";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    console.log("Email submitted for password reset:", email);
-    // Add your code to handle the password reset process
+    setIsLoading(true);
+    try {
+      const checkIfEmailExists = await checkIfEmailExistsAction(email, true);
+      if (checkIfEmailExists) {
+        await sendOtpAction(email);
+        setEmailCookie(email);
+        router.push("/otp-verification");
+      } else {
+        toast.error("Email not found");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
+      getEmailCookie();
+    }
   };
 
   return (
@@ -43,11 +67,14 @@ function ForgotPassword() {
             label="Email"
             value={email}
             radius="none"
+            isRequired
             onChange={(e) => setEmail(e.target.value)}
+            // startContent={<CiMail size={24} />}
           />
           <Button
             type="submit"
             className="w-full flex justify-center py-2 px-4 text-sm sm:text-base font-medium rounded-md text-white bg-black hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            isLoading={isLoading}
           >
             Reset Password
           </Button>

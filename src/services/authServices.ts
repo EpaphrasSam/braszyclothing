@@ -8,7 +8,7 @@ import {
   storeOTP,
   validateOTP,
 } from "@/utils/email";
-import { AuthError } from "next-auth";
+import { AuthError, User } from "next-auth";
 import prisma from "@/utils/prisma";
 import bcrypt from "bcrypt";
 
@@ -19,10 +19,16 @@ type UserUpdatePayload = {
   password?: string;
 };
 
-export const checkIfEmailExistsAction = async (email: string) => {
+export const checkIfEmailExistsAction = async (
+  email: string,
+  forgot?: boolean
+) => {
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (user) {
+    const userExists = await prisma.user.findUnique({ where: { email } });
+    if (forgot && userExists) {
+      return true;
+    }
+    if (userExists && !forgot) {
       throw Error("Email already exists");
     }
     return false;
@@ -145,6 +151,38 @@ export const updateProfile = async (
         return updatedUser;
       });
     }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const changePassword = async (
+  email: string,
+  password: string
+): Promise<User> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const hashedNewPassword = await bcrypt.hash(password, 10);
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        password: hashedNewPassword,
+      },
+    });
+
+    return updatedUser;
   } catch (error) {
     throw error;
   }
