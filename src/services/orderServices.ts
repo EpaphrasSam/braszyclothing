@@ -196,7 +196,11 @@ export const fetchUserOrders = async (
     });
 
     if (!orders.length) {
-      throw new Error("No orders found for this user");
+      return {
+        data: [],
+        error: null,
+        totalPages: 0,
+      };
     }
 
     const productIds = [

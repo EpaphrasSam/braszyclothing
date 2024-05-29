@@ -6,7 +6,13 @@ import OrderCard from "./OrderCard";
 import { useSearchParams, useRouter } from "next/navigation";
 import useSWR from "swr";
 import { fetchUserOrders } from "@/services/orderServices";
-import { Pagination, Spinner, Select, SelectItem } from "@nextui-org/react";
+import {
+  Pagination,
+  Spinner,
+  Select,
+  SelectItem,
+  Divider,
+} from "@nextui-org/react";
 
 interface OrderHistoryProps {
   userId: string;
@@ -94,8 +100,8 @@ const OrderHistory = ({
 
   if (error) {
     return (
-      <div className="min-h-screen flex justify-center items-center text-red-500">
-        Error loading orders.
+      <div className="text-5xl font-bold min-h-screen flex justify-center items-center text-gray-500">
+        No orders found
       </div>
     );
   }
@@ -107,59 +113,64 @@ const OrderHistory = ({
           No orders found
         </div>
       ) : (
-        <div className="flex flex-grow gap-4 xl:justify-between justify-center  flex-wrap">
-          {orders &&
-            orders.map((order) => <OrderCard key={order.id} order={order} />)}
+        <div className="flex flex-col gap-4">
+          <p className="text-3xl font-bold text-gray-500">My Orders</p>
+          <Divider className="my-2" />
+          <div className="flex flex-grow gap-4 xl:justify-between justify-center  flex-wrap">
+            {orders &&
+              orders.map((order) => <OrderCard key={order.id} order={order} />)}
+          </div>
         </div>
       )}
+      {orders && orders.length > 0 && (
+        <div className="flex justify-between items-center my-4 gap-4">
+          <Select
+            aria-label="Select page size"
+            value={pageSize.toString()}
+            selectedKeys={[pageSize.toString()]}
+            onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+            className="w-[70px]"
+            variant="underlined"
+            label="Items"
+            disallowEmptySelection
+          >
+            <SelectItem key="5" value="5">
+              5
+            </SelectItem>
+            <SelectItem key="10" value="10">
+              10
+            </SelectItem>
+            <SelectItem key="15" value="15">
+              15
+            </SelectItem>
 
-      <div className="flex justify-between items-center my-4 gap-4">
-        <Select
-          aria-label="Select page size"
-          value={pageSize.toString()}
-          selectedKeys={[pageSize.toString()]}
-          onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-          className="w-[70px]"
-          variant="underlined"
-          label="Items"
-          disallowEmptySelection
-        >
-          <SelectItem key="5" value="5">
-            5
-          </SelectItem>
-          <SelectItem key="10" value="10">
-            10
-          </SelectItem>
-          <SelectItem key="15" value="15">
-            15
-          </SelectItem>
+            <SelectItem key="20" value="20">
+              20
+            </SelectItem>
+            <SelectItem key="25" value="25">
+              25
+            </SelectItem>
+            <SelectItem key="30" value="30">
+              30
+            </SelectItem>
+          </Select>
 
-          <SelectItem key="20" value="20">
-            20
-          </SelectItem>
-          <SelectItem key="25" value="25">
-            25
-          </SelectItem>
-          <SelectItem key="30" value="30">
-            30
-          </SelectItem>
-        </Select>
+          {totalPages && totalPages > 1 && (
+            <div className="flex justify-center items-center">
+              <Pagination
+                isCompact
+                variant="light"
+                showControls
+                total={totalPages}
+                initialPage={page}
+                onChange={handlePageChange}
+              />
+            </div>
+          )}
 
-        {orders && orders.length > 0 && totalPages && totalPages > 1 && (
-          <div className="flex justify-center items-center">
-            <Pagination
-              isCompact
-              variant="light"
-              showControls
-              total={totalPages}
-              initialPage={page}
-              onChange={handlePageChange}
-            />
-          </div>
-        )}
-
-        <div />
-      </div>
+          <div />
+        </div>
+      )}
     </div>
   );
 };

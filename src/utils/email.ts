@@ -32,13 +32,39 @@ export const decryptOTP = (encryptedOtp: string, email: string): string => {
 };
 
 export const sendOTP = async (otp: string, email: string): Promise<void> => {
-  const message = `<p> Your OTP is:</p> <strong>${otp}</strong>`;
+  const message = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+      <div style="background-color: #f7f7f7; padding: 20px; border-radius: 8px;">
+        <h2 style="color: #333;">Your One-Time Password (OTP)</h2>
+        <p style="font-size: 16px; color: #555;">
+          Hello,
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          To ensure the security of your account, please use the following OTP to complete your verification. This OTP is valid for 10 minutes.
+        </p>
+        <p style="font-size: 24px; font-weight: bold; color: #333;">
+          ${otp}
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          If you did not request this OTP, please ignore this email. Do not share this OTP with anyone for security reasons.
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          Thank you for choosing Braszy Clothing. We are committed to keeping your account secure.
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          Best regards,<br>
+          The Braszy Clothing Team
+        </p>
+      </div>
+    </div>
+  `;
   try {
     const { error, data }: any = await resend.emails.send({
       from: `Braszy Clothing <${process.env.RESEND_DOMAIN_EMAIL}>`,
+      // from: `Braszy Clothing <braszyclothing.com>`,
       // to: [email],
       to: ["isinesam@gmail.com"],
-      subject: "Your OTP",
+      subject: "OTP Verification",
       html: message,
     });
     if (error) {

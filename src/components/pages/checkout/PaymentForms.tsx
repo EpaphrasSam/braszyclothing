@@ -224,7 +224,6 @@ const CardForms = ({
 
         if (result.success) {
           if (result.message === "Payment method saved") {
-            toast.success(result.message);
           }
         } else {
           toast.error(result.error!!);
