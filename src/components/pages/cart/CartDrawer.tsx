@@ -50,21 +50,31 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
   return (
     <>
       {cartItems && cartItems.length === 0 ? (
-        <div className="p-5 h-full flex justify-center items-center">
-          <div className="flex items-center justify-center flex-col gap-y-6">
-            <div className="text-xl text-gray-600 tracking-wider font-semibold">
-              YOUR CART IS EMPTY
-            </div>
-            <Button
+        <>
+          <div className="flex justify-end p-5">
+            <IoCloseOutline
+              size={30}
+              className="cursor-pointer hover:opacity-75"
               onClick={onClose}
-              color="primary"
-              radius="none"
-              className="w-[200px]"
-            >
-              Continue Shopping
-            </Button>
+              color="gray"
+            />
           </div>
-        </div>
+          <div className="p-5 h-full flex justify-center items-center">
+            <div className="flex items-center justify-center flex-col gap-y-6">
+              <div className="text-xl text-gray-600 tracking-wider font-semibold">
+                YOUR CART IS EMPTY
+              </div>
+              <Button
+                onClick={onClose}
+                color="primary"
+                radius="none"
+                className="w-[200px]"
+              >
+                Continue Shopping
+              </Button>
+            </div>
+          </div>
+        </>
       ) : (
         <div className="p-5 h-full flex flex-col">
           <div className="flex mb-8 justify-between items-center">

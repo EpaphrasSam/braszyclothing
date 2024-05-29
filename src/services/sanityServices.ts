@@ -179,11 +179,13 @@ export const getAllProductsByCategory = async (
       price,
       description,
       inStock,
-      "apparel": apparel->title,
+      "apparel": apparel-> title,
       "categoryName": category->title,
       "categorySlug": category->slug.current,
       "slug": slug.current,
-      "imageUrls": images[].asset->url
+      "imageUrls": images[].asset->url,
+      "colors": color,
+      "sizes": size
     }`;
 
     let start = (page - 1) * itemsPerPage;
