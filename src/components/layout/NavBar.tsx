@@ -62,6 +62,10 @@ const NavBar = () => {
   const { data: session, status } = useSession();
 
   useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
     resetAmount();
     if (!session) {
       resetShippingDetails();
@@ -86,23 +90,11 @@ const NavBar = () => {
   };
 
   const navHandler = (anchor: any, open: any) => (event: any) => {
-    // if (
-    //   event.type === "keydown" &&
-    //   (event.key === "Tab" || event.key === "Shift")
-    // ) {
-    //   return;
-    // }
     setShowNav({ ...showNav, [anchor]: open });
     return;
   };
 
   const profileHandler = (anchor: any, open: any) => (event: any) => {
-    // if (
-    //   event.type === "keydown" &&
-    //   (event.key === "Tab" || event.key === "Shift")
-    // ) {
-    //   return;
-    // }
     setShowProfileNav({ ...showNav, [anchor]: open });
     return;
   };
@@ -253,6 +245,7 @@ const NavBar = () => {
         isBordered
         position="sticky"
         onMenuOpenChange={setIsMenuOpen}
+        isMenuOpen={isMenuOpen}
       >
         <NavbarMenuToggle
           icon={(isOpen) =>
