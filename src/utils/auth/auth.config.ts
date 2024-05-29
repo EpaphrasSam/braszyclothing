@@ -4,6 +4,12 @@ import { User } from "@prisma/client";
 import prisma from "../prisma";
 import { passwordValidator } from "../../helpers/bcryptValidator";
 
+interface AuthorizeRequest extends Request {
+  options?: {
+    fetchUserByEmail?: boolean;
+  };
+}
+
 async function validateUser(
   email: string,
   password: string
@@ -33,8 +39,22 @@ export default {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials): Promise<User | null> {
+      async authorize(credentials, req): Promise<User | null> {
+        const body = await req.json();
+        const { fetchUserByEmail } = body;
         if (
+          fetchUserByEmail &&
+          credentials.email &&
+          typeof credentials.email === "string"
+        ) {
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentials?.email!,
+            },
+          });
+          if (!user) throw Error("Invalid credentials");
+          return user;
+        } else if (
           !credentials ||
           typeof credentials.email !== "string" ||
           typeof credentials.password !== "string"

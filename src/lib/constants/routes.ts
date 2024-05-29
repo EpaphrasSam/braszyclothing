@@ -48,7 +48,7 @@ export const NavbarLinks: NavLinkTypes[] = [
 export const protectedRoutes = [
   "/admin",
   "/my-orders",
-  "edit-profile",
-  "reset-password",
+  "/edit-profile",
+  "/reset-password",
 ];
 export const publicRoutes = ["/login", "/signup", "/forgot-password"];

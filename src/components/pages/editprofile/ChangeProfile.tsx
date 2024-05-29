@@ -1,58 +1,83 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
-import { Input, Button } from "@nextui-org/react";
+import { Input, Button, Divider } from "@nextui-org/react";
 import * as z from "zod";
 import { CiMail, CiUser, CiEdit } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/store/user";
+import { Session } from "next-auth";
+import { AiOutlineClose } from "react-icons/ai";
+import Image from "next/image";
+import toast from "react-hot-toast";
+import { loginAction, updateProfile } from "@/services/authServices";
 
-export type FormData = {
+type FormData = {
   name: string;
   email: string;
+  contact: string;
   oldPassword: string;
   password: string;
   confirmPassword: string;
 };
 
-const ChangeProfile = () => {
+type FormDataWithoutConfirmPassword = Omit<FormData, "confirmPassword">;
+
+interface EditProfileProps {
+  session: Session | null;
+}
+
+const ChangeProfile = ({ session }: EditProfileProps) => {
   const router = useRouter();
   const setUserData = useUserStore((state) => state.setUserData);
   const [isLoading, setIsLoading] = useState(false);
-  const [editName, setEditName] = useState(false);
-  const [editPassword, setEditPassword] = useState(false);
-
-  const [initialValues, setInitialValues] = useState<FormData>({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    oldPassword: "",
-    password: "",
-    confirmPassword: "",
+  const [editFields, setEditFields] = useState<{
+    name: boolean;
+    contact: boolean;
+    password: boolean;
+  }>({
+    name: false,
+    contact: false,
+    password: false,
   });
+
+  const defaultValues = useMemo(
+    () => ({
+      email: session?.user?.email || "",
+      name: session?.user?.name || "",
+      contact: session?.user?.contact || "",
+      oldPassword: "",
+      password: "",
+      confirmPassword: "",
+    }),
+    [session]
+  );
 
   const SignUpSchema = z
     .object({
-      name: editName
+      name: editFields.name
         ? z.string().nonempty("Name is required")
         : z.string().optional(),
       email: z.string().email("Invalid email address"),
-      oldPassword: editPassword
+      contact: editFields.contact
+        ? z.string().min(10, "Contact number should be at least 10 digits")
+        : z.string().optional(),
+      oldPassword: editFields.password
         ? z.string().nonempty("Old password is required")
         : z.string().optional(),
-      password: editPassword
+      password: editFields.password
         ? z.string().min(6, "Password must be at least 6 characters")
         : z.string().optional(),
-      confirmPassword: editPassword
+      confirmPassword: editFields.password
         ? z.string().nonempty("Confirm password is required").min(6)
         : z.string().optional(),
     })
     .refine(
       (data) => {
-        if (editPassword && data.password !== data.confirmPassword) {
+        if (editFields.password && data.password !== data.confirmPassword) {
           return false;
         }
         return true;
@@ -66,56 +91,89 @@ const ChangeProfile = () => {
   const {
     register,
     handleSubmit,
-    setValue,
+    watch,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(SignUpSchema),
-    defaultValues: initialValues,
+    defaultValues: defaultValues,
   });
+
+  const name = watch("name");
+  const contact = watch("contact");
+  const oldPassword = watch("oldPassword");
+  const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
+
+  const isDisabled = useMemo(() => {
+    const isAnyFieldInEditMode =
+      editFields.name || editFields.contact || editFields.password;
+
+    const isNameChanged = !editFields.name && defaultValues.name !== name;
+    const isContactChanged =
+      !editFields.contact && defaultValues.contact !== contact;
+    const isPasswordFieldsFilled =
+      !editFields.password && oldPassword && password && confirmPassword;
+    const isPasswordMatch =
+      !editFields.password && password === confirmPassword;
+
+    return (
+      isAnyFieldInEditMode ||
+      !(
+        isNameChanged ||
+        isContactChanged ||
+        (isPasswordFieldsFilled && isPasswordMatch)
+      )
+    );
+  }, [
+    editFields.name,
+    editFields.contact,
+    editFields.password,
+    defaultValues.name,
+    defaultValues.contact,
+    name,
+    contact,
+    oldPassword,
+    password,
+    confirmPassword,
+  ]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsLoading(true);
     try {
-      // Handle form submission logic here
-      console.log("Form Data:", data);
-      setUserData(data);
-      setIsLoading(false);
-      router.push("/profile"); // Redirect to profile page after save
-    } catch (error) {
-      console.error("Error saving profile:", error);
+      const { confirmPassword, ...dataWithoutConfirmPassword } = data;
+
+      const changedValues = (
+        Object.keys(dataWithoutConfirmPassword) as Array<
+          keyof FormDataWithoutConfirmPassword
+        >
+      ).reduce((acc: Partial<FormDataWithoutConfirmPassword>, key) => {
+        if (dataWithoutConfirmPassword[key] !== defaultValues[key]) {
+          acc[key] = dataWithoutConfirmPassword[key];
+        }
+        return acc;
+      }, {});
+      const response = await updateProfile(session?.user?.id!, changedValues);
+      if (response) {
+        await loginAction(response.email, response.password, true);
+        if (changedValues.oldPassword && changedValues.password) {
+          toast.success("Password updated successfully");
+        } else {
+          toast.success("Profile updated successfully");
+        }
+        reset(defaultValues);
+        window.location.reload();
+      }
+    } catch (error: any) {
+      toast.error(error.message || "An error occurred. Please try again.");
+    } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (editName) {
-      setValue("name", ""); // Clear the name field
-    } else {
-      setValue("name", initialValues.name); // Set initial name value
-    }
-  }, [editName, setValue, initialValues.name]);
-
-  useEffect(() => {
-    if (editPassword) {
-      setValue("oldPassword", ""); // Clear the old password field
-      setValue("password", ""); // Clear the new password field
-      setValue("confirmPassword", ""); // Clear the confirm password field
-    } else {
-      setValue("oldPassword", initialValues.oldPassword); // Set initial old password value
-      setValue("password", initialValues.password); // Set initial password value
-      setValue("confirmPassword", initialValues.confirmPassword); // Set initial confirm password value
-    }
-  }, [
-    editPassword,
-    setValue,
-    initialValues.oldPassword,
-    initialValues.password,
-    initialValues.confirmPassword,
-  ]);
-
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-custom-gradient">
-      <div className="m-4 sm:w-3/5 w-full bg-white shadow-3xl rounded-lg md:p-8 p-2 flex justify-center items-center lg:flex-row flex-col-reverse ">
+      <div className="m-4 sm:w-3/5 w-full bg-white shadow-3xl rounded-lg md:p-4 flex justify-center items-center lg:flex-row flex-col-reverse ">
         <div className="p-8 w-full max-sm:p-4 flex flex-col justify-center items-center flex-grow">
           <h1 className="text-3xl font-bold mb-4">Edit Profile</h1>
           <form
@@ -125,30 +183,9 @@ const ChangeProfile = () => {
             <div className="mb-6 flex flex-col gap-4">
               <div className="relative">
                 <Input
-                  variant="bordered"
-                  type="text"
-                  radius="none"
-                  label="Name"
-                  labelPlacement="outside"
-                  placeholder="Enter your name"
-                  errorMessage={errors.name?.message}
-                  isDisabled={!editName}
-                  startContent={<CiUser size={24} />}
-                  isInvalid={!!errors.name}
-                  {...register("name")}
-                />
-                <CiEdit
-                  size={24}
-                  className="absolute right-2 top-9 cursor-pointer"
-                  onClick={() => setEditName(!editName)}
-                />
-              </div>
-
-              <div className="relative">
-                <Input
-                  variant="bordered"
+                  variant="underlined"
                   type="email"
-                  radius="none"
+                  radius="sm"
                   label="Email"
                   labelPlacement="outside"
                   placeholder="Enter your email"
@@ -156,64 +193,146 @@ const ChangeProfile = () => {
                   isInvalid={!!errors.email}
                   startContent={<CiMail size={24} />}
                   {...register("email")}
-                  defaultValue={initialValues.email}
-                  isDisabled
+                  defaultValue={defaultValues.email}
+                  isReadOnly
                 />
               </div>
 
               <div className="relative">
                 <Input
                   variant="bordered"
-                  type="password"
-                  radius="none"
-                  label="Password"
+                  type="text"
+                  radius="sm"
+                  label="Name"
                   labelPlacement="outside"
-                  placeholder="Enter your password"
+                  placeholder="Enter your name"
+                  value={name}
+                  errorMessage={errors.name?.message}
+                  isDisabled={!editFields.name}
+                  startContent={<CiUser size={24} />}
+                  isInvalid={!!errors.name}
+                  {...register("name")}
+                />
+                {!editFields.name ? (
+                  <CiEdit
+                    className="absolute right-2 top-9 cursor-pointer"
+                    size={24}
+                    onClick={() =>
+                      setEditFields((prev) => ({ ...prev, name: true }))
+                    }
+                  />
+                ) : (
+                  <AiOutlineClose
+                    className="absolute right-2 top-9 cursor-pointer"
+                    size={24}
+                    onClick={() =>
+                      setEditFields((prev) => ({ ...prev, name: false }))
+                    }
+                  />
+                )}
+              </div>
+
+              <div className="relative">
+                <Input
+                  variant="bordered"
+                  type="number"
+                  radius="sm"
+                  label="Contact"
+                  value={contact}
+                  labelPlacement="outside"
+                  placeholder="Enter your contact"
+                  errorMessage={errors.contact?.message}
+                  isDisabled={!editFields.contact}
+                  startContent={<CiUser size={24} />}
+                  isInvalid={!!errors.contact}
+                  {...register("contact")}
+                />
+                {!editFields.contact ? (
+                  <CiEdit
+                    className="absolute right-2 top-9 cursor-pointer"
+                    size={24}
+                    onClick={() =>
+                      setEditFields((prev) => ({ ...prev, contact: true }))
+                    }
+                  />
+                ) : (
+                  <AiOutlineClose
+                    className="absolute right-2 top-9 cursor-pointer"
+                    size={24}
+                    onClick={() =>
+                      setEditFields((prev) => ({ ...prev, contact: false }))
+                    }
+                  />
+                )}
+              </div>
+
+              <Divider className="my-2" />
+
+              <div className="relative">
+                <Input
+                  variant="bordered"
+                  type="password"
+                  radius="sm"
+                  label="Password Change"
+                  labelPlacement="outside"
+                  placeholder="Change your password"
                   isDisabled
                   startContent={<RiLockPasswordLine size={24} />}
                 />
-                <CiEdit
-                  size={24}
-                  className="absolute right-2 top-9 cursor-pointer"
-                  onClick={() => setEditPassword(!editPassword)}
-                />
+                {!editFields.password ? (
+                  <CiEdit
+                    className="absolute right-2 top-9 cursor-pointer"
+                    size={24}
+                    onClick={() =>
+                      setEditFields((prev) => ({ ...prev, password: true }))
+                    }
+                  />
+                ) : (
+                  <AiOutlineClose
+                    className="absolute right-2 top-9 cursor-pointer"
+                    size={24}
+                    onClick={() =>
+                      setEditFields((prev) => ({ ...prev, password: false }))
+                    }
+                  />
+                )}
               </div>
-              {editPassword && (
+              {editFields.password && (
                 <>
                   <Input
                     variant="bordered"
                     type="password"
-                    radius="none"
+                    radius="sm"
                     label="Old Password"
+                    value={oldPassword}
                     labelPlacement="outside"
                     placeholder="Enter your old password"
                     errorMessage={errors.oldPassword?.message}
                     isInvalid={!!errors.oldPassword}
-                    startContent={<RiLockPasswordLine size={24} />}
                     {...register("oldPassword")}
                   />
                   <Input
                     variant="bordered"
                     type="password"
-                    radius="none"
+                    radius="sm"
                     label="New Password"
+                    value={password}
                     labelPlacement="outside"
                     placeholder="Enter your new password"
                     errorMessage={errors.password?.message}
                     isInvalid={!!errors.password}
-                    startContent={<RiLockPasswordLine size={24} />}
                     {...register("password")}
                   />
                   <Input
                     variant="bordered"
                     type="password"
-                    radius="none"
-                    label="Confirm New Password"
+                    radius="sm"
+                    label="Confirm Password"
+                    value={confirmPassword}
                     labelPlacement="outside"
                     placeholder="Confirm your new password"
                     errorMessage={errors.confirmPassword?.message}
                     isInvalid={!!errors.confirmPassword}
-                    startContent={<RiLockPasswordLine size={24} />}
                     {...register("confirmPassword")}
                   />
                 </>
@@ -222,22 +341,23 @@ const ChangeProfile = () => {
             <div className="flex">
               <Button
                 fullWidth
-                className="bg-black hover:opacity-75 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className={`${isDisabled ? "bg-gray-500 " : "bg-black "} hover:opacity-75 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
                 type="submit"
-                // isLoading={isLoading}
+                isDisabled={isDisabled}
+                isLoading={isLoading}
               >
                 Save
               </Button>
             </div>
           </form>
-          <Button
-            fullWidth
-            className="bg-red-500 hover:opacity-75 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-            // isLoading={isLoading}
-          >
-            Delete Account
-          </Button>
+          {/* <div className="w-full max-w-sm mb-3">
+            <Button
+              fullWidth
+              className="bg-red-500 hover:opacity-75 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Delete Account
+            </Button>
+          </div> */}
         </div>
         <div className="w-1/2 lg:w-full flex justify-center items-center relative">
           <Image

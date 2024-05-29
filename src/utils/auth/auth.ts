@@ -12,6 +12,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.id = user.id;
         token.admin = user.admin;
         token.contact = user.contact;
+        token.name = user.name;
       }
       return token;
     },
@@ -20,7 +21,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.id;
         session.user.admin = token.admin;
         session.user.contact = token.contact;
+        session.user.name = token.name;
       }
+      // if (token) {
+      //   const user = await prisma.user.findUnique({
+      //     where: { id: token.id },
+      //   });
+
+      //   if (user) {
+      //     session.user.id = user.id;
+      //     session.user.admin = user.admin;
+      //     session.user.contact = user.contact;
+      //     session.user.name = user.name;
+      //   } else {
+      //     signOut();
+      //   }
+      // }
       return session;
     },
   },
