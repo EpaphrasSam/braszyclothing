@@ -1,11 +1,11 @@
 import CheckoutHeader from "@/components/layout/CheckoutHeader";
 import OrderAccordion from "@/components/pages/checkout/OrderAccordion";
 import OrderSummary from "@/components/pages/checkout/OrderSummary";
-import { auth } from "@/utils/auth/auth";
 import getSession from "@/utils/auth/getSession";
-import { Code, Divider } from "@nextui-org/react";
+import { Divider } from "@nextui-org/react";
 import { SessionProvider } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { FiAlertTriangle } from "react-icons/fi";
 
 export default async function CheckLayout({
@@ -19,14 +19,16 @@ export default async function CheckLayout({
     <main className="flex h-screen lg:overflow-hidden">
       <div className="flex flex-col lg:w-[70%] h-full w-full py-5 sm:px-5 px-2">
         <div>
-          <Image
-            src="/logo.png"
-            width={100}
-            height={100}
-            alt="Logo"
-            className="w-auto h-auto pb-3"
-            priority
-          />
+          <Link href="/">
+            <Image
+              src="/logo.png"
+              width={100}
+              height={100}
+              alt="Logo"
+              className="w-auto h-auto pb-3 transition ease-in-out duration-300 hover:scale-110"
+              priority
+            />
+          </Link>
           <OrderAccordion />
           {!session && (
             <div className="flex items-center gap-2 break-all p-2 sm:w-max w-full my-2 bg-[#D4D4D866] text-center rounded-full mx-4 max-sm:text-sm">

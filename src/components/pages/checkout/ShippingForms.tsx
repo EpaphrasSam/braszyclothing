@@ -10,7 +10,9 @@ import { IoChevronBack } from "react-icons/io5";
 
 const ShippingForms = () => {
   const router = useRouter();
+  const totalAmount = useCartStore((state) => state.totalAmount);
   const setShippingDetails = useCartStore((state) => state.setShippingDetails);
+  const setShippingFee = useCartStore((state) => state.setShippingFee);
   const shippingDetails = useCartStore((state) => state.shippingDetails);
   const [selectedMethod, setSelectedMethod] = useState("");
 
@@ -33,6 +35,10 @@ const ShippingForms = () => {
       shippingMethod: selectedMethod,
     };
 
+    if (selectedMethod === "standard") {
+      setShippingFee(totalAmount() >= 150 ? 0 : 9.9);
+    }
+
     setShippingDetails(updatedShippingDetails);
     router.push("/checkouts/payment");
   };
@@ -46,12 +52,26 @@ const ShippingForms = () => {
           value={selectedMethod}
           onValueChange={setSelectedMethod}
         >
-          <Radio className="my-1" value="UPS">
-            UPS
-          </Radio>
-          <Radio className="my-1" value="DHL">
-            DHL
-          </Radio>
+          <div className="flex justify-between items-center my-1">
+            <Radio
+              description={
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm">Delivery within 3-6 business days.</p>
+                  <p className="text-xs">
+                    Total items below $150 has a flat rate of $9.90
+                  </p>
+                </div>
+              }
+              value="standard"
+            >
+              Standard Shipping
+            </Radio>
+            {totalAmount() >= 150 ? (
+              <p className="text-lg text-gray-500">Free</p>
+            ) : (
+              <p className="text-lg text-gray-500">$9.90</p>
+            )}
+          </div>
         </RadioGroup>
       </div>
       <Divider className="my-4" />

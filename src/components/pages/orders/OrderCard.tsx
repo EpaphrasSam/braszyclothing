@@ -53,7 +53,9 @@ const OrderCard = ({ order }: OrderCardProps) => {
               >
                 {order?.shippingStatus}
               </Chip>
-              <Chip color="success">{order?.shippingMethod}</Chip>
+              <Chip color="success" className="capitalize">
+                {order?.shippingMethod}
+              </Chip>
             </div>
           </div>
           <div className="flex justify-between w-full overflow-x-auto scrollbar-thin">
@@ -122,7 +124,8 @@ const OrderCard = ({ order }: OrderCardProps) => {
             <span className="text-base font-semibold">
               ${order?.paymentIntent?.netAmount.toFixed(2)}{" "}
               <span className="text-gray-500">
-                ({order?.items.length} items)
+                ({order?.items.length}{" "}
+                {order?.items.length === 1 ? "item" : "items"})
               </span>
             </span>
           </div>

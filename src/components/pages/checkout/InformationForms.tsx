@@ -128,7 +128,6 @@ const InformationForms = ({ addresses }: InformationFormsProps) => {
             {...register("email")}
           />
           <Input
-            isReadOnly={!!session}
             variant="bordered"
             radius="sm"
             label="Contact"

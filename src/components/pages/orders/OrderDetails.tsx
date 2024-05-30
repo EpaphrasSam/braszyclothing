@@ -176,6 +176,10 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
                   <p>${order?.paymentIntent?.totalAmount.toFixed(2)}</p>
                 </div>
                 <div className="flex justify-between">
+                  <p>Shipping</p>
+                  <p>${order?.paymentIntent?.shippingFee.toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between">
                   <p>Discount</p>
                   <p>${order?.paymentIntent?.discount.toFixed(2)}</p>
                 </div>

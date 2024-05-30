@@ -12,6 +12,7 @@ const OrderSummary = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
   const paymentIntent = useStore(useCartStore, (state) => state.paymentIntent);
   const discount = useStore(useCartStore, (state) => state.discount);
+  const shippingFee = useCartStore((state) => state.shippingFee);
   const netAmount = useCartStore((state) => state.netAmount);
   const totalAmount = useCartStore((state) => state.totalAmount);
   const [isCouponVisible, setIsCouponVisible] = useState(false);
@@ -197,7 +198,7 @@ const OrderSummary = () => {
         </div>
         <div className="flex justify-between mb-2">
           <span className="text-gray-500">Shipping</span>
-          <span className="font-bold">FREE</span>
+          <span className="font-bold">${shippingFee!.toFixed(2)}</span>
         </div>
         <div className="flex justify-between mb-2">
           <span className="text-gray-500">Discount</span>

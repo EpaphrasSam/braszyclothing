@@ -15,10 +15,7 @@ export async function authMiddleware(request: NextRequest) {
 
   if (!token && protectedRoutes.some((route) => pathname.startsWith(route))) {
     const url = new URL("/", request.url);
-    url.searchParams.set(
-      "error",
-      "You must be logged in to access this page hello."
-    );
+    url.searchParams.set("error", "You must be logged in to access this page");
     return NextResponse.redirect(url);
   }
 

@@ -46,6 +46,7 @@ const CardForms = ({
   shippingDetails,
   cartItems,
   discount,
+  shippingFee,
   PaymentIntent,
 }: {
   session: Session | null;
@@ -55,6 +56,7 @@ const CardForms = ({
     size: string;
   })[];
   discount: number;
+  shippingFee: number;
   PaymentIntent: PaymentIntentType | null;
 }) => {
   const router = useRouter();
@@ -208,6 +210,7 @@ const CardForms = ({
           paymentIntent.id,
           PaymentIntent,
           discount,
+          shippingFee,
           session
         );
 
@@ -357,6 +360,7 @@ const PaymentForms = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
   const paymentIntent = useCartStore((state) => state.paymentIntent);
   const discount = useCartStore((state) => state.discount);
+  const shippingFee = useCartStore((state) => state.shippingFee);
   const netAmount = useCartStore((state) => state.netAmount);
   const setPaymentIntent = useCartStore((state) => state.setPaymentIntent);
   const shippingDetails = useCartStore((state) => state.shippingDetails);
@@ -409,6 +413,7 @@ const PaymentForms = () => {
           shippingDetails={shippingDetails!}
           cartItems={cartItems}
           discount={discount}
+          shippingFee={shippingFee}
           PaymentIntent={paymentIntent}
         />
       </Elements>

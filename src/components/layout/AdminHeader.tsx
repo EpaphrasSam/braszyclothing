@@ -12,7 +12,7 @@ const AdminHeader = (props: any) => {
       <NavbarContent justify="start">
         <Link
           href="/"
-          className="flex items-center gap-3 font-semibold hover:scale-105 transition ease-in-out duration-300"
+          className="flex max-sm:text-sm items-center gap-3 font-semibold hover:scale-105 transition ease-in-out duration-300"
         >
           <IoReturnDownBack className="text-2xl" />
           Go to Website
@@ -29,8 +29,11 @@ const AdminHeader = (props: any) => {
           />
         </div>
       </NavbarContent>
-      <NavbarContent justify="end" className="font-semibold text text-gray-500">
-        Admin Dashboard
+      <NavbarContent
+        justify="end"
+        className="font-semibold max-sm:text-sm text-gray-500"
+      >
+        Admin
       </NavbarContent>{" "}
     </Navbar>
   );

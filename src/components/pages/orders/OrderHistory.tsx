@@ -113,7 +113,7 @@ const OrderHistory = ({
           No orders found
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col flex-grow gap-4">
           <p className="text-3xl font-bold text-gray-500">My Orders</p>
           <Divider className="my-2" />
           <div className="flex flex-grow gap-4 xl:justify-between justify-center  flex-wrap">

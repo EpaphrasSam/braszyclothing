@@ -6,7 +6,12 @@ import { AnimatePresence, motion, wrap } from "framer-motion";
 import { CiShoppingCart } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cart";
-import { HiArrowsPointingOut } from "react-icons/hi2";
+import {
+  HiArrowLeft,
+  HiArrowRight,
+  HiArrowsPointingOut,
+} from "react-icons/hi2";
+import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 import { ProductType } from "@/types/SanityTypes";
 
 interface CardItemsProps {
@@ -55,17 +60,34 @@ const CardItems = ({ product }: CardItemsProps) => {
             key={currentSlide}
             src={product.imageUrls[imageIndex]}
             custom={direction}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, scale: isHovered ? 1.05 : 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ x: direction > 0 ? "100%" : "-100%" }}
+            animate={{ x: "0%" }}
+            exit={{ x: direction > 0 ? "-100%" : "100%" }}
             transition={{
-              x: { type: "spring", stiffness: 300, damping: 300 },
-              opacity: { duration: 1.5 },
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              duration: 0.5,
             }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={1}
           />
+
+          <div className="absolute top-36  left-1 ">
+            <MdArrowBackIosNew
+              size={24}
+              onClick={() => paginate(-1)}
+              className="cursor-pointer text-gray-700 transition ease-in-out duration-300 hover:opacity-50"
+            />
+          </div>
+
+          <div className="absolute top-36  right-1 ">
+            <MdArrowForwardIos
+              size={24}
+              onClick={() => paginate(1)}
+              className="cursor-pointer text-gray-700 transition ease-in-out duration-300 hover:opacity-50"
+            />
+          </div>
+
           {isHovered && (
             <motion.div
               className="flex ml-2 justify-evenly absolute bottom-20 -translate-x-1/2"

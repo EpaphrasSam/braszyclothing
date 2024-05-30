@@ -94,10 +94,12 @@ export const createOrder = async (
   paymentIntentId: string,
   paymentIntent: PaymentIntentType | null,
   discount: number,
+  shippingFee: number,
   session?: Session | null
 ) => {
   try {
     const { email, contact, id, shippingMethod, ...data } = shippingAddress;
+
     if (!email || !contact) {
       throw new Error("Email and contact are required");
     }
@@ -124,6 +126,10 @@ export const createOrder = async (
         ).id;
       } else {
         userId = session?.user.id!;
+        await prisma.user.update({
+          where: { id: userId },
+          data: { contact },
+        });
         shippingAddressId = (
           await prisma.shippingAddress.upsert({
             where: { id: id || "" },
@@ -146,6 +152,7 @@ export const createOrder = async (
               totalAmount: paymentIntent?.amount!,
               netAmount: paymentIntent?.netAmount!,
               fee: paymentIntent?.fee!,
+              shippingFee,
               discount,
             },
           },

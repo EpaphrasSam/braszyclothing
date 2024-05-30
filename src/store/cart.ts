@@ -31,9 +31,11 @@ export interface CartState {
   paymentIntent: PaymentIntentType | null;
   shippingDetails: ShippingDetails | null;
   discount: number;
+  shippingFee: number;
   setPaymentIntent: (paymentIntent: PaymentIntentType | null) => void;
   setShippingDetails: (details: ShippingDetails) => void;
   setDiscount: (discount: number) => void;
+  setShippingFee: (fee: number) => void;
   addToCart: (item: ProductType) => void;
   removeFromCart: (itemId: string) => void;
   incrementQuantity: (itemId: string) => void;
@@ -54,9 +56,11 @@ const useCartStore = create<CartState>()(
       paymentIntent: null,
       shippingDetails: null,
       discount: 0,
+      shippingFee: 0,
       setPaymentIntent: (paymentIntent) => set({ paymentIntent }),
       setShippingDetails: (details) => set({ shippingDetails: details }),
       setDiscount: (discount) => set({ discount }),
+      setShippingFee: (fee) => set({ shippingFee: fee }),
       addToCart: (item: ProductType) =>
         set((state) => ({
           cartItems: state.cartItems.some((cartItem) => cartItem.id === item.id)
@@ -115,7 +119,8 @@ const useCartStore = create<CartState>()(
         const totalAmount = get().totalAmount();
         const discount = get().discount;
         const fee = get().paymentIntent?.fee || 0;
-        return totalAmount + fee - discount;
+        const shippingFee = get().shippingFee;
+        return totalAmount + fee + shippingFee - discount;
       },
       resetAmount: () => set({ paymentIntent: null, discount: 0 }),
       resetShippingDetails: () => set({ shippingDetails: null }),
