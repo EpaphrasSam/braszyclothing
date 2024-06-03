@@ -30,10 +30,11 @@ const Product = ({ product }: ProductProps) => {
     [cartItems, product.id]
   );
 
-  const defaultCardColor = cartItem ? "gray" : "blue";
+  const isDisabled = !product.inStock;
 
   const handleUpdate = useCallback(
     (type: "color" | "size", value: string) => {
+      if (isDisabled) return;
       if (cartItem) {
         if (type === "color") {
           updateItemColor(product.id, value);
@@ -49,7 +50,14 @@ const Product = ({ product }: ProductProps) => {
         }
       }
     },
-    [addToCart, updateItemColor, updateItemSize, cartItem, product.id]
+    [
+      addToCart,
+      updateItemColor,
+      updateItemSize,
+      cartItem,
+      product.id,
+      isDisabled,
+    ]
   );
 
   if (!product)
@@ -72,7 +80,6 @@ const Product = ({ product }: ProductProps) => {
       </div>
     );
 
-  const isDisabled = !product.inStock;
   const handleCheckOut = () => {
     addToCart(product);
     router.push("/checkouts/information");
@@ -115,6 +122,7 @@ const Product = ({ product }: ProductProps) => {
                   radius="none"
                   className="w-12"
                   key={size}
+                  isDisabled={isDisabled}
                   onClick={() => handleUpdate("size", size)}
                 >
                   <CardBody
@@ -139,6 +147,7 @@ const Product = ({ product }: ProductProps) => {
                   radius="none"
                   className="w-fit"
                   key={color}
+                  isDisabled={isDisabled}
                   onClick={() => handleUpdate("color", color)}
                 >
                   <CardBody

@@ -2,40 +2,60 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { Navbar, NavbarContent } from "@nextui-org/react";
 import { IoReturnDownBack } from "react-icons/io5";
+import { RxHamburgerMenu } from "react-icons/rx";
+import AdminDrawer from "../pages/admin/AdminDrawer";
 
-const AdminHeader = (props: any) => {
+const AdminHeader = () => {
+  const [showNav, setShowNav] = useState({
+    leftNav: false,
+  });
+
+  const navHandler = (anchor: any, open: any) => (event: any) => {
+    setShowNav({ ...showNav, [anchor]: open });
+    return;
+  };
   return (
-    <Navbar maxWidth="full" isBlurred isBordered position="static">
-      <NavbarContent justify="start">
-        <Link
-          href="/"
-          className="flex max-sm:text-sm items-center gap-3 font-semibold hover:scale-105 transition ease-in-out duration-300"
+    <>
+      <Navbar maxWidth="full" isBlurred isBordered position="static">
+        <NavbarContent justify="start">
+          <Link
+            href="/"
+            className="flex max-sm:text-sm items-center gap-3 font-semibold hover:scale-105 transition ease-in-out duration-300"
+          >
+            <IoReturnDownBack className="text-2xl" />
+            Go to Website
+          </Link>
+        </NavbarContent>
+        <NavbarContent justify="center">
+          <div className="transition ease-in-out duration-300 hover:scale-105">
+            <Image
+              src="/logo.png"
+              alt="logo"
+              width={50}
+              height={50}
+              className="w-12 h-12 "
+            />
+          </div>
+        </NavbarContent>
+        <NavbarContent
+          justify="end"
+          className="font-semibold max-sm:text-sm text-gray-500"
         >
-          <IoReturnDownBack className="text-2xl" />
-          Go to Website
-        </Link>
-      </NavbarContent>
-      <NavbarContent justify="center">
-        <div className="transition ease-in-out duration-300 hover:scale-105">
-          <Image
-            src="/logo.png"
-            alt="logo"
-            width={50}
-            height={50}
-            className="w-12 h-12 "
+          <RxHamburgerMenu
+            size={24}
+            className="cursor-pointer hover:opacity-50"
+            onClick={navHandler("leftNav", true)}
           />
-        </div>
-      </NavbarContent>
-      <NavbarContent
-        justify="end"
-        className="font-semibold max-sm:text-sm text-gray-500"
-      >
-        Admin
-      </NavbarContent>{" "}
-    </Navbar>
+        </NavbarContent>
+      </Navbar>
+      <AdminDrawer
+        isOpen={showNav["leftNav"]}
+        onClose={navHandler("leftNav", false)}
+      />
+    </>
   );
 };
 

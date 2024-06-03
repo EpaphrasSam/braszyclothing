@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AdminHeader from "@/components/layout/AdminHeader";
+import Sidebar from "@/components/pages/admin/AdminDrawer";
 
 export const metadata: Metadata = {
   title: "Braszy Clothing | Admin",
@@ -12,9 +13,9 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <>
       <AdminHeader />
       {children}
-    </div>
+    </>
   );
 }

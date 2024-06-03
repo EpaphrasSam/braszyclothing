@@ -5,7 +5,7 @@ import {
   emailProtectedRoutes,
   protectedRoutes,
   publicRoutes,
-} from "./lib/constants/routes";
+} from "./lib/constants/routes.tsx";
 
 export const config = {
   matcher: "/:path*",

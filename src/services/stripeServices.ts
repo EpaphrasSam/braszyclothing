@@ -2,7 +2,6 @@
 
 import { calculateStripeFee } from "@/helpers/feeCalculators";
 import { ShippingDetails } from "@/store/cart";
-import { ProductType } from "@/types/SanityTypes";
 import { stripe } from "@/utils/stripe";
 import Stripe from "stripe";
 

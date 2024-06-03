@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { NavbarLinks, NavLinkTypes } from "@/lib/constants/routes";
 import { usePathname } from "next/navigation";
 import { motion, useScroll } from "framer-motion";
 import {
@@ -31,6 +30,7 @@ import { useStore } from "@/store/useStore";
 import useCartStore from "@/store/cart";
 import ProfileDrawer from "./ProfileDrawer";
 import { useSession } from "next-auth/react";
+import { NavbarLinks, NavLinkTypes } from "@/lib/constants/routes";
 
 const chevronVariants = {
   down: { rotate: 0 },

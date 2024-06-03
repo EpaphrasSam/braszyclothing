@@ -9,6 +9,7 @@ import {
   MdOutlineCreditCard,
   MdPersonOutline,
   MdLogout,
+  MdOutlineAdminPanelSettings,
 } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 
@@ -99,7 +100,21 @@ const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
         ))}
       </div>
       <Divider className="my-4" />
-      <form className="mt-auto">
+      <div className="mt-auto flex flex-col gap-3">
+        {user.admin && (
+          <Link href="/admin/dashboard">
+            <Button
+              size="lg"
+              fullWidth
+              radius="none"
+              color="primary"
+              className="rounded"
+              startContent={<MdOutlineAdminPanelSettings size={20} />}
+            >
+              Admin
+            </Button>
+          </Link>
+        )}
         <Button
           size="lg"
           fullWidth
@@ -110,7 +125,7 @@ const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
         >
           Logout
         </Button>
-      </form>
+      </div>
     </div>
   );
 };

@@ -1,3 +1,12 @@
+import {
+  FaHome,
+  FaCalendarAlt,
+  FaUsers,
+  FaClipboardList,
+  FaUserCog,
+} from "react-icons/fa";
+import { MdDashboard, MdShoppingCart, MdStore } from "react-icons/md";
+
 export type NavLinkTypes = {
   name: string;
   route: string;
@@ -5,20 +14,6 @@ export type NavLinkTypes = {
 };
 
 export const NavbarLinks: NavLinkTypes[] = [
-  // {
-  //   name: "Shop",
-  //   route: "/shop",
-  //   children: [
-  //     {
-  //       name: "Men",
-  //       route: "/men",
-  //     },
-  //     {
-  //       name: "Women",
-  //       route: "/women",
-  //     },
-  //   ],
-  // },
   {
     name: "Men",
     route: "/shop/men",
@@ -31,10 +26,7 @@ export const NavbarLinks: NavLinkTypes[] = [
     name: "Unisex",
     route: "/shop/unisex",
   },
-  // {
-  //   name: "Gifts",
-  //   route: "/gift",
-  // },
+
   {
     name: "Contact",
     route: "/contact",
@@ -42,6 +34,24 @@ export const NavbarLinks: NavLinkTypes[] = [
   {
     name: "About",
     route: "/about",
+  },
+];
+
+export const adminSidebarLinks = [
+  {
+    icon: <MdDashboard />,
+    route: "/admin/dashboard",
+    label: "Dashboard",
+  },
+  {
+    icon: <MdStore />,
+    route: "/admin/products",
+    label: "Products",
+  },
+  {
+    icon: <MdShoppingCart />,
+    route: "/admin/orders",
+    label: "Orders",
   },
 ];
 
