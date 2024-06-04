@@ -43,6 +43,22 @@ const Footer = () => {
                   About Us
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/terms-of-services"
+                  className="hover:text-gray-400 hover:underline"
+                >
+                  Terms of Services
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/privacy-policy"
+                  className="hover:text-gray-400 hover:underline"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
