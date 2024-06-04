@@ -23,15 +23,15 @@ interface OrderCardProps {
 const getOrderStatusColor = (status: string) => {
   switch (status) {
     case "Pending":
-      return "bg-yellow-200";
-    case "On Delivery":
-      return "bg-blue-200";
-    case "Arrived":
-      return "bg-green-200";
-    case "Cancelled":
-      return "bg-red-200";
+      return "warning";
+    case "Shipping":
+      return "primary";
+    case "Completed":
+      return "success";
+    case "Canceled":
+      return "danger";
     default:
-      return "bg-gray-300";
+      return "default";
   }
 };
 
@@ -49,6 +49,8 @@ const OrderCard = ({ order }: OrderCardProps) => {
             <div className="flex flex-row gap-2 items-center">
               <Chip
                 size="lg"
+                variant="flat"
+                color={getOrderStatusColor(order?.shippingStatus)}
                 className={`${getOrderStatusColor(order?.shippingStatus)} text-gray-700 text-sm font-bold`}
               >
                 {order?.shippingStatus}

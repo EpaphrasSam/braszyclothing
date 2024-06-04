@@ -278,7 +278,14 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
                       {new Date(item.createdAt).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
-                      {item.isUser ? item.userName : item.guestEmail}
+                      <div className="flex flex-col items-start">
+                        {item.isGuest && (
+                          <Chip variant="dot" size="sm" radius="sm">
+                            Guest
+                          </Chip>
+                        )}
+                        {item.isUser ? item.userName : item.guestEmail}
+                      </div>
                     </TableCell>
                     <TableCell>
                       <OrderAccordion data={item.products} type="Products" />

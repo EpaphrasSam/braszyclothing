@@ -24,20 +24,12 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/shipping"
+                  href="/shipping-and-returns"
                   className="hover:text-gray-400 hover:underline"
                 >
                   Shipping & Returns
                 </Link>
               </li>
-              {/* <li>
-                <Link
-                  href="/faq"
-                  className="hover:text-gray-400 hover:underline"
-                >
-                  FAQ
-                </Link>
-              </li> */}
             </ul>
           </div>
           <div>
@@ -51,22 +43,6 @@ const Footer = () => {
                   About Us
                 </Link>
               </li>
-              {/* <li>
-                <Link
-                  href="/careers"
-                  className="hover:text-gray-400 hover:underline"
-                >
-                  Careers
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/blog"
-                  className="hover:text-gray-400 hover:underline"
-                >
-                  Blog
-                </Link>
-              </li> */}
             </ul>
           </div>
           <div>
