@@ -15,8 +15,11 @@ type CustomModalProps = {
   onConfirm: () => void;
   label: string;
   confirmLabel: string;
+  cancelLabel?: string;
   message: string;
   alertMessage?: string;
+  color?: "primary" | "secondary" | "success" | "warning" | "danger";
+  isLoading?: boolean;
 };
 
 const CustomModal = ({
@@ -27,6 +30,9 @@ const CustomModal = ({
   label,
   confirmLabel,
   alertMessage,
+  color = "primary",
+  cancelLabel = "Cancel",
+  isLoading = false,
 }: CustomModalProps) => {
   return (
     <Modal
@@ -67,9 +73,14 @@ const CustomModal = ({
         </ModalBody>
         <ModalFooter>
           <Button radius="sm" onClick={onClose} color="default">
-            Cancel
+            {cancelLabel}
           </Button>
-          <Button radius="sm" onClick={onConfirm} color="primary">
+          <Button
+            radius="sm"
+            isLoading={isLoading}
+            onClick={onConfirm}
+            color={color}
+          >
             {confirmLabel}
           </Button>
         </ModalFooter>
