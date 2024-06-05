@@ -40,6 +40,7 @@ import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
 import { createOrder } from "@/services/orderServices";
 import { ProductType } from "@/types/SanityTypes";
+import { sendInvoiceEmail } from "@/utils/email";
 
 const CardForms = ({
   session,
@@ -215,7 +216,26 @@ const CardForms = ({
         );
 
         if (res.success) {
-          toast.success("Order placed successfully");
+          try {
+            await sendInvoiceEmail(
+              res.orderID!,
+              cartItems,
+              shippingDetails,
+              PaymentIntent?.amount!,
+              discount,
+              shippingFee,
+              PaymentIntent?.fee!,
+              PaymentIntent?.netAmount!,
+              shippingDetails?.email!
+            );
+            toast.success("Invoice sent successfully");
+          } catch (error) {
+            console.log(error);
+            toast.error("An error occurred while sending invoice");
+            setIsProcessing(false);
+            return;
+          }
+          // toast.success("Order placed successfully");
         } else {
           toast.error("An error occurred while placing order");
           setIsProcessing(false);
@@ -276,65 +296,70 @@ const CardForms = ({
         </form>
       )}
       {email && (
-        <form className="sm:w-[60%] w-full flex-grow" onSubmit={confirmPayment}>
-          <RadioGroup
-            className="my-6"
-            aria-label="Payment Methods"
-            value={selectedPaymentMethod}
-            onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+        <>
+          <form
+            className="sm:w-[60%] w-full flex-grow"
+            onSubmit={confirmPayment}
           >
-            {loadingPaymentMethods && <Spinner />}
-            {paymentMethods.map((paymentMethod) => (
-              <Card radius="sm" key={paymentMethod.id}>
-                <CardBody>
-                  <Radio key={paymentMethod.id} value={paymentMethod.id}>
-                    {paymentMethod.card && (
-                      <div className="flex justify-between items-center gap-4 capitalize">
-                        <div className="flex flex-col">
-                          <span className="text-gray-700 text-xs font-semibold">
-                            {paymentMethod.card.brand}
-                          </span>
-                          <span className="text-gray-700 text-base font-semibold">
-                            **** **** **** {paymentMethod.card.last4}
+            <RadioGroup
+              className="my-6"
+              aria-label="Payment Methods"
+              value={selectedPaymentMethod}
+              onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+            >
+              {loadingPaymentMethods && <Spinner />}
+              {paymentMethods.map((paymentMethod) => (
+                <Card radius="sm" key={paymentMethod.id}>
+                  <CardBody>
+                    <Radio key={paymentMethod.id} value={paymentMethod.id}>
+                      {paymentMethod.card && (
+                        <div className="flex justify-between items-center gap-4 capitalize">
+                          <div className="flex flex-col">
+                            <span className="text-gray-700 text-xs font-semibold">
+                              {paymentMethod.card.brand}
+                            </span>
+                            <span className="text-gray-700 text-base font-semibold">
+                              **** **** **** {paymentMethod.card.last4}
+                            </span>
+                          </div>
+
+                          <span className="text-gray-500 text-sm">
+                            {`${paymentMethod.card.exp_month}/${(paymentMethod.card.exp_year % 100).toString().padStart(2, "0")}`}
                           </span>
                         </div>
-
-                        <span className="text-gray-500 text-sm">
-                          {`${paymentMethod.card.exp_month}/${(paymentMethod.card.exp_year % 100).toString().padStart(2, "0")}`}
-                        </span>
-                      </div>
-                    )}
-                  </Radio>
-                </CardBody>
-              </Card>
-            ))}
-            <Radio className="m-1" value="new">
-              Enter new card details
-            </Radio>
-          </RadioGroup>
-          <Card
-            isDisabled={selectedPaymentMethod !== "new"}
-            radius="none"
-            className="rounded-md mb-4"
-          >
-            <CardBody className="p-4">
-              <PaymentElement />
-            </CardBody>
-          </Card>
-          <div className="flex justify-center ">
-            <Button
-              type="submit"
-              color={isDisabled ? "default" : "primary"}
+                      )}
+                    </Radio>
+                  </CardBody>
+                </Card>
+              ))}
+              <Radio className="m-1" value="new">
+                Enter new card details
+              </Radio>
+            </RadioGroup>
+            <Card
+              isDisabled={selectedPaymentMethod !== "new"}
               radius="none"
-              size="md"
-              className="rounded-md  text-base font-semibold w-full sm:w-[50%]"
-              disabled={isDisabled}
-              isLoading={isProcessing}
+              className="rounded-md mb-4"
             >
-              Pay ${netAmount.toFixed(2)}
-            </Button>
-          </div>
-        </form>
+              <CardBody className="p-4">
+                <PaymentElement />
+              </CardBody>
+            </Card>
+            <div className="flex justify-center ">
+              <Button
+                type="submit"
+                color={isDisabled ? "default" : "primary"}
+                radius="none"
+                size="md"
+                className="rounded-md  text-base font-semibold w-full sm:w-[50%]"
+                disabled={isDisabled}
+                isLoading={isProcessing}
+              >
+                Pay ${netAmount.toFixed(2)}
+              </Button>
+            </div>
+          </form>
+        </>
       )}
       {showConfirmationModal && (
         <CustomModal
@@ -371,11 +396,10 @@ const PaymentForms = () => {
         const result = await createPaymentIntent(
           netAmount(),
           shippingDetails,
-
           session?.user?.email!
         );
         if (result) {
-          setPaymentIntent(result);
+          setPaymentIntent({ ...result, amount: result.amount - shippingFee });
         }
       }
     };

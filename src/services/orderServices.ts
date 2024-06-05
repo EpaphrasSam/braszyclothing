@@ -171,6 +171,7 @@ export const createOrder = async (
     });
 
     return {
+      orderID,
       success: true,
       error: null,
     };
@@ -178,6 +179,7 @@ export const createOrder = async (
     console.error(error);
 
     return {
+      orderID: null,
       success: false,
       error: error.message || "Error in creating order",
     };

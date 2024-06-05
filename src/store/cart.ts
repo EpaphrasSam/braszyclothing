@@ -122,7 +122,8 @@ const useCartStore = create<CartState>()(
         const shippingFee = get().shippingFee;
         return totalAmount + fee + shippingFee - discount;
       },
-      resetAmount: () => set({ paymentIntent: null, discount: 0 }),
+      resetAmount: () =>
+        set({ paymentIntent: null, discount: 0, shippingFee: 0 }),
       resetShippingDetails: () => set({ shippingDetails: null }),
       resetCart: () =>
         set({

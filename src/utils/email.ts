@@ -1,6 +1,11 @@
+"use server";
+
 import crypto from "crypto";
 import { Resend } from "resend";
 import prisma from "./prisma";
+import { ProductType } from "@/types/SanityTypes";
+import { ShippingDetails } from "@/store/cart";
+import { generateInvoicePDF } from "@/components/pages/invoice/generateInvoicePDF";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -105,6 +110,80 @@ export const validateOTP = async (otp: string, email: string) => {
     await prisma.otp.delete({ where: { email } });
     return decryptedOtp === otp;
   } catch (error) {
+    throw error;
+  }
+};
+
+// export async function sendInvoiceEmail(
+//   orderID: string,
+//   cartItems: (ProductType & { color: string; size: string })[],
+//   shippingDetails: ShippingDetails,
+//   totalAmount: number,
+//   discount: number,
+//   shippingFee: number,
+//   netAmount: number,
+//   email: string
+// ) {
+//   try {
+//     await resend.emails.send({
+//       from: `Braszy Clothing <${process.env.RESEND_EMAIL}>`,
+//       to: [email],
+//       subject: `Invoice for Your Order`,
+//       react: generateInvoiceHTML({
+//         orderID,
+//         cartItems,
+//         shippingDetails,
+//         totalAmount,
+//         discount,
+//         shippingFee,
+//         netAmount,
+//       }),
+//     });
+//   } catch (error: any) {
+//     console.log(error);
+//     throw error;
+//   }
+// }
+
+export const sendInvoiceEmail = async (
+  orderID: string,
+  cartItems: (ProductType & { color: string; size: string })[],
+  shippingDetails: ShippingDetails,
+  totalAmount: number,
+  discount: number,
+  shippingFee: number,
+  fee: number,
+  netAmount: number,
+  email: string
+) => {
+  try {
+    const pdfBuffer = await generateInvoicePDF({
+      orderID,
+      cartItems,
+      shippingDetails,
+      totalAmount,
+      discount,
+      fee,
+      shippingFee,
+      netAmount,
+    });
+
+    const pdfBase64 = Buffer.from(pdfBuffer).toString("base64");
+
+    await resend.emails.send({
+      from: `Braszy Clothing <${process.env.RESEND_EMAIL}>`,
+      to: [email],
+      subject: `Invoice for Your Order`,
+      html: `<p>Dear Customer,</p><p>Thank you for your order. Please find your invoice attached.</p><br>Thank you for shopping with BraszyClothing`,
+      attachments: [
+        {
+          filename: `Invoice_${orderID}.pdf`,
+          content: pdfBase64,
+        },
+      ],
+    });
+  } catch (error: any) {
+    console.log(error);
     throw error;
   }
 };
