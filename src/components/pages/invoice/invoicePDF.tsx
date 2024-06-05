@@ -8,9 +8,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { InvoiceProps } from "@/types/InvoiceTypes";
-import Logo from "../../../../public/logo.png";
-import fs from "fs";
-import path from "path";
+import { logoUrl } from "@/lib/constants/base64";
 
 const styles = StyleSheet.create({
   container: { padding: 20, fontFamily: "Helvetica" },
@@ -21,7 +19,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   logo: { width: 100, height: 100 },
-  title: { fontSize: 24, fontWeight: "bold" },
+  title: { fontSize: 20, fontWeight: "bold" },
   section: { marginBottom: 20 },
   heading: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
   text: {
@@ -80,11 +78,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const logoPath = path.join(process.cwd(), "public", "logo.png");
-const logoBuffer = fs.readFileSync(logoPath);
-const logoBase64 = logoBuffer.toString("base64");
-const logoUrl = `data:image/png;base64,${logoBase64}`;
-
 const InvoicePDF = ({
   orderID,
   cartItems,
@@ -102,7 +95,10 @@ const InvoicePDF = ({
       <Page size="A4" style={styles.container}>
         <View style={styles.header}>
           <Image src={logoUrl} style={styles.logo} />
-          <Text style={styles.title}>Order #{orderID}</Text>
+          <View>
+            <Text style={styles.label}>Order ID</Text>
+            <Text style={styles.title}>#{orderID}</Text>
+          </View>
         </View>
         <View style={styles.section}>
           <View style={styles.flexRow}>
