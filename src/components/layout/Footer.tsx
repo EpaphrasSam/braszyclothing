@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { Input } from "@nextui-org/react";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { RiTwitterXLine } from "react-icons/ri";
 
 const Footer = () => {
   return (
@@ -86,7 +87,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="hover:text-gray-400 hover:underline"
               >
-                <FaTwitter size={24} />
+                <RiTwitterXLine size={24} />
               </Link>
             </div>
           </div>

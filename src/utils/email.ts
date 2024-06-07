@@ -106,7 +106,7 @@ export const validateOTP = async (otp: string, email: string) => {
       return false;
     }
 
-    const decryptedOtp = decryptOTP(storedOTPData.otp, email);
+    const decryptedOtp = await decryptOTP(storedOTPData.otp, email);
     await prisma.otp.delete({ where: { email } });
     return decryptedOtp === otp;
   } catch (error) {

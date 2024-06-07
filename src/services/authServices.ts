@@ -39,8 +39,8 @@ export const checkIfEmailExistsAction = async (
 
 export const sendOtpAction = async (email: string) => {
   try {
-    const otp = generateOTP();
-    const encryptedOtp = encryptOTP(otp, email);
+    const otp = await generateOTP();
+    const encryptedOtp = await encryptOTP(otp, email);
     await storeOTP(encryptedOtp, email);
 
     await sendOTP(otp, email);
