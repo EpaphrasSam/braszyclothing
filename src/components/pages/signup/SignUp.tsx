@@ -10,7 +10,7 @@ import Link from "next/link";
 import { CiMail, CiUser } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   checkIfEmailExistsAction,
   sendOtpAction,
@@ -27,8 +27,11 @@ export type FormData = {
 
 const SignUp = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const setUserData = useUserStore((state) => state.setUserData);
   const [isLoading, setIsLoading] = useState(false);
+
+  const redirect = searchParams.get("redirect");
 
   const {
     register,
@@ -46,7 +49,9 @@ const SignUp = () => {
         await sendOtpAction(data.email);
         setUserData(data);
         setEmailCookie(data.email);
-        router.push("/otp-verification");
+        router.push(
+          `/otp-verification${redirect ? `?redirect=${redirect}` : ""}`
+        );
       }
     } catch (error: any) {
       toast.error(error.message || "Something went wrong");

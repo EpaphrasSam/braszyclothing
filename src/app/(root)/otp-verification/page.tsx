@@ -7,7 +7,7 @@ import { Button, Input } from "@nextui-org/react";
 import { useStore } from "@/store/useStore";
 import useUserStore from "@/store/user";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import {
   loginAction,
@@ -18,12 +18,15 @@ import { deleteEmailCookie, getEmailCookie } from "@/helpers/cookies";
 
 const OtpScreen = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const userData = useStore(useUserStore, (state) => state.userData);
   const setUserData = useUserStore((state) => state.setUserData);
   const [isLoading, setIsLoading] = useState(false);
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [isFilled, setIsFilled] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
+
+  const redirect = searchParams.get("redirect");
 
   useEffect(() => {
     const fetchEmailCookie = async () => {
@@ -66,7 +69,7 @@ const OtpScreen = () => {
         });
         await loginAction(userData?.email!, userData?.password!);
         toast.success("Account created successfully");
-        window.location.href = "/";
+        window.location.href = redirect || "/";
       } else {
         await verifyOtpAction(otp.join(""), email);
         router.push("/reset-password");
@@ -82,9 +85,9 @@ const OtpScreen = () => {
   };
 
   const sendOtp = async () => {
-    if (!userData) return;
+    if (!email) return;
     try {
-      await sendOtpAction(userData?.email);
+      await sendOtpAction(email);
       toast.success("OTP sent successfully");
     } catch (error: any) {
       toast.error(error.response.data || "Something went wrong");
@@ -141,7 +144,7 @@ const OtpScreen = () => {
                 Didn&apos;t receive an OTP?{" "}
                 <div
                   onClick={sendOtp}
-                  className={`text-gray-400 cursor-not-allowed ${userData ? "text-blue-500 font-bold hover:opacity-80 transition-all ease-in-out duration-300 hover:scale-105" : ""}`}
+                  className={` ${email ? "text-blue-500 cursor-pointer font-bold hover:opacity-80 transition-all ease-in-out duration-300 hover:scale-105" : "text-gray-400 cursor-not-allowed"}`}
                 >
                   Resend OTP
                 </div>

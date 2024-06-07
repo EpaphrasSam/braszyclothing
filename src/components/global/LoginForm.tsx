@@ -45,7 +45,7 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
         window.location.reload();
         onClose();
       } else {
-        router.push(redirect || "/");
+        window.location.href = redirect || "/";
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -108,7 +108,7 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
             <div>Don&apos;t have an account?</div>
             <div>
               <Link
-                href="/signup"
+                href={`/signup${redirect ? `?redirect=${redirect}` : ""}`}
                 className="inline-block align-baseline font-bold text-base underline-offset-4 hover:underline text-blue-700 hover:text-blue-800"
               >
                 Sign Up
