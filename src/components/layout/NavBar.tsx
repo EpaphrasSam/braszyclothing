@@ -238,8 +238,23 @@ const NavBar = () => {
     );
   };
 
+  const scrollToFooter = () => {
+    const footerElement = document.getElementById("footer-subscribe");
+    if (footerElement) {
+      footerElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <>
+      <div
+        onClick={scrollToFooter}
+        className="w-full  bg-black text-white p-2 text-center cursor-pointer"
+      >
+        <span className="animate-pulse text-sm transition ease-in-out duration-1000 font-semibold ">
+          A 10% discount coupon is available for new customers
+        </span>
+      </div>
       <Navbar
         maxWidth="full"
         isBordered

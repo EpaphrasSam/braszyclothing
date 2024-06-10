@@ -1,13 +1,43 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import { Input } from "@nextui-org/react";
+import { Input, Spinner } from "@nextui-org/react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { RiTwitterXLine } from "react-icons/ri";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { addEmailToNewsletter } from "@/services/couponServices";
 
 const Footer = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    watch,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  const onSubmit = async (data: { email: string }) => {
+    try {
+      setIsLoading(true);
+      const response = await addEmailToNewsletter(data.email);
+      if (response.message) {
+        toast.success(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+      reset();
+    }
+  };
   return (
     <footer className="bg-gray-800 text-white py-8 mx-auto w-full">
       <div className="container mx-auto px-4 md:block flex flex-col justify-center items-center">
@@ -94,20 +124,40 @@ const Footer = () => {
         </div>
         <div className="mt-8 text-center">
           <div className="flex flex-col justify-center items-center">
-            <p className="mb-2">Subscribe to our emails</p>
-            <Input
-              label="Email"
-              className="text-black mb-4 w-[350px]"
-              variant="faded"
-              radius="none"
-              endContent={
-                <FaArrowRightLong
-                  size={20}
-                  color="black"
-                  className="cursor-pointer hover:opacity-50 hover:scale-125 transition-all"
-                />
-              }
-            />
+            <p className="mb-2">
+              Subscribe to our newsletter to receive discount
+            </p>
+            <div id="footer-subscribe">
+              <Input
+                type="email"
+                label="Email"
+                className="text-black mb-4 w-[350px]"
+                variant="faded"
+                radius="none"
+                isInvalid={!!errors.email}
+                value={watch("email")}
+                errorMessage={errors.email?.message as string}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address",
+                  },
+                })}
+                endContent={
+                  isLoading ? (
+                    <Spinner size="sm" />
+                  ) : (
+                    <FaArrowRightLong
+                      size={20}
+                      color="black"
+                      className="cursor-pointer hover:opacity-50 hover:scale-125 transition-all"
+                      onClick={handleSubmit(onSubmit)}
+                    />
+                  )
+                }
+              />
+            </div>
           </div>
           <p>
             &copy; {new Date().getFullYear()} Braszy Clothing. All rights

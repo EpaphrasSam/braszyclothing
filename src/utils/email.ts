@@ -114,37 +114,6 @@ export const validateOTP = async (otp: string, email: string) => {
   }
 };
 
-// export async function sendInvoiceEmail(
-//   orderID: string,
-//   cartItems: (ProductType & { color: string; size: string })[],
-//   shippingDetails: ShippingDetails,
-//   totalAmount: number,
-//   discount: number,
-//   shippingFee: number,
-//   netAmount: number,
-//   email: string
-// ) {
-//   try {
-//     await resend.emails.send({
-//       from: `Braszy Clothing <${process.env.RESEND_EMAIL}>`,
-//       to: [email],
-//       subject: `Invoice for Your Order`,
-//       react: generateInvoiceHTML({
-//         orderID,
-//         cartItems,
-//         shippingDetails,
-//         totalAmount,
-//         discount,
-//         shippingFee,
-//         netAmount,
-//       }),
-//     });
-//   } catch (error: any) {
-//     console.log(error);
-//     throw error;
-//   }
-// }
-
 export const sendInvoiceEmail = async (
   orderID: string,
   cartItems: (ProductType & { color: string; size: string })[],
@@ -184,6 +153,48 @@ export const sendInvoiceEmail = async (
     });
   } catch (error: any) {
     console.log(error);
+    throw error;
+  }
+};
+
+export const sendCouponEmail = async (
+  email: string,
+  couponCode: string
+): Promise<void> => {
+  const message = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+      <div style="background-color: #f7f7f7; padding: 20px; border-radius: 8px;">
+        <h2 style="color: #333;">Your Coupon Code</h2>
+        <p style="font-size: 16px; color: #555;">
+          Hello,
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          Thank you for subscribing to our newsletter! Here is your coupon code:
+        </p>
+        <p style="font-size: 24px; font-weight: bold; color: #333;">
+          ${couponCode}
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          Use this code at checkout to enjoy your discount. If you have any questions, feel free to contact us.
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          Best regards,<br>
+          The Braszy Clothing Team
+        </p>
+      </div>
+    </div>
+  `;
+  try {
+    const { error, data }: any = await resend.emails.send({
+      from: `Braszy Clothing <${process.env.RESEND_EMAIL}>`,
+      to: [email],
+      subject: "Your Coupon Code",
+      html: message,
+    });
+    if (error) {
+      throw error;
+    }
+  } catch (error: any) {
     throw error;
   }
 };

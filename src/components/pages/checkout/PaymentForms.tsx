@@ -177,7 +177,7 @@ const CardForms = ({
               billing_details: billingDetails,
             },
             receipt_email: shippingDetails.email,
-            return_url: "http://localhost:3000/cart?success=true",
+            return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkouts/payment`,
           },
           redirect: "if_required",
         });
@@ -193,7 +193,7 @@ const CardForms = ({
         paymentIntentResult = await stripe.confirmCardPayment(clientSecret!, {
           payment_method: selectedPaymentMethod,
           receipt_email: shippingDetails.email,
-          return_url: "http://localhost:3000/cart?success=true",
+          return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkouts/payment`,
         });
       }
 
@@ -235,7 +235,6 @@ const CardForms = ({
             setIsProcessing(false);
             return;
           }
-          // toast.success("Order placed successfully");
         } else {
           toast.error("An error occurred while placing order");
           setIsProcessing(false);

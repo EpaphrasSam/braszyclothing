@@ -78,8 +78,6 @@ export const loginAction = async (
       signInOptions.fetchUserByEmail = fetchUserByEmail;
     }
 
-    console.log(signInOptions);
-
     await signIn("credentials", signInOptions);
   } catch (error) {
     if (error instanceof AuthError) {

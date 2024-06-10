@@ -84,22 +84,6 @@ export const savePaymentMethod = async (
       customer = customersResponse.data[0];
     }
 
-    // const paymentMethods = await stripe.paymentMethods.list({
-    //   customer: customer.id,
-    //   type: "card",
-    // });
-
-    // const isPaymentMethodAttached = paymentMethods.data.some(
-    //   (method) => method.id === paymentMethodId
-    // );
-
-    // if (isPaymentMethodAttached) {
-    //   return {
-    //     success: true,
-    //     message: "Payment method already attached to the customer",
-    //   };
-    // }
-
     await stripe.paymentMethods.attach(paymentMethodId, {
       customer: customer.id,
     });
@@ -168,5 +152,89 @@ export const getPaymentMethodDetails = async (
     };
   } catch (error: any) {
     throw new Error(error.message);
+  }
+};
+
+export const createStripeCoupon = async (
+  discountRate: number,
+  duration: "once" | "repeating" | "forever" = "once",
+  durationInMonths?: number,
+  expirationDate?: Date,
+  maxRedemptions?: number
+): Promise<Stripe.Coupon> => {
+  try {
+    const couponParams: Stripe.CouponCreateParams = {
+      percent_off: discountRate,
+      duration,
+    };
+
+    if (duration === "repeating" && durationInMonths) {
+      couponParams.duration_in_months = durationInMonths;
+    }
+
+    if (expirationDate) {
+      couponParams.redeem_by = Math.floor(expirationDate.getTime() / 1000);
+    }
+
+    if (maxRedemptions) {
+      couponParams.max_redemptions = maxRedemptions;
+    }
+
+    const coupon = await stripe.coupons.create(couponParams);
+    return coupon;
+  } catch (error: any) {
+    throw Error(error.message);
+  }
+};
+
+export const generatePromotionCode = async (
+  couponId: string
+): Promise<Stripe.PromotionCode> => {
+  try {
+    const promotionCode = await stripe.promotionCodes.create({
+      coupon: couponId,
+      max_redemptions: 1,
+    });
+
+    return promotionCode;
+  } catch (error: any) {
+    throw Error(error.message);
+  }
+};
+
+export const validateCoupon = async (couponId: string) => {
+  try {
+    const coupon = await stripe.coupons.retrieve(couponId);
+
+    const plainCoupon = {
+      id: coupon.id,
+      object: coupon.object,
+      amount_off: coupon.amount_off,
+      created: coupon.created,
+      currency: coupon.currency,
+      duration: coupon.duration,
+      duration_in_months: coupon.duration_in_months,
+      livemode: coupon.livemode,
+      max_redemptions: coupon.max_redemptions,
+      metadata: coupon.metadata,
+      name: coupon.name,
+      percent_off: coupon.percent_off,
+      redeem_by: coupon.redeem_by,
+      times_redeemed: coupon.times_redeemed,
+      valid: coupon.valid,
+    };
+
+    return plainCoupon;
+  } catch (error: any) {
+    throw Error(error.message);
+  }
+};
+
+export const updateCouponValidity = async (couponId: string) => {
+  try {
+    const coupon = await stripe.coupons.del(couponId);
+    return coupon;
+  } catch (error: any) {
+    throw Error(error.message);
   }
 };

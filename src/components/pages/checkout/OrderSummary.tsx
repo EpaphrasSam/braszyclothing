@@ -4,18 +4,75 @@ import useCartStore from "@/store/cart";
 import { useStore } from "@/store/useStore";
 import { Badge, Button, Divider, Input, Skeleton } from "@nextui-org/react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { validateCoupon } from "@/services/stripeServices";
 
 const OrderSummary = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
   const paymentIntent = useStore(useCartStore, (state) => state.paymentIntent);
   const discount = useStore(useCartStore, (state) => state.discount);
+  const setDiscount = useCartStore((state) => state.setDiscount);
   const shippingFee = useCartStore((state) => state.shippingFee);
   const netAmount = useCartStore((state) => state.netAmount);
   const totalAmount = useCartStore((state) => state.totalAmount);
   const [isCouponVisible, setIsCouponVisible] = useState(false);
+  const appliedCoupons = useStore(
+    useCartStore,
+    (state) => state.appliedCoupons
+  );
+  const setAppliedCoupons = useCartStore((state) => state.setAppliedCoupons);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    register,
+    reset,
+    watch,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      coupon: "",
+    },
+  });
+
+  const onSubmit = async (data: { coupon: string }) => {
+    try {
+      setIsLoading(true);
+      const coupon = await validateCoupon(data.coupon);
+      if (appliedCoupons?.includes(coupon.id)) {
+        setError("coupon", { message: "Coupon already applied" });
+        return;
+      }
+      if (coupon.valid) {
+        let discountAmount = 0;
+        if (coupon.amount_off) {
+          discountAmount = coupon.amount_off / 100;
+        } else if (coupon.percent_off) {
+          discountAmount = (totalAmount() * coupon.percent_off) / 100;
+        }
+        setAppliedCoupons([...appliedCoupons!, coupon.id]);
+        setDiscount(discountAmount);
+        reset();
+      } else {
+        setError("coupon", { message: "Expired coupon" });
+      }
+    } catch (error: any) {
+      setError("coupon", { message: "Invalid coupon" });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isCouponVisible) {
+      reset();
+    }
+  }, [isCouponVisible]);
 
   if (!cartItems) {
     return (
@@ -155,7 +212,7 @@ const OrderSummary = () => {
       <div className="pt-4">
         <Divider className="my-4" />
         <div className="mb-4 flex justify-between">
-          <div className="text-base font-medium mb-1">Promo Code</div>
+          <div className="text-base font-medium mb-1">Coupon</div>
           {!isCouponVisible ? (
             <FiPlus
               size={24}
@@ -184,8 +241,20 @@ const OrderSummary = () => {
                 radius="sm"
                 color="primary"
                 variant="bordered"
+                value={watch("coupon")}
+                isInvalid={!!errors.coupon}
+                errorMessage={errors.coupon?.message as string}
+                {...register("coupon", {
+                  required: "Coupon is required",
+                })}
               />
-              <Button color="primary" radius="none" className="rounded-md">
+              <Button
+                onClick={handleSubmit(onSubmit)}
+                color="primary"
+                radius="none"
+                className="rounded-md"
+                isLoading={isLoading}
+              >
                 Apply
               </Button>
             </motion.div>

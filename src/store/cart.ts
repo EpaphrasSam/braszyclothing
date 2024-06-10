@@ -32,6 +32,8 @@ export interface CartState {
   shippingDetails: ShippingDetails | null;
   discount: number;
   shippingFee: number;
+  appliedCoupons: string[];
+  setAppliedCoupons: (coupons: string[]) => void;
   setPaymentIntent: (paymentIntent: PaymentIntentType | null) => void;
   setShippingDetails: (details: ShippingDetails) => void;
   setDiscount: (discount: number) => void;
@@ -57,6 +59,11 @@ const useCartStore = create<CartState>()(
       shippingDetails: null,
       discount: 0,
       shippingFee: 0,
+      appliedCoupons: [],
+      setAppliedCoupons: (newCoupons) =>
+        set((state) => ({
+          appliedCoupons: [...state.appliedCoupons, ...newCoupons],
+        })),
       setPaymentIntent: (paymentIntent) => set({ paymentIntent }),
       setShippingDetails: (details) => set({ shippingDetails: details }),
       setDiscount: (discount) => set({ discount }),
@@ -123,7 +130,12 @@ const useCartStore = create<CartState>()(
         return totalAmount + fee + shippingFee - discount;
       },
       resetAmount: () =>
-        set({ paymentIntent: null, discount: 0, shippingFee: 0 }),
+        set({
+          paymentIntent: null,
+          discount: 0,
+          shippingFee: 0,
+          appliedCoupons: [],
+        }),
       resetShippingDetails: () => set({ shippingDetails: null }),
       resetCart: () =>
         set({

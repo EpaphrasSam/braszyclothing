@@ -13,7 +13,6 @@ import ShippingAddressForm from "../shipping-address/ShippingAddressForm";
 import Link from "next/link";
 import { IoChevronBack } from "react-icons/io5";
 import { useStore } from "@/store/useStore";
-import { ShippingAddress } from "@prisma/client";
 
 const initialState = {
   shippingDetails: {
