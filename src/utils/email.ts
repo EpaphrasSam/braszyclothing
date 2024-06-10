@@ -198,3 +198,38 @@ export const sendCouponEmail = async (
     throw error;
   }
 };
+
+export const addAudienceEmail = async (email: string): Promise<void> => {
+  try {
+    await resend.contacts.create({
+      email: email,
+      audienceId: "fd41e8fd-5683-443b-94bc-dbb845255182",
+    });
+  } catch (error) {
+    throw Error("Error adding email to audience");
+  }
+};
+
+// export const removeAudienceEmail = async (email: string): Promise<void> => {
+//   try {
+//     const response = await resend.audiences.list();
+//     const audiences = response.data;
+
+//     if (!audiences) {
+//       throw new Error("No audiences found");
+//     }
+
+//     const audienceToRemove = audiences.find(
+//       (audience: any) => audience.name === email
+//     );
+
+//     if (audienceToRemove) {
+//       await resend.audiences.remove(audienceToRemove.id);
+//       console.log(`Audience with email ${email} removed successfully.`);
+//     } else {
+//       throw new Error("Audience with email not found");
+//     }
+//   } catch (error) {
+//     throw new Error("Error removing email from audience");
+//   }
+// };

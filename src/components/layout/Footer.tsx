@@ -8,7 +8,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { RiTwitterXLine } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { addEmailToNewsletter } from "@/services/couponServices";
+import { addEmailToNewsletter } from "@/services/emailServices";
 
 const Footer = () => {
   const [isLoading, setIsLoading] = useState(false);

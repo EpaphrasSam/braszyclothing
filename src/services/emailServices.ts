@@ -1,7 +1,7 @@
 "use server";
 import prisma from "@/utils/prisma";
-import { createStripeCoupon, generatePromotionCode } from "./stripeServices";
-import { sendCouponEmail } from "@/utils/email";
+import { generatePromotionCode } from "./stripeServices";
+import { addAudienceEmail, sendCouponEmail } from "@/utils/email";
 
 export const addEmailToNewsletter = async (email: string) => {
   try {
@@ -16,7 +16,7 @@ export const addEmailToNewsletter = async (email: string) => {
         email,
       },
     });
-
+    await addAudienceEmail(email);
     const promoCode = await generatePromotionCode("xRryNPp9");
     await sendCouponEmail(email, promoCode.code);
     return { message: "Coupon sent to email" };
