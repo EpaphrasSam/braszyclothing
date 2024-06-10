@@ -159,23 +159,23 @@ export const sendInvoiceEmail = async (
 
 export const sendCouponEmail = async (
   email: string,
-  couponCode: string
+  promoCode: string
 ): Promise<void> => {
   const message = `
     <div style="font-family: Arial, sans-serif; line-height: 1.6;">
       <div style="background-color: #f7f7f7; padding: 20px; border-radius: 8px;">
-        <h2 style="color: #333;">Your Coupon Code</h2>
+        <h2 style="color: #333;">Your Promo Code</h2>
         <p style="font-size: 16px; color: #555;">
           Hello,
         </p>
         <p style="font-size: 16px; color: #555;">
-          Thank you for subscribing to our newsletter! Here is your coupon code:
+          Thank you for subscribing to our newsletter! Here is your promo code:
         </p>
         <p style="font-size: 24px; font-weight: bold; color: #333;">
-          ${couponCode}
+          ${promoCode}
         </p>
         <p style="font-size: 16px; color: #555;">
-          Use this code at checkout to enjoy your discount. If you have any questions, feel free to contact us.
+          Use this code at checkout to enjoy your  10% discount. If you have any questions, feel free to contact us.
         </p>
         <p style="font-size: 16px; color: #555;">
           Best regards,<br>

@@ -8,7 +8,7 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Dropdown,
   DropdownTrigger,
@@ -94,8 +94,8 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
           <div className="flex flex-col gap-4 scrollbar-thin scrollbar-thumb-gray-500  overflow-y-auto flex-grow">
             {cartItems &&
               cartItems.map((item, index) => (
-                <>
-                  <div key={item.id}>
+                <React.Fragment key={item.id}>
+                  <div>
                     <div className="flex w-full relative">
                       <Image
                         src={item.imageUrls[0]}
@@ -124,8 +124,6 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                               <DropdownTrigger>
                                 <div className="capitalize text-base text-gray-500 flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
                                   Size
-                                  {/* <IoIosArrowDown color="gray" /> */}
-                                  {": "}
                                 </div>
                               </DropdownTrigger>
                               <DropdownMenu
@@ -157,8 +155,6 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                               <DropdownTrigger>
                                 <div className="capitalize text-base text-gray-500 flex items-center cursor-pointer hover:opacity-75 transition ease-in-out duration-300 scale-105">
                                   Color
-                                  {/* <IoIosArrowDown color="gray" /> */}
-                                  {": "}
                                 </div>
                               </DropdownTrigger>
                               <DropdownMenu
@@ -217,7 +213,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                     (index !== cartItems.length - 1 && (
                       <Divider className="my-1" />
                     ))}
-                </>
+                </React.Fragment>
               ))}
           </div>
           <Divider className="my-4" />

@@ -90,6 +90,8 @@ const InvoicePDF = ({
 }: InvoiceProps) => {
   const invoiceDate = new Date().toLocaleDateString();
 
+  console.log(totalAmount, netAmount, fee, discount);
+
   return (
     <Document>
       <Page size="A4" style={styles.container}>

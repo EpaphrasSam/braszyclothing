@@ -19,17 +19,14 @@ import {
   Skeleton,
   Spinner,
 } from "@nextui-org/react";
-import useCartStore, {
-  CartState,
-  PaymentIntentType,
-  ShippingDetails,
-} from "@/store/cart";
+import useCartStore, { PaymentIntentType, ShippingDetails } from "@/store/cart";
 import { useStore } from "@/store/useStore";
 import {
   createPaymentIntent,
   savePaymentMethod,
   getPaymentMethod,
   updatePaymentMethod,
+  inValidatePromotionCodes,
 } from "@/services/stripeServices";
 import toast from "react-hot-toast";
 import Link from "next/link";
@@ -49,6 +46,7 @@ const CardForms = ({
   discount,
   shippingFee,
   PaymentIntent,
+  appliedCoupons,
 }: {
   session: Session | null;
   shippingDetails: ShippingDetails;
@@ -59,6 +57,7 @@ const CardForms = ({
   discount: number;
   shippingFee: number;
   PaymentIntent: PaymentIntentType | null;
+  appliedCoupons: string[];
 }) => {
   const router = useRouter();
   const stripe = useStripe();
@@ -204,7 +203,11 @@ const CardForms = ({
       }
 
       const paymentIntent = paymentIntentResult.paymentIntent;
-      if (paymentIntent && email) {
+      if (paymentIntent) {
+        if (appliedCoupons.length > 0) {
+          await inValidatePromotionCodes(appliedCoupons);
+        }
+
         const res = await createOrder(
           cartItems,
           shippingDetails,
@@ -241,16 +244,17 @@ const CardForms = ({
           return;
         }
 
-        const paymentMethod = paymentIntent.payment_method;
-        const result = await savePaymentMethod(paymentMethod, email);
-
-        if (result.success) {
-          if (result.message === "Payment method saved") {
+        if (email) {
+          const paymentMethod = paymentIntent.payment_method;
+          const result = await savePaymentMethod(paymentMethod, email);
+          if (result.success) {
+            if (result.message === "Payment method saved") {
+            }
+          } else {
+            toast.error(result.error!!);
+            setIsProcessing(false);
+            return;
           }
-        } else {
-          toast.error(result.error!!);
-          setIsProcessing(false);
-          return;
         }
 
         router.replace("/cart?success=true");
@@ -385,6 +389,7 @@ const PaymentForms = () => {
   const paymentIntent = useCartStore((state) => state.paymentIntent);
   const discount = useCartStore((state) => state.discount);
   const shippingFee = useCartStore((state) => state.shippingFee);
+  const appliedCoupons = useCartStore((state) => state.appliedCoupons);
   const netAmount = useCartStore((state) => state.netAmount);
   const setPaymentIntent = useCartStore((state) => state.setPaymentIntent);
   const shippingDetails = useCartStore((state) => state.shippingDetails);
@@ -397,14 +402,24 @@ const PaymentForms = () => {
           shippingDetails,
           session?.user?.email!
         );
+
         if (result) {
-          setPaymentIntent({ ...result, amount: result.amount - shippingFee });
+          setPaymentIntent({
+            ...result,
+            amount: result.amount - shippingFee + discount,
+          });
         }
       }
     };
 
     fetchData();
-  }, [paymentIntent, cartItems, netAmount, shippingDetails]);
+  }, [
+    paymentIntent,
+    cartItems,
+    netAmount,
+    shippingDetails,
+    session?.user?.email,
+  ]);
 
   if (!paymentIntent?.clientSecret || !cartItems) {
     return (
@@ -438,6 +453,7 @@ const PaymentForms = () => {
           discount={discount}
           shippingFee={shippingFee}
           PaymentIntent={paymentIntent}
+          appliedCoupons={appliedCoupons}
         />
       </Elements>
       <Divider className="my-4" />

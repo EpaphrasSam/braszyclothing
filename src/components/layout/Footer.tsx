@@ -124,9 +124,7 @@ const Footer = () => {
         </div>
         <div className="mt-8 text-center">
           <div className="flex flex-col justify-center items-center">
-            <p className="mb-2">
-              Subscribe to our newsletter to receive discount
-            </p>
+            <p className="mb-2">Subscribe to our email to receive discount</p>
             <div id="footer-subscribe">
               <Input
                 type="email"

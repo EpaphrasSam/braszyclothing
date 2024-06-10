@@ -8,8 +8,7 @@ import React, { useEffect, useState } from "react";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { validateCoupon } from "@/services/stripeServices";
+import { validatePromotionCode } from "@/services/stripeServices";
 
 const OrderSummary = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
@@ -19,6 +18,7 @@ const OrderSummary = () => {
   const shippingFee = useCartStore((state) => state.shippingFee);
   const netAmount = useCartStore((state) => state.netAmount);
   const totalAmount = useCartStore((state) => state.totalAmount);
+  const setPaymentIntent = useCartStore((state) => state.setPaymentIntent);
   const [isCouponVisible, setIsCouponVisible] = useState(false);
   const appliedCoupons = useStore(
     useCartStore,
@@ -36,33 +36,34 @@ const OrderSummary = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      coupon: "",
+      promoCode: "",
     },
   });
 
-  const onSubmit = async (data: { coupon: string }) => {
+  const onSubmit = async (data: { promoCode: string }) => {
     try {
       setIsLoading(true);
-      const coupon = await validateCoupon(data.coupon);
-      if (appliedCoupons?.includes(coupon.id)) {
-        setError("coupon", { message: "Coupon already applied" });
+      const promoCode = await validatePromotionCode(data.promoCode);
+      if (appliedCoupons?.includes(promoCode.code)) {
+        setError("promoCode", { message: "Coupon already applied" });
         return;
       }
-      if (coupon.valid) {
+      if (promoCode.valid) {
         let discountAmount = 0;
-        if (coupon.amount_off) {
-          discountAmount = coupon.amount_off / 100;
-        } else if (coupon.percent_off) {
-          discountAmount = (totalAmount() * coupon.percent_off) / 100;
+        if (promoCode.amount_off) {
+          discountAmount = promoCode.amount_off / 100;
+        } else if (promoCode.percent_off) {
+          discountAmount = (totalAmount() * promoCode.percent_off) / 100;
         }
-        setAppliedCoupons([...appliedCoupons!, coupon.id]);
+        setAppliedCoupons([...appliedCoupons!, promoCode.code]);
         setDiscount(discountAmount);
+        setPaymentIntent(null);
         reset();
       } else {
-        setError("coupon", { message: "Expired coupon" });
+        setError("promoCode", { message: "Expired promo code" });
       }
     } catch (error: any) {
-      setError("coupon", { message: "Invalid coupon" });
+      setError("promoCode", { message: "Invalid promo code" });
     } finally {
       setIsLoading(false);
     }
@@ -212,7 +213,7 @@ const OrderSummary = () => {
       <div className="pt-4">
         <Divider className="my-4" />
         <div className="mb-4 flex justify-between">
-          <div className="text-base font-medium mb-1">Coupon</div>
+          <div className="text-base font-medium mb-1">Promo Code</div>
           {!isCouponVisible ? (
             <FiPlus
               size={24}
@@ -241,10 +242,10 @@ const OrderSummary = () => {
                 radius="sm"
                 color="primary"
                 variant="bordered"
-                value={watch("coupon")}
-                isInvalid={!!errors.coupon}
-                errorMessage={errors.coupon?.message as string}
-                {...register("coupon", {
+                value={watch("promoCode")}
+                isInvalid={!!errors.promoCode}
+                errorMessage={errors.promoCode?.message as string}
+                {...register("promoCode", {
                   required: "Coupon is required",
                 })}
               />

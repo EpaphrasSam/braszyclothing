@@ -202,39 +202,38 @@ export const generatePromotionCode = async (
   }
 };
 
-export const validateCoupon = async (couponId: string) => {
+export const validatePromotionCode = async (code: string) => {
   try {
-    const coupon = await stripe.coupons.retrieve(couponId);
+    const promoCode = await stripe.promotionCodes.list({
+      code: code,
+    });
+    const promotionCode = await stripe.promotionCodes.retrieve(
+      promoCode.data[0].id
+    );
 
-    const plainCoupon = {
-      id: coupon.id,
-      object: coupon.object,
-      amount_off: coupon.amount_off,
-      created: coupon.created,
-      currency: coupon.currency,
-      duration: coupon.duration,
-      duration_in_months: coupon.duration_in_months,
-      livemode: coupon.livemode,
-      max_redemptions: coupon.max_redemptions,
-      metadata: coupon.metadata,
-      name: coupon.name,
-      percent_off: coupon.percent_off,
-      redeem_by: coupon.redeem_by,
-      times_redeemed: coupon.times_redeemed,
-      valid: coupon.valid,
+    return {
+      valid: promotionCode.active,
+      amount_off: promotionCode.coupon.amount_off || null,
+      percent_off: promotionCode.coupon.percent_off || null,
+      code: promotionCode.code,
     };
-
-    return plainCoupon;
   } catch (error: any) {
-    throw Error(error.message);
+    throw new Error(error.message);
   }
 };
 
-export const updateCouponValidity = async (couponId: string) => {
+export const inValidatePromotionCodes = async (codes: string[]) => {
   try {
-    const coupon = await stripe.coupons.del(couponId);
-    return coupon;
+    codes.forEach(async (code) => {
+      const promoCode = await stripe.promotionCodes.list({
+        code: code,
+      });
+      await stripe.promotionCodes.update(promoCode.data[0].id, {
+        active: false,
+      });
+    });
+    return { success: true };
   } catch (error: any) {
-    throw Error(error.message);
+    throw new Error(error.message);
   }
 };

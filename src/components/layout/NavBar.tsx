@@ -249,10 +249,10 @@ const NavBar = () => {
     <>
       <div
         onClick={scrollToFooter}
-        className="w-full  bg-black text-white p-2 text-center cursor-pointer"
+        className="w-full  bg-black text-white py-2 px-1 text-center cursor-pointer"
       >
         <span className="animate-pulse text-sm transition ease-in-out duration-1000 font-semibold ">
-          A 10% discount coupon is available for new customers
+          A 10% discount promo is available for new customers
         </span>
       </div>
       <Navbar
