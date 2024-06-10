@@ -129,10 +129,10 @@ export default function TermsOfServices() {
           If you have any questions about these Terms of Service, please contact
           us at{" "}
           <a
-            href="mailto:contact@yourbrand.com"
+            href="mailto:braszy957@gmail.com"
             className="text-blue-500 underline"
           >
-            contact@yourbrand.com
+            braszy957@gmail.com
           </a>
           .
         </p>

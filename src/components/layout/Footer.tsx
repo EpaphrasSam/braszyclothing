@@ -96,7 +96,7 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4">Follow Us</h3>
             <div className="flex space-x-4 justify-center">
               <Link
-                href="https://www.facebook.com/braszyclothing"
+                href="https://www.facebook.com/profile.php?id=61558993027033"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gray-400 hover:underline"
@@ -104,7 +104,7 @@ const Footer = () => {
                 <FaFacebook size={24} />
               </Link>
               <Link
-                href="https://www.instagram.com/braszyclothing/"
+                href="https://instagram.com/braszyclothing"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gray-400 hover:underline"
@@ -112,7 +112,7 @@ const Footer = () => {
                 <FaInstagram size={24} />
               </Link>
               <Link
-                href="https://twitter.com/braszyclothing"
+                href="https://twitter.com/braszy957"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gray-400 hover:underline"

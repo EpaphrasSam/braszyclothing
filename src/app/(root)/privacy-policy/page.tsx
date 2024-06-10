@@ -13,10 +13,10 @@ export default function PrivacyPolicy() {
           questions or concerns about our policy, or our practices with regards
           to your personal information, please contact us at{" "}
           <a
-            href="mailto:contact@yourbrand.com"
+            href="mailto:braszy957@gmail.com"
             className="text-blue-500 underline"
           >
-            contact@yourbrand.com
+            braszy957@gmail.com
           </a>
           .
         </p>
@@ -94,10 +94,10 @@ export default function PrivacyPolicy() {
           If you have questions or comments about this policy, you may email us
           at{" "}
           <a
-            href="mailto:contact@yourbrand.com"
+            href="mailto:braszy957@gmail.com"
             className="text-blue-500 underline"
           >
-            contact@yourbrand.com
+            braszy957@gmail.com
           </a>
           .
         </p>

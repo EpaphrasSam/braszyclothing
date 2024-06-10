@@ -10,8 +10,14 @@ const ShippingReturns = () => {
           <section>
             <h2 className="text-xl font-semibold mb-2">Shipping Policy</h2>
             <p>
-              Email info at braszyclothing@gmail.com with your order number,
-              with any order questions.
+              Email info at{" "}
+              <a
+                href="mailto:braszy957@gmail.com"
+                className="text-blue-500 hover:underline"
+              >
+                braszy957@gmail.com
+              </a>{" "}
+              with your order number, with any order questions.
             </p>
           </section>
 

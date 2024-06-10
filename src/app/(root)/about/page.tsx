@@ -4,13 +4,6 @@ const About = () => {
   return (
     <>
       <main className="relative bg-black bg-opacity-10 text-center p-6">
-        {/* <Image
-          src="/logo.png"
-          alt="About Us"
-          fill
-          className="w-full h-full object-cover z-5"
-        /> */}
-
         <div className="relative z-10 text-white">
           <Card isBlurred className="mb-4">
             <h1 className="text-3xl font-semibold my-6 ">About Braszy</h1>
