@@ -31,6 +31,8 @@ import useCartStore from "@/store/cart";
 import ProfileDrawer from "./ProfileDrawer";
 import { useSession } from "next-auth/react";
 import { NavbarLinks, NavLinkTypes } from "@/lib/constants/routes";
+import { cancelPaymentIntent } from "@/services/stripeServices";
+import toast from "react-hot-toast";
 
 const chevronVariants = {
   down: { rotate: 0 },
@@ -54,6 +56,7 @@ const NavBar = () => {
   const { scrollY } = useScroll();
 
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
+  const paymentIntent = useStore(useCartStore, (state) => state.paymentIntent);
   const resetAmount = useCartStore((state) => state.resetAmount);
   const resetShippingDetails = useCartStore(
     (state) => state.resetShippingDetails
@@ -66,11 +69,21 @@ const NavBar = () => {
   }, [pathname]);
 
   useEffect(() => {
-    resetAmount();
+    const cancelPayment = async () => {
+      try {
+        await cancelPaymentIntent(paymentIntent?.paymentIntentId!);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (paymentIntent) {
+      cancelPayment();
+      resetAmount();
+    }
     if (!session) {
       resetShippingDetails();
     }
-  }, [session]);
+  }, [session, paymentIntent]);
 
   useEffect(() => {
     return scrollY.on("change", (y) => {

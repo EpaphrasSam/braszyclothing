@@ -100,6 +100,15 @@ const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
         ))}
       </div>
       <Divider className="my-4" />
+      <a
+        href="https://braszyclothing.promotekit.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 text-sm hover:underline underline-offset-2"
+      >
+        Earn 10% on sales with our affiliate program.
+      </a>
+      <Divider className="my-4" />
       <div className="mt-auto flex flex-col gap-3">
         {user.admin && (
           <Link href="/admin/dashboard">

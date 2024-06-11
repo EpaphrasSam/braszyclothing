@@ -7,6 +7,7 @@ export interface PaymentIntentType {
   clientSecret: string | null;
   fee: number;
   netAmount: number;
+  paymentIntentId: string | null;
 }
 
 export interface ShippingDetails {

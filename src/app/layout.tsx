@@ -5,6 +5,7 @@ import "react-multi-carousel/lib/styles.css";
 import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
+import Script from "next/script";
 
 const inter = Open_Sans({ subsets: ["latin"] });
 
@@ -24,6 +25,11 @@ export default function RootLayout({
         <Toaster position="top-center" />
         <SessionProvider>
           <Providers>
+            <Script
+              async
+              src="https://cdn.promotekit.com/promotekit.js"
+              data-promotekit="a3158f09-4e6b-42df-81a1-386c584a61ad"
+            ></Script>
             <main>{children}</main>
           </Providers>
         </SessionProvider>

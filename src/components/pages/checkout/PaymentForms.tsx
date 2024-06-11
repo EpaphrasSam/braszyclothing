@@ -397,10 +397,12 @@ const PaymentForms = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (!paymentIntent?.clientSecret && cartItems && shippingDetails) {
+        const referralId = window.promotekit_referral;
         const result = await createPaymentIntent(
           netAmount(),
           shippingDetails,
-          session?.user?.email!
+          session?.user?.email!,
+          referralId
         );
 
         if (result) {

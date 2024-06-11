@@ -4,6 +4,7 @@ import {
   FaUsers,
   FaClipboardList,
   FaUserCog,
+  FaUserFriends,
 } from "react-icons/fa";
 import { MdDashboard, MdShoppingCart, MdStore } from "react-icons/md";
 
@@ -52,6 +53,12 @@ export const adminSidebarLinks = [
     icon: <MdShoppingCart />,
     route: "/admin/orders",
     label: "Orders",
+  },
+  {
+    icon: <FaUserFriends />,
+    route: "https://www.promotekit.com/dashboard/",
+    label: "Affiliates",
+    external: true,
   },
 ];
 

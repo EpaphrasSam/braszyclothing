@@ -63,6 +63,7 @@ const AdminDrawer = ({ isOpen, onClose }: AdminDrawerProps) => {
               <Link
                 key={link.label}
                 href={link.route}
+                target={link.external ? "_blank" : "_self"}
                 className={`relative flex justify-start gap-2 rounded-lg p-4  ${
                   isActive && "bg-blue-500"
                 } ${!isActive && "hover:opacity-50"} `}

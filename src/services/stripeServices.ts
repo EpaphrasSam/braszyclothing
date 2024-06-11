@@ -13,7 +13,8 @@ interface PaymentMethodDetails {
 export const createPaymentIntent = async (
   amt: number,
   shippingDetails: ShippingDetails,
-  email?: string
+  email?: string,
+  referralId?: string
 ) => {
   try {
     if (amt === undefined) return;
@@ -29,6 +30,7 @@ export const createPaymentIntent = async (
         fee: fee.toFixed(2),
         net_amount: netAmount.toFixed(2),
         shippingDetails: JSON.stringify(shippingDetails),
+        ...(referralId !== undefined && { promotekit_referral: referralId }),
       },
     };
 
@@ -58,11 +60,23 @@ export const createPaymentIntent = async (
       clientSecret: paymentIntent.client_secret,
       fee: parseFloat(fee.toFixed(2)),
       netAmount: parseFloat(netAmount.toFixed(2)),
+      paymentIntentId: paymentIntent.id,
     };
 
     return paymentIntentObject;
   } catch (error: any) {
     throw new Error(error);
+  }
+};
+
+export const cancelPaymentIntent = async (
+  paymentIntentId: string
+): Promise<{ success: boolean; error?: string }> => {
+  try {
+    await stripe.paymentIntents.cancel(paymentIntentId);
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
   }
 };
 
