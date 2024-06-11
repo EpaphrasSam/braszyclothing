@@ -6,6 +6,11 @@ import { Divider } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import SkeletonLoader from "../../global/SkeletonLoader";
+import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
+import {
+  CustomLeftArrow,
+  CustomRightArrow,
+} from "@/components/global/CustomArrows";
 
 const responsive = {
   LargeDesktop: {
@@ -66,6 +71,9 @@ const LatestProducts = ({ products }: ProductCardProps) => {
           autoPlay
           autoPlaySpeed={3000}
           infinite
+          customLeftArrow={<CustomLeftArrow />}
+          customRightArrow={<CustomRightArrow />}
+          swipeable
         >
           {products.map((product) => (
             <CardItems key={product.id} product={product} />

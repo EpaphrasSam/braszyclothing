@@ -304,9 +304,9 @@ const NavBar = () => {
                 <Image
                   src="/logo.png"
                   alt="logo"
-                  width={50}
-                  height={50}
-                  className="w-12 h-12"
+                  width={100}
+                  height={100}
+                  className="w-auto h-auto"
                 />
               </motion.div>
             </Link>
@@ -341,7 +341,7 @@ const NavBar = () => {
             />
           </NavbarItem>
         </NavbarContent>
-        <NavbarMenu>{NavbarLinks.map(menuLink)}</NavbarMenu>
+        <NavbarMenu className="pt-8">{NavbarLinks.map(menuLink)}</NavbarMenu>
       </Navbar>
       {isSearchOpen && (
         <SearchBar

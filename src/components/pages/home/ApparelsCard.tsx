@@ -8,6 +8,10 @@ import { motion } from "framer-motion";
 import ImageTransition from "@/components/global/ImageTransition";
 import { useRouter } from "next/navigation";
 import SkeletonLoader from "../../global/SkeletonLoader";
+import {
+  CustomLeftArrow,
+  CustomRightArrow,
+} from "@/components/global/CustomArrows";
 
 interface ApparelsCardProps {
   apparels: ApparelType[];
@@ -56,7 +60,13 @@ const ApparelsCard = ({ apparels }: ApparelsCardProps) => {
   }
   return (
     <>
-      <Carousel responsive={responsive} ssr={true}>
+      <Carousel
+        responsive={responsive}
+        ssr={true}
+        customLeftArrow={<CustomLeftArrow />}
+        customRightArrow={<CustomRightArrow />}
+        swipeable
+      >
         {apparels.map((apparel) => (
           <div key={apparel.id} className="flex justify-center">
             <Card
@@ -64,7 +74,7 @@ const ApparelsCard = ({ apparels }: ApparelsCardProps) => {
               className="m-2 w-[250px] h-[350px]"
               isFooterBlurred
             >
-              <CardHeader className="text-gray-600 text-lg">
+              <CardHeader className="text-gray-800 font-semibold text-lg">
                 {apparel.title}
               </CardHeader>
               <motion.div
@@ -80,7 +90,7 @@ const ApparelsCard = ({ apparels }: ApparelsCardProps) => {
                   {apparel.categories.map((category) => (
                     <div
                       key={category.id}
-                      className="text-base text-gray-700 hover:underline underline-offset-4 cursor-pointer transition ease-in-out duration-300 hover:opacity-75 hover:scale-110"
+                      className="text-base text-gray-900 font-semibold hover:underline underline-offset-4 cursor-pointer transition ease-in-out duration-300 hover:opacity-75 hover:scale-110"
                       onClick={() =>
                         router.push(
                           `/shop/${category.slug}?apparel=${apparel.slug}`

@@ -22,10 +22,10 @@ export default async function CheckLayout({
           <Link href="/">
             <Image
               src="/logo.png"
-              width={100}
-              height={100}
+              width={150}
+              height={150}
               alt="Logo"
-              className="w-auto h-auto pb-3 transition ease-in-out duration-300 hover:scale-110"
+              className="w-auto h-auto object-cover object-center pb-3 transition ease-in-out duration-300 hover:scale-110"
               priority
             />
           </Link>

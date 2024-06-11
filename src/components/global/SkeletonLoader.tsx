@@ -13,7 +13,7 @@ const SkeletonLoader = ({ array = 4 }: SkeletonLoaderProps) => {
       {Array(array)
         .fill(null)
         .map((_, index) => (
-          <Card key={index} className="w-[270px] h-[400px]" radius="lg">
+          <Card key={index} className="w-[250px] h-[300px]" radius="lg">
             <Skeleton className="rounded-lg">
               <div className="h-[350px] rounded-lg bg-default-300"></div>
             </Skeleton>

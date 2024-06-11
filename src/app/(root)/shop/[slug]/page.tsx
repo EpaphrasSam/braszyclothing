@@ -31,7 +31,7 @@ export default async function CategoryPage({
 
   return (
     <Suspense>
-      <div className="sm:m-10 m-2">
+      <div className="sm:mx-10 my-10 mx-2">
         <Shop
           allProducts={AllProducts}
           slug={params.slug}

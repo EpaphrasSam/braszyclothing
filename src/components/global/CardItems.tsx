@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Card, CardFooter, Button } from "@nextui-org/react";
+import React, { useCallback, useMemo, useState } from "react";
+import { Card, CardFooter, Button, Chip } from "@nextui-org/react";
 import { AnimatePresence, motion, wrap } from "framer-motion";
 import { CiShoppingCart } from "react-icons/ci";
 import { useRouter } from "next/navigation";
@@ -27,24 +27,19 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
 
   const paginate = useCallback(
     (newDirection: number) => {
-      setCurrentSlide([currentSlide + newDirection, newDirection]);
+      const newIndex = currentSlide + newDirection;
+      if (newIndex >= 0 && newIndex < product.imageUrls.length) {
+        setCurrentSlide([newIndex, newDirection]);
+      }
     },
-    [currentSlide]
+    [currentSlide, product.imageUrls.length]
   );
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      paginate(1);
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, [paginate]);
 
   const addToCart = useCartStore((state) => state.addToCart);
   const isDisabled = !product.inStock;
 
   return (
-    <div className="flex flex-row w-full max-[670px]:justify-center gap-4 flex-wrap">
+    <div className="flex flex-row w-full justify-center gap-4 flex-wrap">
       <Card
         radius="none"
         isFooterBlurred
@@ -70,26 +65,43 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={1}
+                onDragEnd={(e, { offset, velocity }) => {
+                  const swipe = Math.abs(offset.x) * velocity.x;
+                  if (swipe < -1000) {
+                    paginate(1);
+                  } else if (swipe > 1000) {
+                    paginate(-1);
+                  }
+                }}
               />
             ) : null
           )}
         </AnimatePresence>
 
-        <div className="absolute top-36 left-1">
-          <MdArrowBackIosNew
-            size={24}
-            onClick={() => paginate(-1)}
-            className="cursor-pointer text-gray-700 transition ease-in-out duration-300 hover:opacity-50"
-          />
-        </div>
+        {product.imageUrls.length > 1 && imageIndex > 0 && (
+          <div className="absolute top-16 left-1">
+            <MdArrowBackIosNew
+              size={18}
+              onClick={() => paginate(-1)}
+              className="cursor-pointer text-gray-700 transition ease-in-out duration-300 hover:opacity-50"
+            />
+          </div>
+        )}
 
-        <div className="absolute top-36 right-1">
-          <MdArrowForwardIos
-            size={24}
-            onClick={() => paginate(1)}
-            className="cursor-pointer text-gray-700 transition ease-in-out duration-300 hover:opacity-50"
-          />
-        </div>
+        {product.imageUrls.length > 1 &&
+          imageIndex < product.imageUrls.length - 1 && (
+            <div className="absolute top-16 right-1">
+              <MdArrowForwardIos
+                size={18}
+                onClick={() => paginate(1)}
+                className="cursor-pointer text-gray-700 transition ease-in-out duration-300 hover:opacity-50"
+              />
+            </div>
+          )}
+
+        <Chip size="sm" className="absolute top-2 right-2 text-sm font-bold">
+          {imageIndex + 1}/{product.imageUrls.length}
+        </Chip>
 
         {isHovered && (
           <motion.div
@@ -126,17 +138,21 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
         )}
 
         <CardFooter className="flex flex-col absolute px-4 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10">
-          <div className={`flex justify-between items-center  w-full `}>
+          <div
+            className={`flex justify-between items-center w-full ${hide ? "max-[500px]:flex-col" : ""}`}
+          >
             <p className="text-black text-sm font-semibold truncate">
               {product.name}
             </p>
             <p className="text-black text-sm font-semibold">${product.price}</p>
           </div>
           <div className="flex justify-between items-center w-full">
-            <p className={`text-gray-600 text-sm font-semibold`}>
+            <p
+              className={`text-gray-800 text-sm ${hide ? "max-sm:hidden" : ""} font-semibold`}
+            >
               {product.categoryName}
             </p>
-            <p className="text-gray-600 text-sm font-semibold">
+            <p className="text-gray-800 text-sm font-semibold">
               {product.apparel}
             </p>
           </div>

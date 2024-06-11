@@ -77,8 +77,6 @@ export const LoginSchema: ZodType<LoginFormData> = z.object({
     .string()
     .email({ message: "Email is invalid" })
     .min(1, { message: "Email is required" }),
-  password: z
-    .string()
-    .min(1, { message: "Password is required" })
-    .min(8, { message: "Password must be more than 8 characters" }),
+  password: z.string().min(1, { message: "Password is required" }),
+  // .min(8, { message: "Password must be more than 8 characters" }),
 });

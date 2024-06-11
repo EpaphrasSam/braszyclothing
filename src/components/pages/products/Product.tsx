@@ -9,6 +9,7 @@ import useCartStore from "@/store/cart";
 import { ProductType } from "@/types/SanityTypes";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/store/useStore";
+import { FaCheckCircle, FaShoppingCart } from "react-icons/fa";
 
 type ProductProps = {
   product: ProductType;
@@ -168,6 +169,7 @@ const Product = ({ product }: ProductProps) => {
           <Button
             radius="none"
             color={`${isDisabled ? "default" : "primary"}`}
+            startContent={<FaShoppingCart />}
             className="rounded-md"
             size="lg"
             onClick={() => addToCart(product)}
@@ -178,8 +180,10 @@ const Product = ({ product }: ProductProps) => {
           <Button
             radius="none"
             size="lg"
-            className="rounded-md"
-            color={`${isDisabled ? "default" : "secondary"}`}
+            startContent={<FaCheckCircle />}
+            className={`rounded-md ${isDisabled ? "bg-gray-500 text-white" : "bg-black text-white"}`}
+            // color={`${isDisabled ? "default" : "secondary"}`}
+
             isDisabled={isDisabled}
             onClick={handleCheckOut}
           >

@@ -301,9 +301,8 @@ const Cart = () => {
                 Taxes, shipping and discounts calculated at checkout
               </p>
               <Button
-                className="text-lg rounded-sm"
+                className="text-lg bg-black text-white rounded-sm"
                 fullWidth
-                color="secondary"
                 radius="none"
                 onClick={handleCheckout}
               >
