@@ -30,7 +30,7 @@ const TopProducts = ({ topProducts }: TopProductsProps) => {
                 <div className="flex gap-1">
                   <Image
                     src={product.imageUrls[0]}
-                    alt={product.name}
+                    alt={product.name || "Product Image"}
                     className="w-16 h-16"
                     width={100}
                     height={100}

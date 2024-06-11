@@ -99,7 +99,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                     <div className="flex w-full relative">
                       <Image
                         src={item.imageUrls[0]}
-                        alt={item.name}
+                        alt={item.name || "Product Image"}
                         width={100}
                         height={100}
                         className="w-24 h-24 object-cover object-center rounded-sm cursor-pointer hover:opacity-75 transition ease-in-out duration-300"

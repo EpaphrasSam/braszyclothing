@@ -165,7 +165,7 @@ const OTP = () => {
           <div className="w-full lg:w-1/2 mt-8 lg:mt-0 flex justify-center items-center">
             <Image
               src={picture}
-              alt="Verification Illustration"
+              alt="Verification"
               width={400}
               height={400}
               className="object-contain"

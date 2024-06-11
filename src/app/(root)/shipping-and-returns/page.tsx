@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Shipping & Returns - Braszy Clothing",
+  description: "Learn about our shipping and return policy.",
+  alternates: {
+    canonical: "https://www.braszyclothing.com/shipping-and-returns",
+  },
+};
+
 const ShippingReturns = () => {
   return (
     <>

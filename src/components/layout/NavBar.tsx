@@ -274,6 +274,9 @@ const NavBar = () => {
         position="sticky"
         onMenuOpenChange={setIsMenuOpen}
         isMenuOpen={isMenuOpen}
+        classNames={{
+          wrapper: "max-sm:px-2",
+        }}
       >
         <NavbarMenuToggle
           icon={(isOpen) =>

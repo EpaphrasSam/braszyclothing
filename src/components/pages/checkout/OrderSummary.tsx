@@ -179,7 +179,7 @@ const OrderSummary = () => {
                 <Badge content={item.quantity} size="lg" color="primary">
                   <Image
                     src={item.imageUrls[0]}
-                    alt={item.name}
+                    alt={item.name || "Product Image"}
                     width={100}
                     height={100}
                     className="w-20 h-20 object-cover object-center rounded-md"

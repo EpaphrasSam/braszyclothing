@@ -144,7 +144,7 @@ const Cart = () => {
                     <div className="flex w-full relative">
                       <Image
                         src={item.imageUrls[0]}
-                        alt={item.name}
+                        alt={item.name || "Product Image"}
                         width={80}
                         height={80}
                         className=" w-24 h-24 object-cover object-center rounded-sm"

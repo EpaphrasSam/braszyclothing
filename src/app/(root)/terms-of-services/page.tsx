@@ -1,4 +1,13 @@
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service - Braszy Clothing",
+  description: "Read and agree to the terms of service of Braszy Clothing.",
+  alternates: {
+    canonical: "https://www.braszyclothing.com/terms-of-services",
+  },
+};
 
 export default function TermsOfServices() {
   return (

@@ -91,7 +91,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
               <div key={item.id} className="flex gap-2">
                 <Image
                   src={item.product.images[0]}
-                  alt={item.product.name}
+                  alt={item.product.name || "Product Image"}
                   width={80}
                   height={80}
                   className=" w-24 h-24 object-cover object-center rounded-sm"

@@ -1,4 +1,13 @@
 import { Card } from "@nextui-org/react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us - Braszy Clothing",
+  description: "Learn more about Braszy Clothing and our mission.",
+  alternates: {
+    canonical: "https://www.braszyclothing.com/about",
+  },
+};
 
 const About = () => {
   return (

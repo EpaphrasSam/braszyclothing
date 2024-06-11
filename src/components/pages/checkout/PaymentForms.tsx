@@ -251,7 +251,10 @@ const CardForms = ({
             if (result.message === "Payment method saved") {
             }
           } else {
-            toast.error(result.error!!);
+            const errorMessage = result.error || "Something went wrong";
+            toast.error(
+              errorMessage.length > 20 ? "Something went wrong" : errorMessage
+            );
             setIsProcessing(false);
             return;
           }

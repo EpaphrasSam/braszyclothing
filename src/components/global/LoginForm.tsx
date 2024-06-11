@@ -5,11 +5,11 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "@/helpers/validators";
 import { CiMail } from "react-icons/ci";
-import { RiLockPasswordLine } from "react-icons/ri";
+import { RiLockPasswordLine, RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { loginAction } from "@/services/authServices";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export type FormData = {
   email: string;
@@ -22,9 +22,9 @@ type LoginFormProps = {
 };
 
 const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const redirect = searchParams.get("redirect");
 
@@ -48,7 +48,11 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
         window.location.href = redirect || "/";
       }
     } catch (error: any) {
-      toast.error(error.message);
+      console.log(error);
+      const errorMessage = error.message || "Something went wrong";
+      toast.error(
+        errorMessage.length > 20 ? "Something went wrong" : errorMessage
+      );
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +77,7 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
           <div>
             <Input
               variant="bordered"
-              type="password"
+              type={showPassword ? "text" : "password"}
               label="Password"
               radius="none"
               labelPlacement="outside"
@@ -81,6 +85,18 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
               isInvalid={!!errors.password}
               errorMessage={errors.password?.message}
               startContent={<RiLockPasswordLine size={24} />}
+              endContent={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <RiEyeOffLine size={18} />
+                  ) : (
+                    <RiEyeLine size={18} />
+                  )}
+                </button>
+              }
               {...register("password")}
             />
             <div className="text-right">

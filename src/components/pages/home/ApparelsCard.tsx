@@ -56,16 +56,14 @@ const ApparelsCard = ({ apparels }: ApparelsCardProps) => {
   }
   return (
     <>
-      <Carousel
-        responsive={responsive}
-        ssr={true}
-        // autoPlay
-        // autoPlaySpeed={3000}
-        // infinite
-      >
+      <Carousel responsive={responsive} ssr={true}>
         {apparels.map((apparel) => (
           <div key={apparel.id} className="flex justify-center">
-            <Card className="m-2 w-[270px] h-[400px]" isFooterBlurred>
+            <Card
+              radius="none"
+              className="m-2 w-[250px] h-[350px]"
+              isFooterBlurred
+            >
               <CardHeader className="text-gray-600 text-lg">
                 {apparel.title}
               </CardHeader>

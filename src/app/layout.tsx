@@ -12,6 +12,10 @@ const inter = Open_Sans({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Braszy Clothing",
   description: "Your one stop for all your fashion needs",
+  keywords: "fashion, clothing, braszy, online store",
+  alternates: {
+    canonical: "https://www.braszyclothing.com",
+  },
 };
 
 export default function RootLayout({
@@ -28,7 +32,7 @@ export default function RootLayout({
             <Script
               async
               src="https://cdn.promotekit.com/promotekit.js"
-              data-promotekit="a3158f09-4e6b-42df-81a1-386c584a61ad"
+              data-promotekit="ab283b38-496d-4103-9794-5e9ecced440d"
             ></Script>
             <main>{children}</main>
           </Providers>

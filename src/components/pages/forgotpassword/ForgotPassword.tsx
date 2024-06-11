@@ -30,7 +30,10 @@ function ForgotPassword() {
         toast.error("Email not found");
       }
     } catch (error: any) {
-      toast.error(error.message || "Something went wrong");
+      const errorMessage = error.message || "Something went wrong";
+      toast.error(
+        errorMessage.length > 20 ? "Something went wrong" : errorMessage
+      );
     } finally {
       setIsLoading(false);
       getEmailCookie();
@@ -43,7 +46,7 @@ function ForgotPassword() {
         <div className="flex justify-center">
           <Image
             src={illustration}
-            alt="Forgot Password Illustration"
+            alt="Forgot"
             width={250}
             height={250}
             className="w-full max-w-xs"

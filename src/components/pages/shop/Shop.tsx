@@ -151,10 +151,10 @@ const Shop = ({ slug, search, allProducts, total }: ShopProps) => {
               No products available
             </div>
           ) : (
-            <div className="flex flex-row w-full max-[670px]:justify-center flex-wrap">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
               {products.map((product) => (
                 <div key={product.id}>
-                  <CardItems product={product} />
+                  <CardItems product={product} hide={true} />
                 </div>
               ))}
             </div>

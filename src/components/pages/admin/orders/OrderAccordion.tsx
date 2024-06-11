@@ -21,7 +21,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
       <div className="flex gap-2">
         <Image
           src={product.images[0]}
-          alt={product.name}
+          alt={product.name || "Product Image"}
           width={80}
           height={80}
           className="w-16 max-lg:hidden h-16 object-cover object-center rounded-sm"

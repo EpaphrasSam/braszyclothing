@@ -151,7 +151,10 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
     );
 
     if (error) {
-      toast.error(error);
+      const errorMessage = error || "Something went wrong";
+      toast.error(
+        errorMessage.length > 20 ? "Something went wrong" : errorMessage
+      );
     } else if (message) {
       toast.success(message);
     }

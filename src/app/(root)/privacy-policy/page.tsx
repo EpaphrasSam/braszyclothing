@@ -1,4 +1,13 @@
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy - Braszy Clothing",
+  description: "Learn about how Braszy Clothing protects your privacy.",
+  alternates: {
+    canonical: "https://www.braszyclothing.com/privacy-policy",
+  },
+};
 
 export default function PrivacyPolicy() {
   return (

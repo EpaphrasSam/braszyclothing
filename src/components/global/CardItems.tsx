@@ -12,9 +12,10 @@ import { ProductType } from "@/types/SanityTypes";
 
 interface CardItemsProps {
   product: ProductType;
+  hide?: boolean;
 }
 
-const CardItems = ({ product }: CardItemsProps) => {
+const CardItems = ({ product, hide = false }: CardItemsProps) => {
   const router = useRouter();
   const [[currentSlide, direction], setCurrentSlide] = useState([0, 0]);
   const [isHovered, setIsHovered] = useState(false);
@@ -45,8 +46,9 @@ const CardItems = ({ product }: CardItemsProps) => {
   return (
     <div className="flex flex-row w-full max-[670px]:justify-center gap-4 flex-wrap">
       <Card
+        radius="none"
         isFooterBlurred
-        className="relative w-[270px] h-[400px] m-2 transition ease-in-out delay-150 duration-300 hover:scale-105"
+        className="relative w-[250px] h-[300px] m-2 transition ease-in-out delay-150 duration-300 hover:scale-105"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -91,7 +93,7 @@ const CardItems = ({ product }: CardItemsProps) => {
 
         {isHovered && (
           <motion.div
-            className="flex ml-2 justify-evenly absolute bottom-20 -translate-x-1/2"
+            className="flex justify-center items-center mt-auto mb-16"
             initial={{ y: 60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 50, opacity: 0 }}
@@ -104,7 +106,7 @@ const CardItems = ({ product }: CardItemsProps) => {
               startContent={<HiArrowsPointingOut size={20} color="white" />}
               onClick={() => router.push(`/products/${product.slug}`)}
             >
-              View Item
+              <span className="max-sm:hidden">View Item</span>
             </Button>
             {!isDisabled && (
               <Button
@@ -117,24 +119,30 @@ const CardItems = ({ product }: CardItemsProps) => {
                   addToCart(product);
                 }}
               >
-                Add to Cart
+                <span className="max-sm:hidden">Add to Cart</span>
               </Button>
             )}
           </motion.div>
         )}
 
         <CardFooter className="flex flex-col absolute px-4 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10">
-          <div className="flex justify-between w-full">
-            <p className="text-black text-sm truncate">{product.name}</p>
-            <p className="text-black text-sm">${product.price}</p>
+          <div className={`flex justify-between items-center  w-full `}>
+            <p className="text-black text-sm font-semibold truncate">
+              {product.name}
+            </p>
+            <p className="text-black text-sm font-semibold">${product.price}</p>
           </div>
-          <div className="flex justify-between w-full">
-            <p className="text-gray-500 text-sm">{product.categoryName}</p>
-            <p className="text-gray-500 text-sm">{product.apparel}</p>
+          <div className="flex justify-between items-center w-full">
+            <p className={`text-gray-600 text-sm font-semibold`}>
+              {product.categoryName}
+            </p>
+            <p className="text-gray-600 text-sm font-semibold">
+              {product.apparel}
+            </p>
           </div>
         </CardFooter>
         <span
-          className={`absolute top-0 left-0 rounded-br-lg rounded-tl-lg ${product.inStock ? "bg-green-500" : "bg-red-500"} px-3 py-1.5 text-sm uppercase tracking-wider text-white`}
+          className={`absolute top-0 left-0 rounded-br-lg rounded-tl-none ${product.inStock ? "bg-green-500" : "bg-red-500"} px-3 py-1.5 text-sm uppercase tracking-wider text-white`}
         >
           {product.inStock ? "In Stock" : "Sold Out"}
         </span>

@@ -8,7 +8,7 @@ import { Input, Button } from "@nextui-org/react";
 import { SignUpSchema } from "@/helpers/validators";
 import Link from "next/link";
 import { CiMail, CiUser } from "react-icons/ci";
-import { RiLockPasswordLine } from "react-icons/ri";
+import { RiLockPasswordLine, RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 import toast from "react-hot-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -30,6 +30,8 @@ const SignUp = () => {
   const searchParams = useSearchParams();
   const setUserData = useUserStore((state) => state.setUserData);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const redirect = searchParams.get("redirect");
 
@@ -54,7 +56,10 @@ const SignUp = () => {
         );
       }
     } catch (error: any) {
-      toast.error(error.message || "Something went wrong");
+      const errorMessage = error.message || "Something went wrong";
+      toast.error(
+        errorMessage.length > 20 ? "Something went wrong" : errorMessage
+      );
     } finally {
       setIsLoading(false);
     }
@@ -93,7 +98,7 @@ const SignUp = () => {
               />
               <Input
                 variant="bordered"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 radius="none"
                 label="Password"
                 labelPlacement="outside"
@@ -101,11 +106,23 @@ const SignUp = () => {
                 errorMessage={errors.password?.message}
                 isInvalid={!!errors.password}
                 startContent={<RiLockPasswordLine size={24} />}
+                endContent={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <RiEyeOffLine size={18} />
+                    ) : (
+                      <RiEyeLine size={18} />
+                    )}
+                  </button>
+                }
                 {...register("password")}
               />
               <Input
                 variant="bordered"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 radius="none"
                 label="Confirm Password"
                 labelPlacement="outside"
@@ -113,6 +130,18 @@ const SignUp = () => {
                 errorMessage={errors.confirmPassword?.message}
                 isInvalid={!!errors.confirmPassword}
                 startContent={<RiLockPasswordLine size={24} />}
+                endContent={
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? (
+                      <RiEyeOffLine size={18} />
+                    ) : (
+                      <RiEyeLine size={18} />
+                    )}
+                  </button>
+                }
                 {...register("confirmPassword")}
               />
             </div>

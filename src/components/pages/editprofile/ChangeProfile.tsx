@@ -165,7 +165,10 @@ const ChangeProfile = ({ session }: EditProfileProps) => {
         window.location.reload();
       }
     } catch (error: any) {
-      toast.error(error.message || "An error occurred. Please try again.");
+      const errorMessage = error.message || "Something went wrong";
+      toast.error(
+        errorMessage.length > 20 ? "Something went wrong" : errorMessage
+      );
     } finally {
       setIsLoading(false);
     }

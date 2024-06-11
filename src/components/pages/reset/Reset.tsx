@@ -59,7 +59,10 @@ const ResetPassword = () => {
         router.push("/login");
       }
     } catch (error: any) {
-      toast.error(error.message || "An error occurred.");
+      const errorMessage = error.message || "Something went wrong";
+      toast.error(
+        errorMessage.length > 20 ? "Something went wrong" : errorMessage
+      );
     } finally {
       setIsLoading(false);
     }

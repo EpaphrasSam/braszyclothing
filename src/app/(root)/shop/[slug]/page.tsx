@@ -2,6 +2,18 @@ import Shop from "@/components/pages/shop/Shop";
 import { getAllProductsByCategory } from "@/services/sanityServices";
 import { Suspense } from "react";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Shop - Braszy Clothing",
+  description:
+    "Explore a wide range of products at Braszy Clothing's online store.",
+  keywords: "shop, clothing, fashion, online store",
+  alternates: {
+    canonical: "https://www.braszyclothing.com/shop",
+  },
+};
+
 export default async function CategoryPage({
   params,
   searchParams,
@@ -19,7 +31,7 @@ export default async function CategoryPage({
 
   return (
     <Suspense>
-      <div className="sm:m-10 m-5">
+      <div className="sm:m-10 m-2">
         <Shop
           allProducts={AllProducts}
           slug={params.slug}

@@ -66,7 +66,7 @@ const SearchResults = ({ data, loading, onClose }: SearchResultsProps) => {
                         >
                           <Image
                             src={product.imageUrls[0]}
-                            alt={product.name}
+                            alt={product.name || "Product Image"}
                             width={50}
                             height={50}
                             className="object-cover object-center rounded-sm"
