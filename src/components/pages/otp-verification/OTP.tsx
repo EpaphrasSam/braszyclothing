@@ -75,7 +75,10 @@ const OTP = () => {
         router.push("/reset-password");
       }
     } catch (error: any) {
-      toast.error(error.response.data || "Something went wrong");
+      console.log(error);
+      const errorMessage =
+        error?.response?.data || error?.message || "Something went wrong";
+      toast.error(errorMessage);
       deleteEmailCookie();
       router.replace(userData ? "/signup" : "/forgot-password");
     } finally {
@@ -96,8 +99,8 @@ const OTP = () => {
 
   return (
     <>
-      <div className="flex h-screen items-center justify-center bg-gray-100">
-        <div className="w-4/5 max-w-4xl bg-white shadow-lg rounded-lg p-8 flex flex-col lg:flex-row items-center">
+      <div className="flex p-4 my-4 h-screen items-center justify-center bg-gray-100">
+        <div className="sm:w-4/5 w-full max-w-4xl bg-white shadow-lg rounded-lg sm:p-8 p-2 flex flex-col lg:flex-row items-center">
           <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start p-4">
             <h1 className="text-4xl font-bold mb-4 text-gray-800">OTP</h1>
             <div className="mb-6">

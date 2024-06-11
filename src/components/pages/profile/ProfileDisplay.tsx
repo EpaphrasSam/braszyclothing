@@ -1,7 +1,7 @@
 import { logoutAction } from "@/services/authServices";
 import { Badge, Button, Divider } from "@nextui-org/react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import {
   MdOutlineShoppingBag,
@@ -46,14 +46,18 @@ interface ProfileDisplayProps {
 }
 
 const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const logOut = async () => {
     try {
+      setIsLoading(true);
       await logoutAction();
       onClose();
       toast.success("Logout successful");
       window.location.reload();
     } catch (error) {
       toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -128,6 +132,7 @@ const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
           size="lg"
           fullWidth
           radius="none"
+          isLoading={isLoading}
           startContent={<MdLogout size={20} />}
           className="bg-red-800 text-white font-bold rounded hover:bg-red-700"
           onClick={logOut}

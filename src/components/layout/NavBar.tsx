@@ -296,7 +296,7 @@ const NavBar = () => {
             <Link href="/">
               <motion.div
                 whileHover={{
-                  scale: 1.05,
+                  scale: 1.02,
                 }}
                 animate={isScrolled ? "scrolled" : "top"}
                 variants={brandVariants}
@@ -304,9 +304,9 @@ const NavBar = () => {
                 <Image
                   src="/logo.png"
                   alt="logo"
-                  width={100}
-                  height={100}
-                  className="w-auto h-auto"
+                  width={70}
+                  height={70}
+                  className="w-auto h-auto object-cover object-center"
                 />
               </motion.div>
             </Link>
