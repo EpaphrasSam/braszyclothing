@@ -32,7 +32,11 @@ const Banner = ({ banners }: BannerProps) => {
   }, [paginate]);
 
   if (banners.length === 0) {
-    return <div className="bg-gray-600"></div>;
+    return (
+      <div className="bg-gray-400 min-h-screen flex justify-center items-center text-4xl">
+        No banners available
+      </div>
+    );
   }
 
   return (

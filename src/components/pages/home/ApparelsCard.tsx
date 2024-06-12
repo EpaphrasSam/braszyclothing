@@ -59,54 +59,65 @@ const ApparelsCard = ({ apparels }: ApparelsCardProps) => {
     return <SkeletonLoader />;
   }
   return (
-    <>
-      <Carousel
-        responsive={responsive}
-        ssr={true}
-        customLeftArrow={<CustomLeftArrow />}
-        customRightArrow={<CustomRightArrow />}
-        swipeable
-      >
-        {apparels.map((apparel) => (
-          <div key={apparel.id} className="flex justify-center">
-            <Card
-              radius="none"
-              className="m-2 w-[250px] h-[350px]"
-              isFooterBlurred
-            >
-              <CardHeader className="text-gray-800 font-semibold text-lg">
-                {apparel.title}
-              </CardHeader>
-              <motion.div
-                className="relative w-full h-full"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
+    <div>
+      <h2 className="text-3xl font-semibold mb-4 capitalize">
+        Fashion Collection
+      </h2>
+      {loading ? (
+        <SkeletonLoader />
+      ) : apparels.length === 0 ? (
+        <div className="text-center text-4xl font-semibold text-gray-500 my-20 pb-10">
+          No collection available
+        </div>
+      ) : (
+        <Carousel
+          responsive={responsive}
+          ssr={true}
+          customLeftArrow={<CustomLeftArrow />}
+          customRightArrow={<CustomRightArrow />}
+          swipeable
+        >
+          {apparels.map((apparel) => (
+            <div key={apparel.id} className="flex justify-center">
+              <Card
+                radius="none"
+                className="m-2 w-[250px] h-[350px]"
+                isFooterBlurred
               >
-                <ImageTransition images={apparel.imageUrls} />
-              </motion.div>
-              <CardFooter className="absolute px-4 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10">
-                <div className="flex w-full justify-evenly">
-                  {apparel.categories.map((category) => (
-                    <div
-                      key={category.id}
-                      className="text-base text-gray-900 font-semibold hover:underline underline-offset-4 cursor-pointer transition ease-in-out duration-300 hover:opacity-75 hover:scale-110"
-                      onClick={() =>
-                        router.push(
-                          `/shop/${category.slug}?apparel=${apparel.slug}`
-                        )
-                      }
-                    >
-                      {category.title}
-                    </div>
-                  ))}
-                </div>
-              </CardFooter>
-            </Card>
-          </div>
-        ))}
-      </Carousel>
-    </>
+                <CardHeader className="text-gray-800 font-semibold text-lg">
+                  {apparel.title}
+                </CardHeader>
+                <motion.div
+                  className="relative w-full h-full"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <ImageTransition images={apparel.imageUrls} />
+                </motion.div>
+                <CardFooter className="absolute px-4 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10">
+                  <div className="flex w-full justify-evenly">
+                    {apparel.categories.map((category) => (
+                      <div
+                        key={category.id}
+                        className="text-base text-gray-900 font-semibold hover:underline underline-offset-4 cursor-pointer transition ease-in-out duration-300 hover:opacity-75 hover:scale-110"
+                        onClick={() =>
+                          router.push(
+                            `/shop/${category.slug}?apparel=${apparel.slug}`
+                          )
+                        }
+                      >
+                        {category.title}
+                      </div>
+                    ))}
+                  </div>
+                </CardFooter>
+              </Card>
+            </div>
+          ))}
+        </Carousel>
+      )}
+    </div>
   );
 };
 
