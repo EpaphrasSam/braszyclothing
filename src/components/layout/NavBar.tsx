@@ -262,7 +262,9 @@ const NavBar = () => {
     <>
       <div
         onClick={scrollToFooter}
-        className="w-full  bg-black text-white py-2 px-1 text-center cursor-pointer"
+        className={`${
+          isSearchOpen && "hidden"
+        } w-full  bg-black text-white py-2 px-1 text-center cursor-pointer`}
       >
         <span className="animate-pulse text-sm transition ease-in-out duration-1000 font-semibold ">
           A 10% discount promo is available for new customers
