@@ -15,6 +15,7 @@ import {
   verifyOtpAction,
 } from "@/services/authServices";
 import { deleteEmailCookie, getEmailCookie } from "@/helpers/cookies";
+import { CustomError } from "@/utils/errors";
 
 const OTP = () => {
   const router = useRouter();
@@ -75,10 +76,13 @@ const OTP = () => {
         router.push("/reset-password");
       }
     } catch (error: any) {
-      console.log(error);
       const errorMessage =
-        error?.response?.data || error?.message || "Something went wrong";
-      toast.error(errorMessage);
+        error instanceof CustomError
+          ? error.clientMessage
+          : "Something went wrong";
+      toast.error(
+        errorMessage.length > 20 ? "Something went wrong" : errorMessage
+      );
       deleteEmailCookie();
       router.replace(userData ? "/signup" : "/forgot-password");
     } finally {

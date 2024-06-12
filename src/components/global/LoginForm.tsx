@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import { loginAction } from "@/services/authServices";
 import { useSearchParams } from "next/navigation";
+import { CustomError } from "@/utils/errors";
 
 export type FormData = {
   email: string;
