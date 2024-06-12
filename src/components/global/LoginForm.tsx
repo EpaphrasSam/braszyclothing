@@ -48,8 +48,13 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
         window.location.href = redirect || "/";
       }
     } catch (error: any) {
-      console.log(error);
-      const errorMessage = error?.message || "Something went wrong";
+      let errorMessage = "Something went wrong";
+      try {
+        const parsedError = JSON.parse(error.message);
+        errorMessage = parsedError.message || errorMessage;
+      } catch (e) {
+        // If parsing fails, use the default error message
+      }
       toast.error(
         errorMessage.length > 20 ? "Something went wrong" : errorMessage
       );

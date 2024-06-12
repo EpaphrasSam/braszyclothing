@@ -81,9 +81,9 @@ export const loginAction = async (
     await signIn("credentials", signInOptions);
   } catch (error) {
     if (error instanceof AuthError) {
-      throw Error(error.cause?.err?.message);
+      throw new Error(JSON.stringify({ message: error.cause?.err?.message }));
     } else {
-      throw Error("Something went wrong");
+      throw new Error(JSON.stringify({ message: "Something went wrong" }));
     }
   }
 };
@@ -166,7 +166,7 @@ export const changePassword = async (
     });
 
     if (!user) {
-      throw Error("User not found");
+      throw Error("Email not found");
     }
 
     const hashedNewPassword = await bcrypt.hash(password, 10);
