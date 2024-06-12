@@ -83,7 +83,7 @@ export const loginAction = async (
     if (error instanceof AuthError) {
       throw new Error(error.cause?.err?.message);
     } else {
-      throw new Error("Something went wrong");
+      throw new Error("Something went wrong!!!");
     }
   }
 };

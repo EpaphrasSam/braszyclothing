@@ -49,10 +49,9 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
       }
     } catch (error: any) {
       console.log(error);
-      const errorMessage =
-        error?.message || error?.response?.data || "Something went wrong";
+      const errorMessage = error?.message || "Something went wrong!";
       toast.error(
-        errorMessage.length > 20 ? "Something went wrong" : errorMessage
+        errorMessage.length > 20 ? "Something went wrong!!" : errorMessage
       );
     } finally {
       setIsLoading(false);
