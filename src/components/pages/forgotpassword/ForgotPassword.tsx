@@ -11,7 +11,6 @@ import {
 import { getEmailCookie, setEmailCookie } from "@/helpers/cookies";
 import { useRouter } from "next/navigation";
 import { CiMail } from "react-icons/ci";
-import { CustomError } from "@/utils/errors";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -31,10 +30,7 @@ function ForgotPassword() {
         toast.error("Email not found");
       }
     } catch (error: any) {
-      const errorMessage =
-        error instanceof CustomError
-          ? error.clientMessage
-          : "Something went wrong";
+      const errorMessage = error.message || "Something went wrong";
       toast.error(
         errorMessage.length > 20 ? "Something went wrong" : errorMessage
       );

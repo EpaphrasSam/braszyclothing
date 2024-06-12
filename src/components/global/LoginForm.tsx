@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import { loginAction } from "@/services/authServices";
 import { useSearchParams } from "next/navigation";
-import { CustomError } from "@/utils/errors";
 
 export type FormData = {
   email: string;
@@ -40,7 +39,8 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     setIsLoading(true);
     try {
-      await loginAction(data.email, data.password);
+      const response = await loginAction(data.email, data.password);
+      if (response?.error) throw new Error(response.error);
       toast.success("Login successful");
       if (onClose) {
         window.location.reload();
@@ -49,13 +49,7 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
         window.location.href = redirect || "/";
       }
     } catch (error: any) {
-      let errorMessage = "Something went wrong";
-      try {
-        const parsedError = JSON.parse(error.message);
-        errorMessage = parsedError.message || errorMessage;
-      } catch (e) {
-        // If parsing fails, use the default error message
-      }
+      const errorMessage = error.message || "Something went wrong";
       toast.error(
         errorMessage.length > 20 ? "Something went wrong" : errorMessage
       );

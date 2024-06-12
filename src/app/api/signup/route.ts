@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import prisma from "@/utils/prisma";
 import bcrypt from "bcrypt";
 import { verifyOtpAction } from "@/services/authServices";
-import { CustomError } from "@/utils/errors";
 
 export async function POST(request: Request) {
   try {
@@ -10,7 +9,9 @@ export async function POST(request: Request) {
     const { email, password, name, otp } = body;
 
     if (!name || !email || !password || !otp) {
-      throw new CustomError("Missing fields", 400);
+      return new NextResponse("Missing fields", {
+        status: 400,
+      });
     }
     const validate = await verifyOtpAction(otp, email);
 
@@ -27,16 +28,17 @@ export async function POST(request: Request) {
       return new NextResponse(JSON.stringify(user), { status: 200 });
     }
 
-    throw new CustomError("Invalid OTP", 400);
+    throw new Error("Invalid OTP");
   } catch (error: any) {
     switch (error.code) {
       case "P2002":
-        throw new CustomError("Email already exists", 400);
+        return new NextResponse("Email already exists", {
+          status: 400,
+        });
       default:
-        throw new CustomError(
-          error.message || "Internal Server Error",
-          error.code || 500
-        );
+        return new NextResponse(error.message || "Internal Server Error", {
+          status: error.code || 500,
+        });
     }
   }
 }

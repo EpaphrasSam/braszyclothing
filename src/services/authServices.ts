@@ -11,7 +11,6 @@ import {
 import { AuthError, User } from "next-auth";
 import prisma from "@/utils/prisma";
 import bcrypt from "bcrypt";
-import { CustomError } from "@/utils/errors";
 
 type UserUpdatePayload = {
   name?: string;
@@ -30,11 +29,11 @@ export const checkIfEmailExistsAction = async (
       return true;
     }
     if (userExists && !forgot) {
-      throw new CustomError("Email already exists", 400);
+      throw Error("Email already exists");
     }
     return false;
   } catch (error: any) {
-    throw new CustomError(error.message, 500);
+    throw Error(error.message);
   }
 };
 
@@ -47,7 +46,7 @@ export const sendOtpAction = async (email: string) => {
     await sendOTP(otp, email);
     return { message: "OTP sent successfully" };
   } catch (error: any) {
-    throw new CustomError(error.message, 500);
+    throw new Error(error.message);
   }
 };
 
@@ -55,11 +54,11 @@ export const verifyOtpAction = async (otp: string, email: string) => {
   try {
     const isValid = await validateOTP(otp, email);
     if (!isValid) {
-      throw new CustomError("Invalid OTP", 400);
+      throw Error("Invalid OTP");
     }
     return { message: "OTP verified successfully" };
   } catch (error: any) {
-    throw new CustomError(error.message, 500);
+    throw Error(error.message);
   }
 };
 
@@ -80,11 +79,14 @@ export const loginAction = async (
     }
 
     await signIn("credentials", signInOptions);
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof AuthError) {
-      throw new Error(JSON.stringify({ message: error.cause?.err?.message }));
+      return {
+        success: false,
+        error: error.cause?.err?.message || "Invalid credentials",
+      };
     } else {
-      throw new Error(JSON.stringify({ message: "Something went wrong" }));
+      return { success: false, error: "Something went wrong" };
     }
   }
 };
@@ -93,7 +95,7 @@ export const logoutAction = async () => {
   try {
     await signOut({ redirect: false });
   } catch (error) {
-    throw new CustomError("Something went wrong", 500);
+    throw new Error("Something went wrong");
   }
 };
 
@@ -107,7 +109,7 @@ export const updateProfile = async (
         where: { id: userId },
       });
       if (!user) {
-        throw new CustomError("User not found", 404);
+        throw new Error("User not found");
       }
 
       const isMatch = await bcrypt.compare(
@@ -116,7 +118,7 @@ export const updateProfile = async (
       );
 
       if (!isMatch) {
-        throw new CustomError("Old password is incorrect", 400);
+        throw new Error("Old password is incorrect");
       }
 
       const hashedNewPassword = await bcrypt.hash(changedValues.password, 10);
@@ -150,8 +152,8 @@ export const updateProfile = async (
         return updatedUser;
       });
     }
-  } catch (error: any) {
-    throw new CustomError(error.message, 500);
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -167,7 +169,7 @@ export const changePassword = async (
     });
 
     if (!user) {
-      throw Error("Email not found");
+      throw new Error("User not found");
     }
 
     const hashedNewPassword = await bcrypt.hash(password, 10);
@@ -182,7 +184,7 @@ export const changePassword = async (
     });
 
     return updatedUser;
-  } catch (error: any) {
-    throw new CustomError(error.message, 500);
+  } catch (error) {
+    throw error;
   }
 };

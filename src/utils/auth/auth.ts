@@ -23,20 +23,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.contact = token.contact;
         session.user.name = token.name;
       }
-      // if (token) {
-      //   const user = await prisma.user.findUnique({
-      //     where: { id: token.id },
-      //   });
 
-      //   if (user) {
-      //     session.user.id = user.id;
-      //     session.user.admin = user.admin;
-      //     session.user.contact = user.contact;
-      //     session.user.name = user.name;
-      //   } else {
-      //     signOut();
-      //   }
-      // }
       return session;
     },
   },

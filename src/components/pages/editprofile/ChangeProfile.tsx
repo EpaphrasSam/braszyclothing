@@ -14,7 +14,6 @@ import { AiOutlineClose } from "react-icons/ai";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { loginAction, updateProfile } from "@/services/authServices";
-import { CustomError } from "@/utils/errors";
 
 type FormData = {
   name: string;
@@ -143,6 +142,7 @@ const ChangeProfile = ({ session }: EditProfileProps) => {
     setIsLoading(true);
     try {
       const { confirmPassword, ...dataWithoutConfirmPassword } = data;
+
       const changedValues = (
         Object.keys(dataWithoutConfirmPassword) as Array<
           keyof FormDataWithoutConfirmPassword
@@ -165,10 +165,7 @@ const ChangeProfile = ({ session }: EditProfileProps) => {
         window.location.reload();
       }
     } catch (error: any) {
-      const errorMessage =
-        error instanceof CustomError
-          ? error.clientMessage
-          : "Something went wrong";
+      const errorMessage = error.message || "Something went wrong";
       toast.error(
         errorMessage.length > 20 ? "Something went wrong" : errorMessage
       );

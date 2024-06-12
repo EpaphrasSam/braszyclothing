@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { verifyOtpAction } from "@/services/authServices";
-import { CustomError } from "@/utils/errors";
 
 export async function POST(request: Request) {
   try {
@@ -10,16 +9,16 @@ export async function POST(request: Request) {
     const validatedOTP = await verifyOtpAction(otp, email);
 
     if (!validatedOTP) {
-      throw new CustomError("Invalid OTP", 400);
+      return new NextResponse("Invalid OTP", { status: 400 });
     }
 
     return new NextResponse("OTP verified", { status: 200 });
   } catch (error: any) {
     switch (error.message) {
       case "Invalid OTP":
-        throw new CustomError("Invalid OTP", 400);
+        return new NextResponse("Invalid OTP", { status: 400 });
       default:
-        throw new CustomError("Internal Server Error", 500);
+        return new NextResponse("Internal Server Error", { status: 500 });
     }
   }
 }
