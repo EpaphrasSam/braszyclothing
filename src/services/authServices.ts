@@ -46,7 +46,7 @@ export const sendOtpAction = async (email: string) => {
     await sendOTP(otp, email);
     return { message: "OTP sent successfully" };
   } catch (error: any) {
-    throw new Error(error.message);
+    throw Error(error.message);
   }
 };
 
@@ -81,9 +81,9 @@ export const loginAction = async (
     await signIn("credentials", signInOptions);
   } catch (error) {
     if (error instanceof AuthError) {
-      throw new Error(error.cause?.err?.message);
+      throw Error(error.cause?.err?.message);
     } else {
-      throw new Error("Something went wrong!!!");
+      throw Error("Something went wrong");
     }
   }
 };
@@ -92,7 +92,7 @@ export const logoutAction = async () => {
   try {
     await signOut({ redirect: false });
   } catch (error) {
-    throw new Error("Something went wrong");
+    throw Error("Something went wrong");
   }
 };
 
@@ -115,7 +115,7 @@ export const updateProfile = async (
       );
 
       if (!isMatch) {
-        throw new Error("Old password is incorrect");
+        throw Error("Old password is incorrect");
       }
 
       const hashedNewPassword = await bcrypt.hash(changedValues.password, 10);
@@ -166,7 +166,7 @@ export const changePassword = async (
     });
 
     if (!user) {
-      throw new Error("User not found");
+      throw Error("User not found");
     }
 
     const hashedNewPassword = await bcrypt.hash(password, 10);
