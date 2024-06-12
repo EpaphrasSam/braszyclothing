@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import { loginAction } from "@/services/authServices";
 import { useSearchParams } from "next/navigation";
+import { CustomError } from "@/utils/errors";
 
 export type FormData = {
   email: string;
@@ -48,8 +49,10 @@ const LoginForm = ({ isVisible, onClose }: LoginFormProps = {}) => {
         window.location.href = redirect || "/";
       }
     } catch (error: any) {
-      console.log(error);
-      const errorMessage = error?.message || "Something went wrong";
+      let errorMessage = "Something went wrong";
+      if (error instanceof CustomError) {
+        errorMessage = error.clientMessage;
+      }
       toast.error(
         errorMessage.length > 20 ? "Something went wrong" : errorMessage
       );

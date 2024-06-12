@@ -11,6 +11,7 @@ import {
 import { AuthError, User } from "next-auth";
 import prisma from "@/utils/prisma";
 import bcrypt from "bcrypt";
+import { CustomError } from "@/utils/errors";
 
 type UserUpdatePayload = {
   name?: string;
@@ -29,11 +30,11 @@ export const checkIfEmailExistsAction = async (
       return true;
     }
     if (userExists && !forgot) {
-      throw Error("Email already exists");
+      throw new CustomError("Email already exists", 400);
     }
     return false;
   } catch (error: any) {
-    throw Error(error.message);
+    throw new CustomError(error.message, 500);
   }
 };
 
@@ -46,7 +47,7 @@ export const sendOtpAction = async (email: string) => {
     await sendOTP(otp, email);
     return { message: "OTP sent successfully" };
   } catch (error: any) {
-    throw Error(error.message);
+    throw new CustomError(error.message, 500);
   }
 };
 
@@ -54,11 +55,11 @@ export const verifyOtpAction = async (otp: string, email: string) => {
   try {
     const isValid = await validateOTP(otp, email);
     if (!isValid) {
-      throw Error("Invalid OTP");
+      throw new CustomError("Invalid OTP", 400);
     }
     return { message: "OTP verified successfully" };
   } catch (error: any) {
-    throw Error(error.message);
+    throw new CustomError(error.message, 500);
   }
 };
 
@@ -79,11 +80,11 @@ export const loginAction = async (
     }
 
     await signIn("credentials", signInOptions);
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof AuthError) {
-      throw Error(error.cause?.err?.message);
+      throw new CustomError(error.cause?.err?.message!, 401);
     } else {
-      throw Error("Something went wrong");
+      throw new CustomError("Something went wrong", 500);
     }
   }
 };
@@ -92,7 +93,7 @@ export const logoutAction = async () => {
   try {
     await signOut({ redirect: false });
   } catch (error) {
-    throw Error("Something went wrong");
+    throw new CustomError("Something went wrong", 500);
   }
 };
 
@@ -106,7 +107,7 @@ export const updateProfile = async (
         where: { id: userId },
       });
       if (!user) {
-        throw new Error("User not found");
+        throw new CustomError("User not found", 404);
       }
 
       const isMatch = await bcrypt.compare(
@@ -115,7 +116,7 @@ export const updateProfile = async (
       );
 
       if (!isMatch) {
-        throw Error("Old password is incorrect");
+        throw new CustomError("Old password is incorrect", 400);
       }
 
       const hashedNewPassword = await bcrypt.hash(changedValues.password, 10);
@@ -149,8 +150,8 @@ export const updateProfile = async (
         return updatedUser;
       });
     }
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new CustomError(error.message, 500);
   }
 };
 
@@ -166,7 +167,7 @@ export const changePassword = async (
     });
 
     if (!user) {
-      throw Error("User not found");
+      throw new CustomError("User not found", 404);
     }
 
     const hashedNewPassword = await bcrypt.hash(password, 10);
@@ -181,7 +182,7 @@ export const changePassword = async (
     });
 
     return updatedUser;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw new CustomError(error.message, 500);
   }
 };
