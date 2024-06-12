@@ -26,7 +26,7 @@ const AdminHeader = () => {
             className="flex max-sm:text-sm items-center gap-3 font-semibold hover:scale-105 transition ease-in-out duration-300"
           >
             <IoReturnDownBack className="text-2xl" />
-            Go to Website
+            Go Back
           </Link>
         </NavbarContent>
         <NavbarContent justify="center">
@@ -34,9 +34,9 @@ const AdminHeader = () => {
             <Image
               src="/logo.png"
               alt="logo"
-              width={50}
-              height={50}
-              className="w-12 h-12 "
+              width={70}
+              height={70}
+              className="w-auto h-auto "
             />
           </div>
         </NavbarContent>
