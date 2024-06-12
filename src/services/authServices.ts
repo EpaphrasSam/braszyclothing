@@ -33,7 +33,9 @@ export const checkIfEmailExistsAction = async (
     }
     return false;
   } catch (error: any) {
-    throw Error(error.message);
+    return {
+      error: error.message || "Something went wrong",
+    };
   }
 };
 
@@ -46,7 +48,9 @@ export const sendOtpAction = async (email: string) => {
     await sendOTP(otp, email);
     return { message: "OTP sent successfully" };
   } catch (error: any) {
-    throw new Error(error.message);
+    return {
+      error: error.message || "Something went wrong",
+    };
   }
 };
 
@@ -58,7 +62,9 @@ export const verifyOtpAction = async (otp: string, email: string) => {
     }
     return { message: "OTP verified successfully" };
   } catch (error: any) {
-    throw Error(error.message);
+    return {
+      error: error.message || "Something went wrong",
+    };
   }
 };
 
@@ -79,14 +85,14 @@ export const loginAction = async (
     }
 
     await signIn("credentials", signInOptions);
+    return { success: true };
   } catch (error) {
     if (error instanceof AuthError) {
       return {
-        success: false,
         error: error.cause?.err?.message || "Invalid credentials",
       };
     } else {
-      return { success: false, error: "Something went wrong" };
+      return { error: "Something went wrong" };
     }
   }
 };
@@ -95,7 +101,7 @@ export const logoutAction = async () => {
   try {
     await signOut({ redirect: false });
   } catch (error) {
-    throw new Error("Something went wrong");
+    return { error: "Something went wrong" };
   }
 };
 
@@ -152,15 +158,17 @@ export const updateProfile = async (
         return updatedUser;
       });
     }
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    return {
+      error: error.message || "Something went wrong",
+    };
   }
 };
 
 export const changePassword = async (
   email: string,
   password: string
-): Promise<User> => {
+): Promise<User | { error: string }> => {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -184,7 +192,9 @@ export const changePassword = async (
     });
 
     return updatedUser;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    return {
+      error: error.message || "Something went wrong",
+    };
   }
 };

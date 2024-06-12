@@ -115,11 +115,11 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
         selectedStatus.id,
         selectedStatus.action
       );
-      if (response) {
-        toast.success("Status updated successfully");
-      }
-    } catch (error) {
-      toast.error("Error occurred with updating status");
+      if (response.error) throw new Error(response.error);
+      toast.success("Status updated successfully");
+    } catch (error: any) {
+      const errorMessage = error.message || "Error in updating status";
+      toast.error(errorMessage > 20 ? "Something went wrong" : errorMessage);
     } finally {
       setIsLoading(false);
       setIsModalOpen(false);

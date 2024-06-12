@@ -53,11 +53,10 @@ const ResetPassword = () => {
     setIsLoading(true);
     try {
       const response = await changePassword(email, data.newPassword);
-      if (response) {
-        toast.success("Password reset successfully");
-        deleteEmailCookie();
-        router.push("/login");
-      }
+      if ("error" in response) throw new Error(response.error);
+      toast.success("Password reset successfully");
+      deleteEmailCookie();
+      router.push("/login");
     } catch (error: any) {
       const errorMessage = error.message || "Something went wrong";
       toast.error(

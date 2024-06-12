@@ -182,7 +182,12 @@ const CardForms = ({
         });
       } else {
         try {
-          await updatePaymentMethod(selectedPaymentMethod, billingDetails);
+          const result = await updatePaymentMethod(
+            selectedPaymentMethod,
+            billingDetails
+          );
+
+          if (result?.error) throw new Error(result.error);
         } catch (error) {
           console.error(error);
           setIsProcessing(false);
@@ -407,6 +412,11 @@ const PaymentForms = () => {
           session?.user?.email!,
           referralId
         );
+
+        if (result && "error" in result) {
+          toast.error(result.error);
+          return;
+        }
 
         if (result) {
           setPaymentIntent({

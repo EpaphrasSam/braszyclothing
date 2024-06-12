@@ -50,7 +50,8 @@ const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
   const logOut = async () => {
     try {
       setIsLoading(true);
-      await logoutAction();
+      const response = await logoutAction();
+      if (response?.error) throw new Error(response.error);
       onClose();
       toast.success("Logout successful");
       window.location.reload();

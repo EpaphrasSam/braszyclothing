@@ -65,7 +65,7 @@ export const createPaymentIntent = async (
 
     return paymentIntentObject;
   } catch (error: any) {
-    throw new Error(error);
+    return { error: error.message };
   }
 };
 
@@ -143,13 +143,13 @@ export const updatePaymentMethod = async (
       billing_details: BillingDetails,
     });
   } catch (error: any) {
-    throw new Error(error);
+    return { error: error.message };
   }
 };
 
 export const getPaymentMethodDetails = async (
   paymentIntentId: string
-): Promise<PaymentMethodDetails> => {
+): Promise<PaymentMethodDetails | { error: string }> => {
   try {
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
@@ -165,45 +165,13 @@ export const getPaymentMethodDetails = async (
       brand: paymentMethod.card?.brand || "",
     };
   } catch (error: any) {
-    throw new Error(error.message);
-  }
-};
-
-export const createStripeCoupon = async (
-  discountRate: number,
-  duration: "once" | "repeating" | "forever" = "once",
-  durationInMonths?: number,
-  expirationDate?: Date,
-  maxRedemptions?: number
-): Promise<Stripe.Coupon> => {
-  try {
-    const couponParams: Stripe.CouponCreateParams = {
-      percent_off: discountRate,
-      duration,
-    };
-
-    if (duration === "repeating" && durationInMonths) {
-      couponParams.duration_in_months = durationInMonths;
-    }
-
-    if (expirationDate) {
-      couponParams.redeem_by = Math.floor(expirationDate.getTime() / 1000);
-    }
-
-    if (maxRedemptions) {
-      couponParams.max_redemptions = maxRedemptions;
-    }
-
-    const coupon = await stripe.coupons.create(couponParams);
-    return coupon;
-  } catch (error: any) {
-    throw Error(error.message);
+    return { error: error.message };
   }
 };
 
 export const generatePromotionCode = async (
   couponId: string
-): Promise<Stripe.PromotionCode> => {
+): Promise<Stripe.PromotionCode | { error: string }> => {
   try {
     const promotionCode = await stripe.promotionCodes.create({
       coupon: couponId,
@@ -212,7 +180,7 @@ export const generatePromotionCode = async (
 
     return promotionCode;
   } catch (error: any) {
-    throw Error(error.message);
+    return { error: error.message };
   }
 };
 
@@ -232,7 +200,7 @@ export const validatePromotionCode = async (code: string) => {
       code: promotionCode.code,
     };
   } catch (error: any) {
-    throw new Error(error.message);
+    return { error: error.message };
   }
 };
 
@@ -248,6 +216,6 @@ export const inValidatePromotionCodes = async (codes: string[]) => {
     });
     return { success: true };
   } catch (error: any) {
-    throw new Error(error.message);
+    return { error: error.message };
   }
 };

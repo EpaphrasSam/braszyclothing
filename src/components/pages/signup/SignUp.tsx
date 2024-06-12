@@ -47,6 +47,11 @@ const SignUp = () => {
     setIsLoading(true);
     try {
       const checkIfEmailExists = await checkIfEmailExistsAction(data.email);
+      if (
+        typeof checkIfEmailExists === "object" &&
+        "error" in checkIfEmailExists
+      )
+        throw new Error(checkIfEmailExists.error);
       if (!checkIfEmailExists) {
         await sendOtpAction(data.email);
         setUserData(data);

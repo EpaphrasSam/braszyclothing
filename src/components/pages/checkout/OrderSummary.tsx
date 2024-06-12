@@ -44,6 +44,7 @@ const OrderSummary = () => {
     try {
       setIsLoading(true);
       const promoCode = await validatePromotionCode(data.promoCode);
+      if ("error" in promoCode) throw new Error(promoCode.error);
       if (appliedCoupons?.includes(promoCode.code)) {
         setError("promoCode", { message: "Coupon already applied" });
         return;

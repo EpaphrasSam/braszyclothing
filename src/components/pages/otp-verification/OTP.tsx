@@ -61,21 +61,22 @@ const OTP = () => {
     setIsLoading(true);
     try {
       if (userData) {
-        await axios.post("/api/signup", {
+        const response = await axios.post("/api/signup", {
           email: userData?.email,
           otp: otp.join(""),
           name: userData?.name,
           password: userData?.password,
         });
+        if (response.data.error) throw new Error(response.data.error);
         await loginAction(userData?.email!, userData?.password!);
         toast.success("Account created successfully");
         window.location.href = redirect || "/";
       } else {
-        await verifyOtpAction(otp.join(""), email);
+        const response = await verifyOtpAction(otp.join(""), email);
+        if (response.error) throw new Error(response.error);
         router.push("/reset-password");
       }
     } catch (error: any) {
-      console.log(error);
       const errorMessage =
         error?.response?.data || error?.message || "Something went wrong";
       toast.error(
@@ -92,10 +93,11 @@ const OTP = () => {
   const sendOtp = async () => {
     if (!email) return;
     try {
-      await sendOtpAction(email);
+      const response = await sendOtpAction(email);
+      if (response.error) throw new Error(response.error);
       toast.success("OTP sent successfully");
     } catch (error: any) {
-      toast.error(error.response.data || "Something went wrong");
+      toast.error(error.message || "Something went wrong");
     }
   };
 

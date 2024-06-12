@@ -83,7 +83,6 @@ export const getShippingAddress = async (userId: string) => {
 
     return { addresses, error: null };
   } catch (error) {
-    console.log(error);
     return { addresses: [], error: "Error in fetching shipping details" };
   }
 };
@@ -176,8 +175,6 @@ export const createOrder = async (
       error: null,
     };
   } catch (error: any) {
-    console.error(error);
-
     return {
       orderID: null,
       success: false,

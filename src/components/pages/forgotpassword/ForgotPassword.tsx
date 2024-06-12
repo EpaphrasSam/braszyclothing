@@ -10,7 +10,6 @@ import {
 } from "@/services/authServices";
 import { getEmailCookie, setEmailCookie } from "@/helpers/cookies";
 import { useRouter } from "next/navigation";
-import { CiMail } from "react-icons/ci";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -22,8 +21,14 @@ function ForgotPassword() {
     setIsLoading(true);
     try {
       const checkIfEmailExists = await checkIfEmailExistsAction(email, true);
+      if (
+        typeof checkIfEmailExists === "object" &&
+        "error" in checkIfEmailExists
+      )
+        throw new Error(checkIfEmailExists.error);
       if (checkIfEmailExists) {
-        await sendOtpAction(email);
+        const response = await sendOtpAction(email);
+        if (response.error) throw new Error(response.error);
         setEmailCookie(email);
         router.push("/otp-verification");
       } else {

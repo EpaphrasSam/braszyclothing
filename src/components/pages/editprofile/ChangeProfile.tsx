@@ -154,16 +154,15 @@ const ChangeProfile = ({ session }: EditProfileProps) => {
         return acc;
       }, {});
       const response = await updateProfile(session?.user?.id!, changedValues);
-      if (response) {
-        await loginAction(response.email, response.password, true);
-        if (changedValues.oldPassword && changedValues.password) {
-          toast.success("Password updated successfully");
-        } else {
-          toast.success("Profile updated successfully");
-        }
-        reset(defaultValues);
-        window.location.reload();
+      if ("error" in response) throw new Error(response.error);
+      await loginAction(response.email, response.password, true);
+      if (changedValues.oldPassword && changedValues.password) {
+        toast.success("Password updated successfully");
+      } else {
+        toast.success("Profile updated successfully");
       }
+      reset(defaultValues);
+      window.location.reload();
     } catch (error: any) {
       const errorMessage = error.message || "Something went wrong";
       toast.error(

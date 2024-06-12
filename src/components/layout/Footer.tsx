@@ -28,11 +28,13 @@ const Footer = () => {
     try {
       setIsLoading(true);
       const response = await addEmailToNewsletter(data.email);
+      if (response.error) throw new Error(response.error);
       if (response.message) {
         toast.success(response.message);
       }
     } catch (error: any) {
-      toast.error(error.message);
+      const errorMessage = error.message || "Something went wrong";
+      toast.error(errorMessage > 20 ? "Something went wrong" : errorMessage);
     } finally {
       setIsLoading(false);
       reset();

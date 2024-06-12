@@ -227,8 +227,12 @@ export const updateOrderStatus = async (orderId: string, action: string) => {
     revalidatePath("/admin/dashboard");
     return {
       success: true,
+      error: null,
     };
   } catch (error: any) {
-    throw error.message;
+    return {
+      success: false,
+      error: error.message,
+    };
   }
 };

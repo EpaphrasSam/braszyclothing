@@ -18,9 +18,12 @@ export const addEmailToNewsletter = async (email: string) => {
     });
     await addAudienceEmail(email);
     const promoCode = await generatePromotionCode("xRryNPp9");
+    if ("error" in promoCode) throw new Error(promoCode.error);
     await sendCouponEmail(email, promoCode.code);
     return { message: "Coupon sent to email" };
   } catch (error: any) {
-    throw Error(error.message);
+    return {
+      error: error.message,
+    };
   }
 };

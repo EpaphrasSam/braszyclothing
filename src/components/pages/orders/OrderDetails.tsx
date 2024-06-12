@@ -28,6 +28,8 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
       order.paymentIntent?.paymentIntentId
     );
 
+    if (res && "error" in res) throw new Error(res.error);
+
     return res;
   };
   const { data, error, isLoading } = useSWR(
