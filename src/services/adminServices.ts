@@ -94,12 +94,15 @@ export const getOrders = async (
           select: {
             id: true,
             name: true,
+            email: true,
+            contact: true,
           },
         },
         guest: {
           select: {
             id: true,
             email: true,
+            contact: true,
           },
         },
         shippingAddress: true,
@@ -176,12 +179,15 @@ export const getOrders = async (
 
       if (user) {
         orderDetails.userId = user.id;
+        orderDetails.userEmail = user.email;
         orderDetails.userName = user.name;
         orderDetails.isUser = true;
+        orderDetails.contact = user.contact;
       } else if (guest) {
         orderDetails.guestId = guest.id;
         orderDetails.guestEmail = guest.email;
         orderDetails.isGuest = true;
+        orderDetails.contact = guest.contact;
       }
 
       return orderDetails;

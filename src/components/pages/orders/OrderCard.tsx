@@ -9,12 +9,12 @@ import {
   Divider,
 } from "@nextui-org/react";
 import React, { useState } from "react";
-import { CiDeliveryTruck } from "react-icons/ci";
-import { GrLocation } from "react-icons/gr";
-import { GoDotFill } from "react-icons/go";
-import { MdArrowRight } from "react-icons/md";
+import { MdCancel, MdInfo } from "react-icons/md";
 import Image from "next/image";
 import OrderDetails from "./OrderDetails";
+import CustomModal from "@/components/global/CustomModal";
+import { cancelOrder } from "@/services/orderServices";
+import toast from "react-hot-toast";
 
 interface OrderCardProps {
   order: OrderWithProductDetails;
@@ -37,6 +37,26 @@ const getOrderStatusColor = (status: string) => {
 
 const OrderCard = ({ order }: OrderCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCancelOrder = async () => {
+    setIsLoading(true);
+    try {
+      const response = await cancelOrder(order.id);
+      if (response.error) throw new Error(response.error);
+      toast.success("Order canceled");
+    } catch (error: any) {
+      const errorMessage = error.message || "Something went wrong";
+      toast.error(
+        errorMessage.length > 20 ? "Something went wrong" : errorMessage
+      );
+    } finally {
+      setIsLoading(false);
+      setIsModalOpen(false);
+    }
+  };
+
   return (
     <>
       <Card className="max-w-[650px] w-full h-[350px] flex flex-col">
@@ -60,28 +80,13 @@ const OrderCard = ({ order }: OrderCardProps) => {
               </Chip>
             </div>
           </div>
-          <div className="flex justify-between w-full overflow-x-auto scrollbar-thin">
-            <Chip
-              className="bg-white border-1 border-solid border-gray-200 rounded-full p-4"
-              startContent={<CiDeliveryTruck size={20} />}
-            >
-              York City, Canada
-            </Chip>
-            <div className="flex items-center">
-              <GoDotFill size={18} />
-              <div className="flex items-center gap-1">
-                {Array.from({ length: 12 }).map((_, index) => (
-                  <div key={index} className="w-1 h-[2px] bg-gray-600" />
-                ))}
-              </div>
-              <MdArrowRight size={24} />
-            </div>
-            <Chip
-              className="bg-white border-1 border-solid border-gray-200 rounded-full p-4"
-              startContent={<GrLocation size={20} />}
-            >
+          <div className="flex flex-col gap-2 w-full overflow-x-auto scrollbar-thin">
+            <div className="text-sm text-gray-500">Destination</div>
+            <div className="font-semibold text-lg">
+              {order?.shippingAddress.address}
+              {" - "}
               {`${order?.shippingAddress.city}, ${order?.shippingAddress.country}`}
-            </Chip>
+            </div>
           </div>
         </CardHeader>
         <Divider className="mb-4" />
@@ -96,7 +101,6 @@ const OrderCard = ({ order }: OrderCardProps) => {
                   height={80}
                   className=" w-24 h-24 object-cover object-center rounded-sm"
                 />
-
                 <div className="flex flex-col">
                   <div className="flex flex-col">
                     <div className="text-base text-gray-800 font-semibold">
@@ -125,19 +129,30 @@ const OrderCard = ({ order }: OrderCardProps) => {
           <div className="text-gray-900 ">
             <span className="text-base font-semibold">
               ${order?.paymentIntent?.netAmount.toFixed(2)}{" "}
-              <span className="text-gray-500">
-                ({order?.items.length}{" "}
-                {order?.items.length === 1 ? "item" : "items"})
-              </span>
+              <span className="text-gray-500">({order?.items.length}) </span>
             </span>
           </div>
-          <Button
-            onClick={() => setIsOpen(true)}
-            radius="full"
-            className="bg-black text-white w-32"
-          >
-            Details
-          </Button>
+          <div className="flex flex-row gap-2">
+            {order?.shippingStatus === "Pending" && (
+              <Button
+                startContent={<MdCancel size={20} />}
+                color="danger"
+                radius="full"
+                className="w-full max-w-28"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <span className="">Cancel</span>
+              </Button>
+            )}
+            <Button
+              onClick={() => setIsOpen(true)}
+              radius="full"
+              className="bg-black text-white w-full max-w-28"
+              startContent={<MdInfo size={20} />}
+            >
+              <span className="">Details</span>
+            </Button>
+          </div>
         </CardFooter>
       </Card>
 
@@ -148,6 +163,17 @@ const OrderCard = ({ order }: OrderCardProps) => {
           onClose={() => setIsOpen(false)}
         />
       )}
+
+      <CustomModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleCancelOrder}
+        message="Are you sure you want to cancel this order?"
+        label="Cancel Order"
+        confirmLabel="Confirm"
+        color="danger"
+        isLoading={isLoading}
+      />
     </>
   );
 };

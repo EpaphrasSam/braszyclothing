@@ -110,7 +110,7 @@ const InvoicePDF = ({
             </View>
             <View>
               <Text style={styles.label}>Estimated Delivery</Text>
-              <Text style={styles.text}>June 10, 2024</Text>
+              <Text style={styles.text}>3 - 14 days</Text>
             </View>
           </View>
         </View>
@@ -199,7 +199,7 @@ const InvoicePDF = ({
           </View>
         </View>
         <View style={styles.footer}>
-          <Text>Contact braszyclothing@gmail.com if there are any issues</Text>
+          <Text>Contact braszy957@gmail.com if there are any issues</Text>
         </View>
       </Page>
     </Document>

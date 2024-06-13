@@ -17,7 +17,7 @@ export default async function OrderPage({
 
   return (
     <Suspense>
-      <div className="p-6 min-h-screen">
+      <div className="sm:px-6 py-6 px-3 min-h-screen">
         <OrderHistory
           userId={session?.user.id!}
           InitialOrders={data}

@@ -48,7 +48,7 @@ const About = () => {
             </Card>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-4">
+          {/* <div className="grid md:grid-cols-4 gap-4">
             <div className="p-6 shadow rounded-lg bg-blue-500 text-white">
               <p className="text-2xl font-bold">2K+</p>
               <p>Exclusive Designs</p>
@@ -65,7 +65,7 @@ const About = () => {
               <p className="text-2xl font-bold">1K+</p>
               <p>Global Partnerships</p>
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
     </>

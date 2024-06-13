@@ -25,6 +25,7 @@ export const saveShippingAddress = async (
         city: data.city,
         code: data.code,
         country: data.country,
+        state: data.state, // Added this line
         user: {
           connect: {
             id: userId,
@@ -38,6 +39,7 @@ export const saveShippingAddress = async (
         city: data.city,
         code: data.code,
         country: data.country,
+        state: data.state, // Added this line
         user: {
           connect: {
             id: userId,
@@ -111,15 +113,28 @@ export const createOrder = async (
 
     await prisma.$transaction(async (prisma) => {
       if (!session) {
-        const guest = await prisma.guest.create({
-          data: { contact, email },
+        const existingGuest = await prisma.guest.findUnique({
+          where: { email },
         });
-        guestId = guest.id;
+
+        if (existingGuest) {
+          guestId = existingGuest.id;
+          await prisma.guest.update({
+            where: { id: guestId },
+            data: { contact },
+          });
+        } else {
+          const guest = await prisma.guest.create({
+            data: { contact, email },
+          });
+          guestId = guest.id;
+        }
+
         shippingAddressId = (
           await prisma.shippingAddress.create({
             data: {
               ...data,
-              guest: { connect: { id: guest.id } },
+              guest: { connect: { id: guestId } },
             },
           })
         ).id;
@@ -256,6 +271,22 @@ export const fetchUserOrders = async (
       data: [],
       error: error.message,
       totalPages: 0,
+    };
+  }
+};
+
+export const cancelOrder = async (orderId: string) => {
+  try {
+    await prisma.order.update({
+      where: { id: orderId },
+      data: { shippingStatus: "Canceled" },
+    });
+    revalidatePath("/my-orders");
+    return { success: true, error: null };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Error in canceling order",
     };
   }
 };

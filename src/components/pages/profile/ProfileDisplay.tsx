@@ -134,7 +134,7 @@ const ProfileDisplay = ({ onClose, user }: ProfileDisplayProps) => {
           fullWidth
           radius="none"
           isLoading={isLoading}
-          startContent={<MdLogout size={20} />}
+          startContent={<MdLogout size={16} />}
           className="bg-red-800 text-white font-bold rounded hover:bg-red-700"
           onClick={logOut}
         >

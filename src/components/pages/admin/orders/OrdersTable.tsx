@@ -12,7 +12,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Pagination,
-  Spinner,
+  DateRangePicker,
   Table,
   TableBody,
   TableCell,
@@ -27,6 +27,7 @@ import { FaShippingFast, FaBan, FaCheck, FaEllipsisV } from "react-icons/fa";
 import CustomModal from "@/components/global/CustomModal";
 import toast from "react-hot-toast";
 import { updateOrderStatus } from "@/services/adminServices";
+import { AiFillCloseCircle } from "react-icons/ai";
 
 interface OrdersTableProps {
   orders: Orders[];
@@ -80,6 +81,9 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
   const [selectedStatus, setSelectedStatus] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [dateRange, setDateRange] = useState<any>(null);
+
+  // console.log(dateRange);
 
   const handleActionClick = (orderId: string, action: string) => {
     setSelectedStatus({ id: orderId, action });
@@ -87,14 +91,33 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
   };
 
   const filteredOrders = useMemo(() => {
-    if (selectedStatusFilter === "All") {
-      return orders;
-    } else {
-      return orders.filter(
+    let filtered = orders;
+
+    if (selectedStatusFilter !== "All") {
+      filtered = filtered.filter(
         (order) => order.shippingStatus === selectedStatusFilter
       );
     }
-  }, [orders, selectedStatusFilter]);
+
+    if (dateRange) {
+      const startDate = new Date(
+        dateRange.start.year,
+        dateRange.start.month - 1,
+        dateRange.start.day
+      ).toDateString();
+      const endDate = new Date(
+        dateRange.end.year,
+        dateRange.end.month - 1,
+        dateRange.end.day
+      ).toDateString();
+      filtered = filtered.filter((order) => {
+        const orderDate = new Date(order.createdAt).toDateString();
+        return orderDate >= startDate && orderDate <= endDate;
+      });
+    }
+
+    return filtered;
+  }, [orders, selectedStatusFilter, dateRange]);
 
   const pages = Math.ceil(filteredOrders?.length / rowsPerPage);
 
@@ -215,22 +238,41 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
               </Link>
             </div>
           ) : (
-            <div className="flex space-x-4">
-              {["All", "Pending", "Shipping", "Completed", "Canceled"].map(
-                (status) => (
-                  <button
-                    key={status}
-                    className={`text-blue-500 font-semibold underline underline-offset-4 transition ease-in-out duration-300 hover:scale-105 ${
-                      selectedStatusFilter === status
-                        ? "text-blue-500 underline underline-offset-4"
-                        : "text-gray-500 no-underline"
-                    }`}
-                    onClick={() => setSelectedStatusFilter(status)}
-                  >
-                    {status}
-                  </button>
-                )
-              )}
+            <div className="w-full max-md:gap-4 px-2 flex justify-between md:flex-row flex-col-reverse">
+              <div className="flex overflow-x-auto space-x-4">
+                {["All", "Pending", "Shipping", "Completed", "Canceled"].map(
+                  (status) => (
+                    <button
+                      key={status}
+                      className={`text-blue-500 font-semibold underline underline-offset-4 transition ease-in-out duration-300 hover:text-blue-600 ${
+                        selectedStatusFilter === status
+                          ? "text-blue-500 underline underline-offset-4"
+                          : "text-gray-500 no-underline"
+                      }`}
+                      onClick={() => setSelectedStatusFilter(status)}
+                    >
+                      {status}
+                    </button>
+                  )
+                )}
+              </div>
+              <DateRangePicker
+                label="Date Filter"
+                radius="none"
+                variant="underlined"
+                className="w-[250px]"
+                value={dateRange}
+                onChange={setDateRange}
+                startContent={
+                  dateRange && (
+                    <AiFillCloseCircle
+                      size={24}
+                      onClick={() => setDateRange(null)}
+                      className="cursor-pointer"
+                    />
+                  )
+                }
+              />
             </div>
           )}
         </CardHeader>
@@ -279,14 +321,22 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col items-start">
-                        {item.isGuest && (
-                          <Chip variant="dot" size="sm" radius="sm">
-                            Guest
-                          </Chip>
-                        )}
-                        {item.isUser ? item.userName : item.guestEmail}
+                        <p>
+                          {item.isGuest ? (
+                            <Chip variant="dot" size="sm" radius="sm">
+                              Guest
+                            </Chip>
+                          ) : (
+                            item.userName
+                          )}
+                        </p>
+                        <p className="text-xs text-zinc-500">
+                          {item.isUser ? item.userEmail : item.guestEmail}
+                        </p>
+                        <p className="text-xs text-zinc-500">{item.contact}</p>
                       </div>
                     </TableCell>
+
                     <TableCell>
                       <OrderAccordion data={item.products} type="Products" />
                     </TableCell>

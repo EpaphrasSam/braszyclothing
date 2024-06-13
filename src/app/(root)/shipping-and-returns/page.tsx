@@ -13,7 +13,7 @@ const ShippingReturns = () => {
     <>
       <main className="bg-white min-h-screen p-10">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-bold text-center mb-8">
+          <h1 className="text-4xl font-bold text-center mb-8">
             Shipping and Returns
           </h1>
 
@@ -34,6 +34,15 @@ const ShippingReturns = () => {
           <section className="mt-6">
             <h2 className="text-xl font-semibold mb-2">Return Policy</h2>
             <p>No refunds unless we messed up the item or size.</p>
+          </section>
+
+          <section className="mt-6">
+            <h2 className="text-xl font-semibold mb-2">Refund Policy</h2>
+            <p>
+              If an order is canceled before being shipped, you can contact us
+              for a refund. Once the order has been shipped, you cannot request
+              a refund.
+            </p>
           </section>
 
           <section className="mt-6">

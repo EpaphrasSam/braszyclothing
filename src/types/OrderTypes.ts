@@ -39,9 +39,11 @@ export interface Orders {
   shippingStatus: string;
   userId?: string;
   userName?: string;
+  userEmail?: string;
   isUser?: boolean;
   guestId?: string;
   guestEmail?: string;
+  contact?: string;
   isGuest?: boolean;
   createdAt: Date;
   orderID: string;

@@ -13,7 +13,7 @@ export default function TermsOfServices() {
   return (
     <div className="p-8 font-sans">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl text-center font-bold mb-4">
+        <h1 className="text-4xl text-center font-bold mb-4">
           Terms of Service
         </h1>
 

@@ -188,7 +188,7 @@ export const sendCouponEmail = async (
     const { error, data }: any = await resend.emails.send({
       from: `Braszy Clothing <${process.env.RESEND_EMAIL}>`,
       to: [email],
-      subject: "Your Coupon Code",
+      subject: "Your 10% Discount Promo Code",
       html: message,
     });
     if (error) {

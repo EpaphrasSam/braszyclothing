@@ -13,7 +13,7 @@ export default function PrivacyPolicy() {
   return (
     <div className="p-8 font-sans">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl text-center font-bold mb-4">Privacy Policy</h1>
+        <h1 className="text-4xl text-center font-bold mb-4">Privacy Policy</h1>
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">1. Introduction</h2>
         <p className="mb-4">

@@ -82,7 +82,7 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
             <Divider orientation="vertical" />
             <div className="flex gap-2 bg-white font-normal text-sm text-green-600">
               <CiDeliveryTruck size={20} color="green" />
-              <span>Estimated delivery: June 10, 2024</span>
+              <span>Estimated delivery: 3 - 14 days</span>
             </div>
           </div>
         </ModalHeader>
@@ -164,7 +164,7 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
               <div className="text-xs my-2 font-semibold text-gray-500">
                 Delivery Method
               </div>
-              <div>{order?.shippingMethod}</div>
+              <div className="capitalize">{order?.shippingMethod}</div>
             </div>
           </div>
           <Divider className="my-1" />
@@ -183,7 +183,7 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
                 </div>
                 <div className="flex justify-between">
                   <p>Discount</p>
-                  <p>${order?.paymentIntent?.discount.toFixed(2)}</p>
+                  <p>-${order?.paymentIntent?.discount.toFixed(2)}</p>
                 </div>
                 <div className="flex justify-between">
                   <p>Tax</p>

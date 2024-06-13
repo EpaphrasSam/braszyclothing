@@ -169,6 +169,18 @@ export const getPaymentMethodDetails = async (
   }
 };
 
+export const checkIfCouponExists = async (code: string) => {
+  try {
+    const coupon = await stripe.coupons.retrieve(code);
+    if (!coupon) {
+      throw new Error("Coupon code does not exist");
+    }
+    return coupon;
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+
 export const generatePromotionCode = async (
   couponId: string
 ): Promise<Stripe.PromotionCode | { error: string }> => {

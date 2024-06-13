@@ -6,7 +6,7 @@ export const shippingSchemaBase = z.object({
   email: z.string().email("Invalid email address").optional(),
   contact: z
     .string()
-    .min(10, "Contact number should be at least 10 digits")
+    .min(7, "Contact number should be at least 7 digits")
     .optional(),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
