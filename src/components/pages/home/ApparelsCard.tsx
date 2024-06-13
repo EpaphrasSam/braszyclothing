@@ -100,7 +100,7 @@ const ApparelsCard = ({ apparels }: ApparelsCardProps) => {
                     {apparel.categories.map((category) => (
                       <div
                         key={category.id}
-                        className="text-base text-gray-900 font-semibold hover:underline underline-offset-4 cursor-pointer transition ease-in-out duration-300 hover:opacity-75 hover:scale-110"
+                        className="text-base text-black font-semibold hover:underline underline-offset-4 cursor-pointer transition ease-in-out duration-300 hover:opacity-75 hover:scale-110"
                         onClick={() =>
                           router.push(
                             `/shop/${category.slug}?apparel=${apparel.slug}`
