@@ -19,7 +19,8 @@ export const createPaymentIntent = async (
   try {
     if (amt === undefined) return;
 
-    const fee = calculateStripeFee(amt);
+    // const fee = calculateStripeFee(amt);
+    const fee = 0;
     const netAmount = amt + fee;
 
     const paymentIntentParams: Stripe.PaymentIntentCreateParams = {

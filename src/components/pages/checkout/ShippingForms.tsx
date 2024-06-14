@@ -36,7 +36,8 @@ const ShippingForms = () => {
     };
 
     if (selectedMethod === "standard") {
-      setShippingFee(totalAmount() >= 100 ? 0 : 9.9);
+      // setShippingFee(totalAmount() >= 100 ? 0 : 9.9);
+      setShippingFee(0);
     }
 
     setShippingDetails(updatedShippingDetails);
@@ -66,11 +67,11 @@ const ShippingForms = () => {
             >
               Standard Shipping
             </Radio>
-            {totalAmount() >= 100 ? (
-              <p className="text-lg text-gray-500">Free</p>
-            ) : (
-              <p className="text-lg text-gray-500">$9.90</p>
-            )}
+            {/* {totalAmount() >= 100 ? ( */}
+            <p className="text-lg text-gray-500">Free</p>
+            {/* ) : ( */}
+            {/* <p className="text-lg text-gray-500">$9.90</p> */}
+            {/* )} */}
           </div>
         </RadioGroup>
       </div>
