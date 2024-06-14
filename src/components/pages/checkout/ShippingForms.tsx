@@ -36,7 +36,7 @@ const ShippingForms = () => {
     };
 
     if (selectedMethod === "standard") {
-      setShippingFee(totalAmount() >= 150 ? 0 : 9.9);
+      setShippingFee(totalAmount() >= 100 ? 0 : 9.9);
     }
 
     setShippingDetails(updatedShippingDetails);
@@ -58,7 +58,7 @@ const ShippingForms = () => {
                 <div className="flex flex-col gap-1">
                   <p className="text-sm">Delivery within 3-6 business days.</p>
                   <p className="text-xs">
-                    Total items below $150 has a flat rate of $9.90
+                    Total items below $100 has a flat rate of $9.90
                   </p>
                 </div>
               }
@@ -66,7 +66,7 @@ const ShippingForms = () => {
             >
               Standard Shipping
             </Radio>
-            {totalAmount() >= 150 ? (
+            {totalAmount() >= 100 ? (
               <p className="text-lg text-gray-500">Free</p>
             ) : (
               <p className="text-lg text-gray-500">$9.90</p>
