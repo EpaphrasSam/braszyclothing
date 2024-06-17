@@ -121,7 +121,7 @@ const Product = ({ product }: ProductProps) => {
                 <Card
                   isPressable
                   radius="none"
-                  className="w-12"
+                  className="w-16"
                   key={size}
                   isDisabled={isDisabled}
                   onClick={() => handleUpdate("size", size)}

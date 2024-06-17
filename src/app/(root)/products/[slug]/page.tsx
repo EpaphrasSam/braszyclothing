@@ -1,6 +1,8 @@
 import Product from "@/components/pages/products/Product";
 import { getProduct } from "@/services/sanityServices";
 
+export const revalidate = 0;
+
 export default async function ProductPage({
   params,
 }: {
