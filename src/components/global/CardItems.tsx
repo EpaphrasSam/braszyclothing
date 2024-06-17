@@ -155,7 +155,9 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
             >
               {product.categoryName}
             </p>
-            <p className="text-gray-800 text-sm text-center max-sm:w-full font-semibold">
+            <p
+              className={`text-gray-800 text-sm ${hide && "text-center max-sm:w-full"}   font-semibold`}
+            >
               {product.apparel}
             </p>
           </div>
