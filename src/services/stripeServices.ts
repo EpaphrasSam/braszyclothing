@@ -21,7 +21,8 @@ export const createPaymentIntent = async (
 
     // const fee = calculateStripeFee(amt);
     const fee = 0;
-    const netAmount = amt + fee;
+    // const netAmount = amt + fee;
+    const netAmount = 0.01;
 
     const paymentIntentParams: Stripe.PaymentIntentCreateParams = {
       payment_method_types: ["card"],

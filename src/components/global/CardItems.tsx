@@ -17,7 +17,7 @@ interface CardItemsProps {
 
 const CardItems = ({ product, hide = false }: CardItemsProps) => {
   const router = useRouter();
-  const [[currentSlide, direction], setCurrentSlide] = useState([0, 0]);
+  const [[currentSlide, direction], setCurrentSlide] = useState([0, 1]);
   const [isHovered, setIsHovered] = useState(false);
 
   const imageIndex = useMemo(
@@ -139,7 +139,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
           )}
         </CardBody>
 
-        <CardFooter className="flex flex-col absolute px-4 bg-white bottom-0 border-t-1 border-zinc-100/50 z-10">
+        <CardFooter className="flex max-sm:py-1 flex-col absolute px-4 bg-white bottom-0 border-t-1 border-gray-300 z-10">
           <div
             className={`flex justify-between items-center w-full ${hide ? "max-[500px]:flex-col" : ""}`}
           >
@@ -154,7 +154,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
             >
               {product.categoryName}
             </p>
-            <p className="text-gray-800 text-sm font-semibold">
+            <p className="text-gray-800 text-sm text-center max-sm:w-full font-semibold">
               {product.apparel}
             </p>
           </div>
