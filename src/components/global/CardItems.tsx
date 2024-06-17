@@ -9,6 +9,7 @@ import useCartStore from "@/store/cart";
 import { HiArrowsPointingOut } from "react-icons/hi2";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 import { ProductType } from "@/types/SanityTypes";
+import Image from "next/image";
 
 interface CardItemsProps {
   product: ProductType;
@@ -106,7 +107,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
 
           {isHovered && (
             <motion.div
-              className="flex justify-center items-center mt-auto mb-20"
+              className="flex justify-center items-center mt-auto mb-4"
               initial={{ y: 60, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 50, opacity: 0 }}
@@ -139,7 +140,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
           )}
         </CardBody>
 
-        <CardFooter className="flex max-sm:py-1 flex-col absolute px-4 bg-white bottom-0 border-t-1 border-gray-300 z-10">
+        <CardFooter className="flex max-sm:py-1 flex-col px-4 bg-white bottom-0 border-t-1 border-gray-300 ">
           <div
             className={`flex justify-between items-center w-full ${hide ? "max-[500px]:flex-col" : ""}`}
           >
