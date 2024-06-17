@@ -302,8 +302,12 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
               <TableColumn key="orderID">Order ID</TableColumn>
               <TableColumn key="Order date">Order Date</TableColumn>
               <TableColumn key="customer">Customer</TableColumn>
-              <TableColumn key="product(s)">Product(s)</TableColumn>
-              <TableColumn key="address">Address</TableColumn>
+              <TableColumn key="product(s)" className="min-w-[200px]">
+                Product(s)
+              </TableColumn>
+              <TableColumn key="address" className="min-w-[200px]">
+                Address
+              </TableColumn>
               <TableColumn key="total">Total</TableColumn>
               <TableColumn key="status">Status</TableColumn>
               <TableColumn key="actions">Actions</TableColumn>
@@ -321,7 +325,7 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col items-start">
-                        <p>
+                        <p className="capitalize text-sm">
                           {item.isGuest ? (
                             <Chip variant="dot" size="sm" radius="sm">
                               Guest
