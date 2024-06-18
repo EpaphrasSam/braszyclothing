@@ -47,7 +47,7 @@ const CustomDot = ({ onClick, ...rest }: any) => {
       className={`custom-dot ${active ? "active" : ""}`}
       onClick={() => onClick()}
     >
-      <GoDotFill color={active ? "blue" : "gray"} />
+      <GoDotFill size={14} color={active ? "blue" : "gray"} />
     </button>
   );
 };
