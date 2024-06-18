@@ -57,7 +57,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
                   key={`slide-${index}`}
                   src={url}
                   custom={direction}
-                  initial={{ x: 0 }}
+                  initial={{ x: direction > 0 ? "100%" : "-100%" }}
                   animate={{ x: "0%" }}
                   exit={{ x: direction > 0 ? "-100%" : "100%" }}
                   transition={{

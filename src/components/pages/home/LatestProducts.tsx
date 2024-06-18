@@ -69,7 +69,7 @@ const LatestProducts = ({ products }: ProductCardProps) => {
           responsive={responsive}
           ssr={true}
           autoPlay
-          autoPlaySpeed={3000}
+          autoPlaySpeed={10000}
           infinite
           customLeftArrow={<CustomLeftArrow />}
           customRightArrow={<CustomRightArrow />}
