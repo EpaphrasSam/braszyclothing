@@ -32,13 +32,13 @@ const SearchResults = ({ data, loading, onClose }: SearchResultsProps) => {
     );
   }
 
-  console.log(data);
-
   return (
     <div className="absolute top-16 left-0 right-0 z-50 bg-white p-5 flex flex-col sm:flex-row">
       {hasApparels ? (
         <div className="w-full sm:w-1/4 pr-4 sm:border-r overflow-y-auto">
-          <h2 className="text-lg font-bold text-gray-600">Collections</h2>
+          <h2 className="text-xl text-center font-bold text-gray-600">
+            Collections
+          </h2>
           {data.apparels.map((apparel) => (
             <div key={apparel.id} className="mb-4 pl-2">
               <p className="text-base font-bold text-gray-600">
@@ -91,7 +91,9 @@ const SearchResults = ({ data, loading, onClose }: SearchResultsProps) => {
       <Divider className="my-2 sm:hidden" />
       {hasProducts ? (
         <div className="w-full sm:w-3/4 sm:pl-4 pl-0 overflow-y-auto">
-          <h2 className="text-lg font-bold text-gray-600">Products</h2>
+          <h2 className="text-xl text-center font-bold text-gray-600">
+            Products
+          </h2>
           {Object.entries(data.products).map(([categoryName, apparels]) => (
             <div key={categoryName} className="mb-4 pl-2">
               <p className="text-base font-bold text-gray-600">

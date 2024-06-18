@@ -99,7 +99,7 @@ const SearchBar = ({ isOpen, onClose }: SearchBarProps) => {
                 radius="full"
                 className="sm:w-[600px] w-full"
                 startContent={<IoSearchOutline size={20} />}
-                placeholder="Search for products"
+                placeholder="Search for products/collections"
                 classNames={{
                   label: "text-black text-[12px]",
                 }}
