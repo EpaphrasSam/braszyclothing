@@ -250,7 +250,7 @@ export const searchProducts = async (searchQuery: string) => {
   }
 
   try {
-    const query = `*[_type == "product" && name match "${searchQuery}*"]{
+    const productQuery = `*[_type == "product" && name match "${searchQuery}*"]{
       "id": _id,
       name,
       "apparel": apparel-> title,
@@ -258,10 +258,22 @@ export const searchProducts = async (searchQuery: string) => {
       "slug": slug.current,
       "imageUrls": images[].asset->url
     }`;
-    const response: SearchType[] = await client.fetch(query);
+    const apparelQuery = `*[_type == "apparel" && title match "${searchQuery}*"]{
+      "id": _id,
+      title,
+      "categories": categories[]->{
+        "slug": slug.current,
+        "title": title
+      },
+      "imageUrls": images[].asset->url,
+      "slug": slug.current
+    }`;
+    const [productResponse, apparelResponse] = await Promise.all([
+      client.fetch(productQuery),
+      client.fetch(apparelQuery),
+    ]);
 
-    const groupedByCategory = _.groupBy(response, "categoryName");
-
+    const groupedByCategory = _.groupBy(productResponse, "categoryName");
     const groupedByCategoryAndApparel = _.mapValues(
       groupedByCategory,
       (products) => {
@@ -269,7 +281,13 @@ export const searchProducts = async (searchQuery: string) => {
       }
     );
 
-    return { search: groupedByCategoryAndApparel, error: null };
+    return {
+      search: {
+        products: groupedByCategoryAndApparel,
+        apparels: apparelResponse,
+      },
+      error: null,
+    };
   } catch (error: any) {
     return { search: {}, error };
   }

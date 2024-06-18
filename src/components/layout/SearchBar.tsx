@@ -113,13 +113,16 @@ const SearchBar = ({ isOpen, onClose }: SearchBarProps) => {
                 className="cursor-pointer hover:opacity-75 flex"
               />
             </motion.div>
-            {hasSearched && query !== "" && (
-              <SearchResults
-                data={search}
-                loading={isLoading}
-                onClose={onClose}
-              />
-            )}
+            {hasSearched &&
+              query !== "" &&
+              search.products &&
+              search.apparels && (
+                <SearchResults
+                  data={search}
+                  loading={isLoading}
+                  onClose={onClose}
+                />
+              )}
           </>
         )}
       </AnimatePresence>
