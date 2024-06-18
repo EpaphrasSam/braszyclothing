@@ -42,7 +42,7 @@ const Banner = ({ banners }: BannerProps) => {
   return (
     <AnimatePresence initial={false} custom={direction}>
       <motion.img
-        className="w-full h-full object-cover absolute"
+        className="w-full h-full object-fit absolute"
         key={currentSlide}
         src={banners[imageIndex]?.image}
         custom={direction}

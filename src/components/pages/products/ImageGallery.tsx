@@ -26,7 +26,7 @@ const ImageGallery = ({ images, inStock }: ImageGalleryProps) => {
             >
               <motion.img
                 src={image}
-                className="w-full h-full object-cover  cursor-pointer"
+                className="w-full h-full border-2  border-solid object-cover  cursor-pointer"
                 whileHover={{ scale: 1.1 }}
                 alt="photo"
                 onClick={() => handleSmallImageClick(image)}
@@ -40,17 +40,19 @@ const ImageGallery = ({ images, inStock }: ImageGalleryProps) => {
           <motion.img
             key={bigImage}
             src={bigImage}
-            className="w-full h-full rounded-none object-fit"
+            className="w-full h-full border-2 border-solid rounded-none object-fit"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
         </AnimatePresence>
-        <span
-          className={`absolute top-4 left-4 bg-black bg-opacity-50 px-2 py-1 text-sm uppercase tracking-wider text-white rounded-md`}
-        >
-          {inStock ? "In Stock" : "Sold Out"}
-        </span>
+        {!inStock && (
+          <span
+            className={`absolute top-4 left-4 bg-black bg-opacity-50 px-2 py-1 text-sm uppercase tracking-wider text-white rounded-md`}
+          >
+            Sold Out
+          </span>
+        )}
       </div>
     </div>
   );

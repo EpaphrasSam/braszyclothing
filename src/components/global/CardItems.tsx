@@ -155,11 +155,13 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
             </p>
           </div>
         </CardFooter>
-        <span
-          className={`absolute top-2 left-2 bg-black px-2 py-1  bg-opacity-50 text-sm uppercase tracking-wider text-white rounded-md -rotate-12`}
-        >
-          {product.inStock ? "In Stock" : "Sold Out"}
-        </span>
+        {!product.inStock && (
+          <span
+            className={`absolute top-2 left-2 bg-black px-2 py-1  bg-opacity-50 text-sm uppercase tracking-wider text-white rounded-md -rotate-12`}
+          >
+            Sold Out
+          </span>
+        )}
       </Card>
     </div>
   );
