@@ -47,7 +47,7 @@ const ImageGallery = ({ images, inStock }: ImageGalleryProps) => {
           />
         </AnimatePresence>
         <span
-          className={`absolute top-0 left-0 ${inStock ? "bg-green-500" : "bg-red-500"} px-3 py-1.5 text-sm uppercase tracking-wider text-white`}
+          className={`absolute top-4 left-4 bg-black bg-opacity-50 px-2 py-1 text-sm uppercase tracking-wider text-white rounded-md`}
         >
           {inStock ? "In Stock" : "Sold Out"}
         </span>

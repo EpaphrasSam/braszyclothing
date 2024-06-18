@@ -148,13 +148,12 @@ const Product = ({ product }: ProductProps) => {
                 <Card
                   isPressable
                   radius="none"
-                  className="w-fit"
                   key={color}
                   isDisabled={isDisabled}
                   onClick={() => handleUpdate("color", color)}
                 >
                   <CardBody
-                    className={`text-center capitalize ${
+                    className={`text-center p-4 capitalize ${
                       cartItem && cartItem.color === color
                         ? "bg-gray-500 text-white"
                         : ""
@@ -195,45 +194,6 @@ const Product = ({ product }: ProductProps) => {
         <div className="mt-8 text-base text-gray-500 tracking-wide">
           <p className="text-sm font-semibold text-gray-400">Description</p>
           <p className="mt-2 text-base text-gray-700 tracking-wide">
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
-            {product.description}
             {product.description}
           </p>
         </div>

@@ -156,7 +156,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
           </div>
         </CardFooter>
         <span
-          className={`absolute top-0 left-0 rounded-br-lg rounded-tl-none ${product.inStock ? "bg-green-500" : "bg-red-500"} px-3 py-1.5 text-sm uppercase tracking-wider text-white`}
+          className={`absolute top-2 left-2 bg-black px-2 py-1  bg-opacity-50 text-sm uppercase tracking-wider text-white rounded-md -rotate-12`}
         >
           {product.inStock ? "In Stock" : "Sold Out"}
         </span>
