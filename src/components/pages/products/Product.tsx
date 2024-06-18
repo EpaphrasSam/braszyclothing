@@ -116,7 +116,7 @@ const Product = ({ product }: ProductProps) => {
         <div className="mb-6 flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <div className="font-bold text-gray-700 text-xl">Size</div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               {product.sizes.map((size) => (
                 <Card
                   isPressable
@@ -141,7 +141,7 @@ const Product = ({ product }: ProductProps) => {
           </div>
           <div className="flex flex-col gap-2">
             <div className="font-bold text-gray-700 text-xl">Colors</div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               {product.colors.map((color) => (
                 <Card
                   isPressable

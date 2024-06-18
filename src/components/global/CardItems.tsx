@@ -1,43 +1,68 @@
 "use client";
 
 import React, { useCallback, useMemo, useState } from "react";
-import { Card, CardFooter, Button, Chip, CardBody } from "@nextui-org/react";
-import { AnimatePresence, motion, wrap } from "framer-motion";
+import {
+  Card,
+  CardFooter,
+  Button,
+  Chip,
+  CardBody,
+  Image,
+} from "@nextui-org/react";
 import { CiShoppingCart } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cart";
 import { HiArrowsPointingOut } from "react-icons/hi2";
-import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 import { ProductType } from "@/types/SanityTypes";
-import Image from "next/image";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import { CustomLeftArrow, CustomRightArrow } from "./CustomArrows";
+import { motion, wrap } from "framer-motion";
+import { GoDotFill, GoDot } from "react-icons/go";
 
 interface CardItemsProps {
   product: ProductType;
   hide?: boolean;
 }
 
+const responsive = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 1,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 1,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
+};
+
+const CustomDot = ({ onClick, ...rest }: any) => {
+  const { onMove, index, active } = rest;
+  return (
+    <button
+      className={`custom-dot ${active ? "active" : ""}`}
+      onClick={() => onClick()}
+    >
+      <GoDotFill color={active ? "blue" : "gray"} />
+    </button>
+  );
+};
+
 const CardItems = ({ product, hide = false }: CardItemsProps) => {
   const router = useRouter();
-  const [[currentSlide, direction], setCurrentSlide] = useState([0, 1]);
   const [isHovered, setIsHovered] = useState(false);
+  const [[currentSlide, direction], setCurrentSlide] = useState([0, 1]);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const isDisabled = !product.inStock;
 
   const imageIndex = useMemo(
     () => wrap(0, product.imageUrls.length, currentSlide),
     [currentSlide, product.imageUrls.length]
   );
-
-  const paginate = useCallback(
-    (newDirection: number) => {
-      const newIndex = currentSlide + newDirection;
-      if (newIndex >= 0 && newIndex < product.imageUrls.length) {
-        setCurrentSlide([newIndex, newDirection]);
-      }
-    },
-    [currentSlide, product.imageUrls.length]
-  );
-
-  const addToCart = useCartStore((state) => state.addToCart);
-  const isDisabled = !product.inStock;
 
   return (
     <div className="flex flex-row w-full justify-center gap-4 flex-wrap">
@@ -48,58 +73,28 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <CardBody className="relative p-0 overflow-hidden">
-          <AnimatePresence custom={direction} initial={false}>
-            {product.imageUrls.map((url, index) =>
-              index === imageIndex ? (
-                <motion.img
-                  className="w-full h-full object-cover absolute"
-                  key={`slide-${index}`}
-                  src={url}
-                  custom={direction}
-                  initial={{ x: direction > 0 ? "100%" : "-100%" }}
-                  animate={{ x: "0%" }}
-                  exit={{ x: direction > 0 ? "-100%" : "100%" }}
-                  transition={{
-                    x: { type: "spring", stiffness: 300, damping: 30 },
-                    duration: 0.5,
-                  }}
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={1}
-                  onDragEnd={(e, { offset, velocity }) => {
-                    const swipe = Math.abs(offset.x) * velocity.x;
-                    if (swipe < -1000) {
-                      paginate(1);
-                    } else if (swipe > 1000) {
-                      paginate(-1);
-                    }
-                  }}
-                />
-              ) : null
-            )}
-          </AnimatePresence>
-
-          {product.imageUrls.length > 1 && imageIndex > 0 && (
-            <div className="absolute top-16 left-1">
-              <MdArrowBackIosNew
-                size={18}
-                onClick={() => paginate(-1)}
-                className="cursor-pointer text-gray-700 transition ease-in-out duration-300 hover:opacity-50"
+        <CardBody className="relative p-0 overflow-hidden ">
+          <Carousel
+            responsive={responsive}
+            ssr={true}
+            customLeftArrow={<CustomLeftArrow isInnerArrow={true} />}
+            customRightArrow={<CustomRightArrow isInnerArrow={true} />}
+            showDots={true}
+            customDot={<CustomDot />}
+            swipeable
+            afterChange={(previousSlide, { currentSlide }) =>
+              setCurrentSlide([currentSlide, direction])
+            }
+          >
+            {product.imageUrls.map((url, index) => (
+              <motion.img
+                key={`slide-${index}`}
+                className="w-full h-[231px] object-cover object-center"
+                src={url}
+                alt={`Product Image ${index + 1}`}
               />
-            </div>
-          )}
-
-          {product.imageUrls.length > 1 &&
-            imageIndex < product.imageUrls.length - 1 && (
-              <div className="absolute top-16 right-1">
-                <MdArrowForwardIos
-                  size={18}
-                  onClick={() => paginate(1)}
-                  className="cursor-pointer text-gray-700 transition ease-in-out duration-300 hover:opacity-50"
-                />
-              </div>
-            )}
+            ))}
+          </Carousel>
 
           <Chip size="sm" className="absolute top-2 right-2 text-sm font-bold">
             {imageIndex + 1}/{product.imageUrls.length}
@@ -107,7 +102,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
 
           {isHovered && (
             <motion.div
-              className="flex justify-center items-center mt-auto mb-4"
+              className="flex justify-center items-center absolute bottom-0 left-0 right-0 mt-auto mb-4"
               initial={{ y: 60, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 50, opacity: 0 }}
@@ -140,7 +135,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
           )}
         </CardBody>
 
-        <CardFooter className="flex max-sm:py-1 flex-col px-4 bg-white bottom-0 border-t-1 border-gray-300 ">
+        <CardFooter className="flex mb-1 flex-col sm:px-4 px-2 bg-white bottom-0 border-t-1 border-gray-300 ">
           <div
             className={`flex justify-between items-center w-full ${hide ? "max-[500px]:flex-col" : ""}`}
           >

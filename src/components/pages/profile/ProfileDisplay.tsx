@@ -25,7 +25,7 @@ const sections = [
     href: "/shipping-address",
     icon: <MdOutlineLocationOn size={32} className="text-gray-800" />,
     title: "Your Addresses",
-    description: "Edit, remove and add address",
+    description: "Edit and add address",
   },
   // {
   //   href: "#payments",

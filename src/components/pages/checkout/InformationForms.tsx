@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { Button, Divider, Input } from "@nextui-org/react";
 import { CiMail } from "react-icons/ci";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { MdOutlinePhone } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { validateShippingDetails } from "@/helpers/validators";
@@ -65,6 +65,7 @@ const InformationForms = ({ addresses }: InformationFormsProps) => {
     setError,
     reset,
     clearErrors,
+    control,
   } = useForm<FieldValues>({
     defaultValues: formDefaultValues,
   });
@@ -72,6 +73,30 @@ const InformationForms = ({ addresses }: InformationFormsProps) => {
   useEffect(() => {
     reset(formDefaultValues);
   }, [formDefaultValues]);
+
+  const watchedValues = useWatch({ control });
+
+  const prevWatchedValues = useRef<FieldValues>(formDefaultValues);
+
+  const updateShippingDetails = useCallback(() => {
+    const currentValues = watchedValues as ShippingDetails;
+    const prevValues = prevWatchedValues.current as ShippingDetails;
+
+    const hasChanged = Object.keys(currentValues).some(
+      (key) =>
+        currentValues[key as keyof ShippingDetails] !==
+        prevValues[key as keyof ShippingDetails]
+    );
+
+    if (hasChanged) {
+      setShippingDetails(currentValues);
+      prevWatchedValues.current = currentValues;
+    }
+  }, [watchedValues]);
+
+  useEffect(() => {
+    updateShippingDetails();
+  }, [updateShippingDetails]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const validationErrors = validateShippingDetails(data);
