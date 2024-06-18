@@ -117,11 +117,13 @@ const SearchBar = ({ isOpen, onClose }: SearchBarProps) => {
               query !== "" &&
               search.products &&
               search.apparels && (
-                <SearchResults
-                  data={search}
-                  loading={isLoading}
-                  onClose={onClose}
-                />
+                <div className="fixed top-16 left-0 right-0 z-40">
+                  <SearchResults
+                    data={search}
+                    loading={isLoading}
+                    onClose={onClose}
+                  />
+                </div>
               )}
           </>
         )}

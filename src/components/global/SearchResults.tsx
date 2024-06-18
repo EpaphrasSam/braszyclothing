@@ -18,7 +18,7 @@ const SearchResults = ({ data, loading, onClose }: SearchResultsProps) => {
 
   if (loading) {
     return (
-      <div className="py-4 bg-white flex justify-center items-center absolute top-16 left-0 right-0 z-50">
+      <div className="py-4 bg-white flex justify-center items-center">
         <Spinner />
       </div>
     );
@@ -26,17 +26,17 @@ const SearchResults = ({ data, loading, onClose }: SearchResultsProps) => {
 
   if (!loading && !hasApparels && !hasProducts) {
     return (
-      <div className="py-4 bg-white flex justify-center items-center absolute top-16 left-0 right-0 z-50">
+      <div className="py-4 bg-white flex justify-center items-center">
         No results found
       </div>
     );
   }
 
   return (
-    <div className="absolute top-16 left-0 right-0 z-50 bg-white p-5 flex flex-col sm:flex-row">
+    <div className="bg-white p-5 flex flex-col sm:flex-row">
       {hasApparels ? (
         <div className="w-full sm:w-1/4 pr-4 sm:border-r overflow-y-auto">
-          <h2 className="text-xl text-center font-bold text-gray-600">
+          <h2 className="text-xl pb-2 text-center font-bold text-gray-600">
             Collections
           </h2>
           {data.apparels.map((apparel) => (
@@ -91,7 +91,7 @@ const SearchResults = ({ data, loading, onClose }: SearchResultsProps) => {
       <Divider className="my-2 sm:hidden" />
       {hasProducts ? (
         <div className="w-full sm:w-3/4 sm:pl-4 pl-0 overflow-y-auto">
-          <h2 className="text-xl text-center font-bold text-gray-600">
+          <h2 className="text-xl pb-2 text-center font-bold text-gray-600">
             Products
           </h2>
           {Object.entries(data.products).map(([categoryName, apparels]) => (
