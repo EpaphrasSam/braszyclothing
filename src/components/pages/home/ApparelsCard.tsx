@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { ApparelType } from "@/types/SanityTypes";
-import { Card, CardFooter, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import Carousel from "react-multi-carousel";
 import { motion } from "framer-motion";
 import ImageTransition from "@/components/global/ImageTransition";
@@ -84,18 +84,20 @@ const ApparelsCard = ({ apparels }: ApparelsCardProps) => {
                 className="m-2 w-[250px] h-[350px]"
                 isFooterBlurred
               >
-                <CardHeader className="text-gray-800 font-semibold text-lg">
+                <CardHeader className="text-gray-800 flex justify-center font-semibold text-lg">
                   {apparel.title}
                 </CardHeader>
-                <motion.div
-                  className="relative w-full h-full"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <ImageTransition images={apparel.imageUrls} />
-                </motion.div>
-                <CardFooter className="absolute px-4 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10">
+                <CardBody className="relative p-0 overflow-hidden ">
+                  <motion.div
+                    className="relative w-full h-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ImageTransition images={apparel.imageUrls} />
+                  </motion.div>
+                </CardBody>
+                <CardFooter className=" px-4 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10">
                   <div className="flex w-full justify-evenly">
                     {apparel.categories.map((category) => (
                       <div

@@ -82,6 +82,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
             showDots={true}
             customDot={<CustomDot />}
             swipeable
+            transitionDuration={500}
             afterChange={(previousSlide, { currentSlide }) =>
               setCurrentSlide([currentSlide, direction])
             }
@@ -89,17 +90,15 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
             {product.imageUrls.map((url, index) => (
               <motion.img
                 key={`slide-${index}`}
-                className="w-full h-[231px] object-cover object-center"
+                className="w-full h-[231px] object-fit object-center"
                 src={url}
                 alt={`Product Image ${index + 1}`}
               />
             ))}
           </Carousel>
-
           <Chip size="sm" className="absolute top-2 right-2 text-sm font-bold">
             {imageIndex + 1}/{product.imageUrls.length}
           </Chip>
-
           {isHovered && (
             <motion.div
               className="flex justify-center items-center absolute bottom-0 left-0 right-0 mt-auto mb-4"
@@ -134,7 +133,6 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
             </motion.div>
           )}
         </CardBody>
-
         <CardFooter className="flex mb-1 flex-col sm:px-4 px-2 bg-white bottom-0 border-t-1 border-gray-300 ">
           <div
             className={`flex justify-between items-center w-full ${hide ? "max-[500px]:flex-col" : ""}`}

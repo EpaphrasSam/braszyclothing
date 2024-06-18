@@ -343,7 +343,9 @@ const NavBar = () => {
             />
           </NavbarItem>
         </NavbarContent>
-        <NavbarMenu className="pt-8">{NavbarLinks.map(menuLink)}</NavbarMenu>
+        <NavbarMenu className="bg-white max-md:pt-10">
+          {NavbarLinks.map(menuLink)}
+        </NavbarMenu>
       </Navbar>
       {isSearchOpen && (
         <SearchBar

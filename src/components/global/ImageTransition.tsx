@@ -16,14 +16,14 @@ const ImageTransition = ({ images }: { images: string[] }) => {
       onHoverEnd={() => setHovered(false)}
     >
       <motion.img
-        className="w-full h-full object-cover absolute"
+        className="w-full h-full object-fit absolute"
         src={images[0]}
         initial={{ opacity: 0 }}
         animate={{ opacity: hovered ? 0 : 1 }}
         transition={{ duration: 0.5 }}
       />
       <motion.img
-        className="w-full h-full object-cover absolute"
+        className="w-full h-full object-fit absolute"
         src={images[1]}
         initial={{ opacity: 0 }}
         animate={{ opacity: hovered ? 1 : 0 }}
