@@ -74,29 +74,29 @@ const InformationForms = ({ addresses }: InformationFormsProps) => {
     reset(formDefaultValues);
   }, [formDefaultValues]);
 
-  const watchedValues = useWatch({ control });
+  // const watchedValues = useWatch({ control });
 
-  const prevWatchedValues = useRef<FieldValues>(formDefaultValues);
+  // const prevWatchedValues = useRef<FieldValues>(formDefaultValues);
 
-  const updateShippingDetails = useCallback(() => {
-    const currentValues = watchedValues as ShippingDetails;
-    const prevValues = prevWatchedValues.current as ShippingDetails;
+  // const updateShippingDetails = useCallback(() => {
+  //   const currentValues = watchedValues as ShippingDetails;
+  //   const prevValues = prevWatchedValues.current as ShippingDetails;
 
-    const hasChanged = Object.keys(currentValues).some(
-      (key) =>
-        currentValues[key as keyof ShippingDetails] !==
-        prevValues[key as keyof ShippingDetails]
-    );
+  //   const hasChanged = Object.keys(currentValues).some(
+  //     (key) =>
+  //       currentValues[key as keyof ShippingDetails] !==
+  //       prevValues[key as keyof ShippingDetails]
+  //   );
 
-    if (hasChanged) {
-      setShippingDetails(currentValues);
-      prevWatchedValues.current = currentValues;
-    }
-  }, [watchedValues]);
+  //   if (hasChanged) {
+  //     setShippingDetails(currentValues);
+  //     prevWatchedValues.current = currentValues;
+  //   }
+  // }, [watchedValues]);
 
-  useEffect(() => {
-    updateShippingDetails();
-  }, [updateShippingDetails]);
+  // useEffect(() => {
+  //   updateShippingDetails();
+  // }, [updateShippingDetails]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const validationErrors = validateShippingDetails(data);
