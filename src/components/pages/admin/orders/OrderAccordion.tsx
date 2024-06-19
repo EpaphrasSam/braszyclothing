@@ -19,32 +19,34 @@ const ProductItem = ({ product }: ProductItemProps) => {
   return (
     <div className="flex justify-between">
       <div className="flex gap-2">
-        <Image
-          src={product.images[0]}
-          alt={product.name || "Product Image"}
-          width={80}
-          height={80}
-          className="w-16 max-lg:hidden h-16 object-cover object-center rounded-sm"
-        />
+        {product?.images && (
+          <Image
+            src={product?.images[0] || ""}
+            alt={product?.name || "Product Image"}
+            width={80}
+            height={80}
+            className="w-16 max-lg:hidden h-16 object-cover object-center rounded-sm"
+          />
+        )}
 
         <div className="flex flex-col">
           <div className="flex flex-col">
             <div className="text-sm text-gray-800 font-semibold">
-              {product.name}
+              {product?.name}
             </div>
           </div>
 
           <div className="flex gap-1 items-center">
-            <p className="text-sm">${product.price}</p>
+            <p className="text-sm">${product?.price}</p>
             <p className="text-[14px] justify-end flex text-gray-500">
-              x {product.quantity}
+              x {product?.quantity}
             </p>
           </div>
           <div className="mt-1 capitalize text-xs text-gray-600">
-            Color: <span className="text-black">{product.color}</span>
+            Color: <span className="text-black">{product?.color}</span>
           </div>
           <div className="text-xs text-gray-600">
-            Size: <span className="text-black">{product.size}</span>
+            Size: <span className="text-black">{product?.size}</span>
           </div>
         </div>
       </div>

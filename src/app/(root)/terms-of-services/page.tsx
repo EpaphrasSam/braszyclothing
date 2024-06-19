@@ -76,6 +76,12 @@ export default function TermsOfServices() {
             Payment must be made at the time of order placement. We accept
             various payment methods as indicated on the website.
           </li>
+          <li>
+            Payment is processed through Stripe. All intended charges will be
+            deducted in USD. If payment is made in other currencies, appropriate
+            conversion and deduction will be made according to Stripe&apos;s
+            policy and principles.
+          </li>
         </ul>
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">
@@ -129,7 +135,7 @@ export default function TermsOfServices() {
         <h2 className="text-2xl font-semibold mt-6 mb-2">10. Governing Law</h2>
         <p className="mb-4">
           These terms shall be governed by and construed in accordance with the
-          laws of [Your Country/State], without regard to its conflict of law
+          laws of Canada-Ontario, without regard to its conflict of law
           principles.
         </p>
 
