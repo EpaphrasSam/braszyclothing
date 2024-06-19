@@ -26,7 +26,7 @@ const AdminHeader = () => {
             className="flex max-sm:text-sm items-center gap-3 font-semibold hover:scale-105 transition ease-in-out duration-300"
           >
             <IoReturnDownBack className="text-2xl" />
-            Go Back
+            <span className="hidden sm:block">Go Back</span>
           </Link>
         </NavbarContent>
         <NavbarContent justify="center">
