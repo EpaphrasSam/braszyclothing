@@ -32,7 +32,7 @@ export const createPaymentIntent = async (
         fee: fee.toFixed(2),
         net_amount: netAmount.toFixed(2),
         shippingDetails: JSON.stringify(shippingDetails),
-        ...(referralId !== undefined && { promotekit_referral: referralId }),
+        ...(referralId && { promotekit_referral: referralId }),
       },
     };
 

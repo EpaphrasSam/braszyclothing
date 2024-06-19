@@ -1,6 +1,7 @@
 import { stripe } from "@/utils/stripe";
 import axios from "axios";
 import { NextResponse } from "next/server";
+import Stripe from "stripe";
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 
@@ -19,6 +20,18 @@ export async function POST(request: Request) {
       signature!,
       webhookSecret
     );
+
+    // if (event.type === "charge.succeeded") {
+    //   const charge = event.data.object as Stripe.Charge;
+    //   const metadata: any = charge.metadata;
+
+    //   const promotekitReferral = metadata.promotekit_referral;
+    //   const shippingDetails = JSON.parse(metadata.shippingDetails);
+
+    //   if (promotekitReferral) {
+    //     window.promotekit.refer(shippingDetails.email);
+    //   }
+    // }
 
     return new NextResponse("Success", { status: 200 });
   } catch (error: any) {

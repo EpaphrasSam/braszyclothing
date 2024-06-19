@@ -265,6 +265,10 @@ const CardForms = ({
           }
         }
 
+        if (window.promotekit_referral) {
+          window.promotekit.refer(shippingDetails.email!);
+        }
+
         router.replace("/cart?success=true");
       } else {
         router.replace("/cart?success=true");
