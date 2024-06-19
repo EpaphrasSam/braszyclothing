@@ -40,6 +40,7 @@ const CustomModal = ({
       isOpen={isOpen}
       radius="sm"
       onOpenChange={onClose}
+      placement="center"
       motionProps={{
         variants: {
           enter: {
