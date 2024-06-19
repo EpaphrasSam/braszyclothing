@@ -122,12 +122,15 @@ const CardForms = ({
     const isPaymentMethodSelected = !!selectedPaymentMethod;
     const hasEmail = email && email.trim() !== "";
 
+    if (!hasEmail) {
+      return !isPaymentElementComplete;
+    }
+
     return (
       !stripe ||
       !elements ||
       isProcessing ||
       paymentElementError ||
-      !hasEmail ||
       (isNewCardSelected && !isPaymentElementComplete) ||
       (!isNewCardSelected && !isPaymentMethodSelected)
     );
