@@ -8,7 +8,7 @@ export const CustomLeftArrow = ({
 }: {
   onClick?: () => void;
   isInnerArrow?: boolean;
-  size: number;
+  size?: number;
 }) => {
   if (isInnerArrow) {
     return (
@@ -40,7 +40,7 @@ export const CustomRightArrow = ({
 }: {
   onClick?: () => void;
   isInnerArrow?: boolean;
-  size: number;
+  size?: number;
 }) => {
   if (isInnerArrow) {
     return (
