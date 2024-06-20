@@ -4,15 +4,17 @@ import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 export const CustomLeftArrow = ({
   onClick,
   isInnerArrow,
+  size = 18,
 }: {
   onClick?: () => void;
   isInnerArrow?: boolean;
+  size: number;
 }) => {
   if (isInnerArrow) {
     return (
       <div className="absolute top-16 left-1 transform -translate-y-1/2 cursor-pointer z-10">
         <MdArrowBackIosNew
-          size={18}
+          size={size}
           onClick={onClick}
           className="text-gray-700 transition ease-in-out duration-300 hover:opacity-50"
         />
@@ -34,15 +36,17 @@ export const CustomLeftArrow = ({
 export const CustomRightArrow = ({
   onClick,
   isInnerArrow,
+  size = 18,
 }: {
   onClick?: () => void;
   isInnerArrow?: boolean;
+  size: number;
 }) => {
   if (isInnerArrow) {
     return (
       <div className="absolute top-16 right-1 transform -translate-y-1/2 cursor-pointer z-10">
         <MdArrowForwardIos
-          size={18}
+          size={size}
           onClick={onClick}
           className="text-gray-700 transition ease-in-out duration-300 hover:opacity-50"
         />

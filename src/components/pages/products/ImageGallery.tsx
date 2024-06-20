@@ -75,10 +75,14 @@ const ImageGallery = ({ images, inStock }: ImageGalleryProps) => {
         </AnimatePresence>
 
         {currentIndex > 0 && (
-          <CustomLeftArrow onClick={handlePrev} isInnerArrow={true} />
+          <CustomLeftArrow onClick={handlePrev} isInnerArrow={true} size={30} />
         )}
         {currentIndex < images.length - 1 && (
-          <CustomRightArrow onClick={handleNext} isInnerArrow={true} />
+          <CustomRightArrow
+            onClick={handleNext}
+            isInnerArrow={true}
+            size={30}
+          />
         )}
 
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
