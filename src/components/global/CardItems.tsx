@@ -140,7 +140,9 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
             <p className="text-black text-sm font-semibold line-clamp-1">
               {product.name}
             </p>
-            <p className="text-black text-sm font-semibold">${product.price}</p>
+            <p className="text-black text-sm font-semibold pl-3">
+              ${product.price}
+            </p>
           </div>
           <div className="flex justify-between items-center w-full">
             <p
