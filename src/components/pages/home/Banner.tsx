@@ -57,7 +57,7 @@ const Banner = ({ banners }: BannerProps) => {
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={1}
       />
-      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
