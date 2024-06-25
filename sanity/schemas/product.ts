@@ -87,17 +87,17 @@ export default defineType({
       validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
-      name: "category",
-      type: "reference",
-      title: "Category",
-      to: [{ type: "category" }],
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
       name: "apparel",
       type: "reference",
       title: "Apparel",
       to: [{ type: "apparel" }],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "category",
+      type: "reference",
+      title: "Category",
+      to: [{ type: "category" }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
