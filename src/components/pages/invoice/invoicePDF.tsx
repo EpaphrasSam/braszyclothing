@@ -87,10 +87,11 @@ const InvoicePDF = ({
   fee,
   shippingFee,
   netAmount,
+  createdAt,
 }: InvoiceProps) => {
-  const invoiceDate = new Date().toLocaleDateString();
-
-  console.log(totalAmount, netAmount, fee, discount);
+  const invoiceDate = createdAt
+    ? new Date(createdAt).toLocaleDateString()
+    : new Date().toLocaleDateString();
 
   return (
     <Document>

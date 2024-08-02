@@ -9,11 +9,15 @@ import {
   ModalFooter,
   ModalHeader,
   Skeleton,
+  Button,
 } from "@nextui-org/react";
 import Image from "next/image";
 import React from "react";
 import { CiDeliveryTruck } from "react-icons/ci";
+import { FaFilePdf } from "react-icons/fa";
 import useSWR from "swr";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 interface OrderDetailsProps {
   order: OrderWithProductDetails;
@@ -36,6 +40,39 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
     `/api/orders/${order.paymentIntent?.paymentIntentId}`,
     fetcher
   );
+
+  const handleDownloadInvoice = async (orderId: string) => {
+    try {
+      const response = await axios.post(
+        `/api/invoice`,
+        { orderId },
+        {
+          responseType: "blob",
+          timeout: 60000,
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to download invoice");
+      }
+
+      const orderID = response.headers["orderid"];
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Invoice_${orderID}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
+      if (error.message === "Network Error") {
+        toast.error("Download blocked by browser extension");
+      } else {
+        toast.error("Failed to download invoice");
+      }
+    }
+  };
 
   return (
     <Modal
@@ -202,6 +239,15 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
                 </p>
               </div>
             </div>
+          </div>
+          <div className="flex justify-end mt-4">
+            <Button
+              color="primary"
+              startContent={<FaFilePdf />}
+              onClick={() => handleDownloadInvoice(order.orderID)}
+            >
+              Download Invoice
+            </Button>
           </div>
         </ModalFooter>
       </ModalContent>

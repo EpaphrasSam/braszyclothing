@@ -23,11 +23,18 @@ import {
 import Link from "next/link";
 import React, { useState, useEffect, useMemo } from "react";
 import OrderAccordion from "./OrderAccordion";
-import { FaShippingFast, FaBan, FaCheck, FaEllipsisV } from "react-icons/fa";
+import {
+  FaShippingFast,
+  FaBan,
+  FaCheck,
+  FaEllipsisV,
+  FaFilePdf,
+} from "react-icons/fa";
 import CustomModal from "@/components/global/CustomModal";
 import toast from "react-hot-toast";
 import { updateOrderStatus } from "@/services/adminServices";
 import { AiFillCloseCircle } from "react-icons/ai";
+import axios from "axios";
 
 interface OrdersTableProps {
   orders: Orders[];
@@ -181,6 +188,7 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
             key="cancel"
             color="danger"
             startContent={<FaBan />}
+            showDivider
             onClick={() => handleActionClick(orderId, "Cancel")}
           >
             Cancel
@@ -201,6 +209,7 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
             key="cancel"
             color="danger"
             startContent={<FaBan />}
+            showDivider
             onClick={() => handleActionClick(orderId, "Cancel")}
           >
             Cancel
@@ -215,11 +224,51 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
     return items;
   };
 
+  const handleDownloadInvoice = async (orderId: string) => {
+    try {
+      const response = await axios.post(
+        `/api/invoice`,
+        { orderId },
+        {
+          responseType: "blob",
+          timeout: 60000,
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to download invoice");
+      }
+
+      const orderID = response.headers["orderid"];
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Invoice_${orderID}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
+      if (error.message === "Network Error") {
+        toast.error("Download blocked by browser extension");
+      } else {
+        toast.error("Failed to download invoice");
+      }
+    }
+  };
+
   const renderDropdownItems = (orderId: string, shippingStatus: string) => {
     const items = renderDropdownOneOrBackticksItems(orderId, shippingStatus);
-    if (!items.length) {
-      return <DropdownItem></DropdownItem>;
-    }
+    items.push(
+      <DropdownItem
+        key="download-invoice"
+        color="default"
+        startContent={<FaFilePdf />}
+        onClick={() => handleDownloadInvoice(orderId)}
+      >
+        Download Invoice
+      </DropdownItem>
+    );
     return items;
   };
 

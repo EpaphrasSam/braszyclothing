@@ -17,6 +17,7 @@ export const encryptOTP = (otp: string, email: string): string => {
   const algorithm = "aes-256-cbc";
   const key = crypto.createHash("sha256").update(email).digest();
   const iv = crypto.randomBytes(16);
+  // @ts-ignore
   const cipher = crypto.createCipheriv(algorithm, key, iv);
   let encrypted = cipher.update(otp, "utf8", "hex");
   encrypted += cipher.final("hex");
@@ -26,12 +27,15 @@ export const encryptOTP = (otp: string, email: string): string => {
 export const decryptOTP = (encryptedOtp: string, email: string): string => {
   const [iv, content] = encryptedOtp.split(":");
   const key = crypto.createHash("sha256").update(email).digest();
+  // @ts-ignore
   const decipher = crypto.createDecipheriv(
     "aes-256-cbc",
     key,
     Buffer.from(iv, "hex")
   );
+  // @ts-ignore
   let decrypted = decipher.update(Buffer.from(content, "hex"));
+  // @ts-ignore
   decrypted = Buffer.concat([decrypted, decipher.final()]);
   return decrypted.toString();
 };
@@ -207,6 +211,40 @@ export const addAudienceEmail = async (email: string): Promise<void> => {
     });
   } catch (error) {
     throw Error("Error adding email to audience");
+  }
+};
+
+export const sendAdminNotificationEmail = async (
+  orderID: string
+): Promise<void> => {
+  const message = `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+      <div style="background-color: #f7f7f7; padding: 20px; border-radius: 8px;">
+        <h2 style="color: #333;">New Order Received</h2>
+        <p style="font-size: 16px; color: #555;">
+          Hello Admin,
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          A new order with Order ID <strong>#${orderID}</strong> has been placed. Please check the admin dashboard for more details.
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          Thank you.
+        </p>
+      </div>
+    </div>
+  `;
+  try {
+    const { error, data }: any = await resend.emails.send({
+      from: `Braszy Clothing <${process.env.RESEND_EMAIL}>`,
+      to: ["braszy957@gmail.com"],
+      subject: "New Order Received",
+      html: message,
+    });
+    if (error) {
+      throw error;
+    }
+  } catch (error: any) {
+    throw error;
   }
 };
 

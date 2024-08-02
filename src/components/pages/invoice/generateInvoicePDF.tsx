@@ -17,6 +17,7 @@ export async function generateInvoicePDF(invoiceProps: InvoiceProps) {
       chunks.push(chunk);
     }
   }
+  // @ts-ignore
   const arrayBuffer = new Uint8Array(Buffer.concat(chunks));
 
   return arrayBuffer;

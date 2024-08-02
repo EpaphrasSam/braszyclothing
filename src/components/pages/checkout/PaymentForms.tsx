@@ -192,7 +192,6 @@ const CardForms = ({
 
           if (result?.error) throw new Error(result.error);
         } catch (error) {
-          console.error(error);
           setIsProcessing(false);
           return;
         }

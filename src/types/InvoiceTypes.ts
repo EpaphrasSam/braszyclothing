@@ -10,4 +10,5 @@ export interface InvoiceProps {
   fee: number;
   shippingFee: number;
   netAmount: number;
+  createdAt?: Date;
 }

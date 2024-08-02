@@ -8,6 +8,7 @@ import { Session } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { client } from "../../sanity/lib/client";
 import { OrderWithProductDetails, Product } from "@/types/OrderTypes";
+import { sendAdminNotificationEmail } from "@/utils/email";
 
 export const saveShippingAddress = async (
   data: ShippingDetails,
@@ -183,6 +184,8 @@ export const createOrder = async (
         })),
       });
     });
+
+    await sendAdminNotificationEmail(orderID);
 
     return {
       orderID,
