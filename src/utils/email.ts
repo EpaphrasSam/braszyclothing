@@ -241,10 +241,12 @@ export const sendAdminNotificationEmail = async (
       html: message,
     });
     if (error) {
-      throw error;
+      console.error(error);
+      return;
     }
   } catch (error: any) {
-    throw error;
+    console.error(error);
+    return;
   }
 };
 
