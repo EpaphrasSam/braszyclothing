@@ -22,11 +22,24 @@ export const createPaymentIntent = async (
     const fee = calculateStripeFee(amt);
     const netAmount = amt + fee;
 
+    // Determine the currency based on the payment method types
+    const paymentMethodTypes = [
+      "card",
+      "afterpay_clearpay",
+      "klarna",
+      "affirm",
+    ];
+    let currency = "usd";
+
+    if (paymentMethodTypes.includes("afterpay_clearpay")) {
+      currency = "cad"; // Change to a supported currency for afterpay_clearpay
+    }
+
     const paymentIntentParams: Stripe.PaymentIntentCreateParams = {
-      payment_method_types: ["card", "afterpay_clearpay", "klarna", "affirm"],
+      payment_method_types: paymentMethodTypes,
       // automatic_payment_methods: { enabled: true },
       amount: Math.round(netAmount * 100),
-      currency: "usd",
+      currency: currency,
       metadata: {
         fee: fee.toFixed(2),
         net_amount: netAmount.toFixed(2),
