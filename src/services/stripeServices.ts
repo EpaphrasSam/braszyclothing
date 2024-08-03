@@ -23,7 +23,8 @@ export const createPaymentIntent = async (
     const netAmount = amt + fee;
 
     const paymentIntentParams: Stripe.PaymentIntentCreateParams = {
-      payment_method_types: ["card"],
+      payment_method_types: ["card", "afterpay_clearpay", "klarna", "affirm"],
+      // automatic_payment_methods: { enabled: true },
       amount: Math.round(netAmount * 100),
       currency: "usd",
       metadata: {
@@ -42,13 +43,13 @@ export const createPaymentIntent = async (
 
       if (customer && customer.data && customer.data.length > 0) {
         paymentIntentParams.customer = customer.data[0].id;
-        paymentIntentParams.setup_future_usage = "off_session";
+        // paymentIntentParams.setup_future_usage = "off_session";
       } else {
         const newCustomer = await stripe.customers.create({
           email: email,
         });
         paymentIntentParams.customer = newCustomer.id;
-        paymentIntentParams.setup_future_usage = "off_session";
+        // paymentIntentParams.setup_future_usage = "off_session";
       }
     }
 
