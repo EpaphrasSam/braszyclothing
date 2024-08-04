@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Elements,
   PaymentElement,
@@ -27,13 +27,14 @@ import {
   getPaymentMethod,
   updatePaymentMethod,
   inValidatePromotionCodes,
+  checkPaymentIntentStatus,
 } from "@/services/stripeServices";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { IoChevronBack } from "react-icons/io5";
 import CustomModal from "@/components/global/CustomModal";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Session } from "next-auth";
 import { createOrder } from "@/services/orderServices";
 import { ProductType } from "@/types/SanityTypes";
@@ -60,6 +61,7 @@ const CardForms = ({
   appliedCoupons: string[];
 }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -149,24 +151,105 @@ const CardForms = ({
     setShowConfirmationModal(true);
   };
 
+  const processSuccessfulPayment = async (paymentIntent: any) => {
+    try {
+      toast.loading("Verifying payment...", {
+        id: "verify-payment",
+      });
+      if (appliedCoupons.length > 0) {
+        await inValidatePromotionCodes(appliedCoupons);
+      }
+
+      const res = await createOrder(
+        cartItems,
+        shippingDetails,
+        paymentIntent.id,
+        PaymentIntent,
+        discount,
+        shippingFee,
+        session
+      );
+
+      if (res.success) {
+        try {
+          await sendInvoiceEmail(
+            res.orderID!,
+            cartItems,
+            shippingDetails,
+            PaymentIntent?.amount!,
+            discount,
+            shippingFee,
+            PaymentIntent?.fee!,
+            PaymentIntent?.netAmount!,
+            shippingDetails?.email!
+          );
+          toast.success("Order placed successfully");
+        } catch (error) {
+          console.log(error);
+          toast.error("An error occurred while placing order");
+        }
+      } else {
+        toast.error("An error occurred while placing order");
+        return;
+      }
+
+      setIsProcessing(false);
+
+      if (email && paymentIntent.payment_method) {
+        const paymentMethod = paymentIntent.payment_method;
+        const setupFutureUsage =
+          paymentIntent.payment_method_options?.card?.setup_future_usage;
+
+        if (setupFutureUsage === "off_session") {
+          try {
+            const result = await savePaymentMethod(paymentMethod, email);
+            if (result.success && result.message === "Payment method saved") {
+              // Optionally handle success message if needed
+              console.log("Payment method saved successfully");
+            }
+          } catch (error) {
+            // Log the error but don't break the flow
+            console.error("Failed to save payment method:", error);
+          }
+        }
+      }
+
+      if (window.promotekit_referral) {
+        window.promotekit.refer(shippingDetails.email!);
+      }
+
+      router.replace("/cart?success=true");
+    } catch (error) {
+      console.error("Error processing successful payment:", error);
+      toast.error("An error occurred while processing your payment.");
+    } finally {
+      toast.dismiss("verify-payment");
+    }
+  };
+
+  useEffect(() => {
+    const paymentIntentId = searchParams.get("payment_intent");
+    if (paymentIntentId && cartItems.length > 0) {
+      const verifyPaymentIntent = async () => {
+        const { paymentIntent, error } =
+          await checkPaymentIntentStatus(paymentIntentId);
+        if (paymentIntent.status === "succeeded") {
+          await processSuccessfulPayment(paymentIntent);
+        } else if (error) {
+          toast.error(`Payment failed`);
+          router.replace("/cart?error=true");
+        }
+      };
+      verifyPaymentIntent();
+    }
+  }, [searchParams, cartItems]);
+
   const handleConfirmation = async () => {
     if (!stripe || !elements) {
       return;
     }
     setShowConfirmationModal(false);
     setIsProcessing(true);
-
-    const billingDetails = {
-      email: shippingDetails.email,
-      phone: shippingDetails.contact,
-      name: `${shippingDetails.firstName} ${shippingDetails.lastName}`,
-      address: {
-        line1: shippingDetails.address,
-        city: shippingDetails.city,
-        state: shippingDetails.state!,
-        postal_code: shippingDetails.code,
-      },
-    };
 
     try {
       let paymentIntentResult: any;
@@ -176,7 +259,18 @@ const CardForms = ({
           elements,
           confirmParams: {
             payment_method_data: {
-              billing_details: billingDetails,
+              billing_details: {
+                email: shippingDetails.email,
+                phone: shippingDetails.contact,
+                name: `${shippingDetails.firstName} ${shippingDetails.lastName}`,
+                address: {
+                  line1: shippingDetails.address,
+                  city: shippingDetails.city,
+                  state: shippingDetails.state!,
+                  postal_code: shippingDetails.code,
+                  country: "US",
+                },
+              },
             },
             receipt_email: shippingDetails.email,
             return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkouts/payment`,
@@ -184,18 +278,6 @@ const CardForms = ({
           redirect: "if_required",
         });
       } else {
-        try {
-          const result = await updatePaymentMethod(
-            selectedPaymentMethod,
-            billingDetails
-          );
-
-          if (result?.error) throw new Error(result.error);
-        } catch (error) {
-          setIsProcessing(false);
-          return;
-        }
-
         paymentIntentResult = await stripe.confirmCardPayment(clientSecret!, {
           payment_method: selectedPaymentMethod,
           receipt_email: shippingDetails.email,
@@ -205,80 +287,14 @@ const CardForms = ({
 
       if (paymentIntentResult.error) {
         toast.error(paymentIntentResult.error.message);
-        setIsProcessing(false);
-        return;
-      }
-
-      const paymentIntent = paymentIntentResult.paymentIntent;
-      if (paymentIntent) {
-        if (appliedCoupons.length > 0) {
-          await inValidatePromotionCodes(appliedCoupons);
-        }
-
-        const res = await createOrder(
-          cartItems,
-          shippingDetails,
-          paymentIntent.id,
-          PaymentIntent,
-          discount,
-          shippingFee,
-          session
-        );
-
-        if (res.success) {
-          try {
-            await sendInvoiceEmail(
-              res.orderID!,
-              cartItems,
-              shippingDetails,
-              PaymentIntent?.amount!,
-              discount,
-              shippingFee,
-              PaymentIntent?.fee!,
-              PaymentIntent?.netAmount!,
-              shippingDetails?.email!
-            );
-            toast.success("Invoice sent successfully");
-          } catch (error) {
-            console.log(error);
-            toast.error("An error occurred while sending invoice");
-            setIsProcessing(false);
-            return;
-          }
-        } else {
-          toast.error("An error occurred while placing order");
-          setIsProcessing(false);
-          return;
-        }
-
-        if (email) {
-          const paymentMethod = paymentIntent.payment_method;
-          const result = await savePaymentMethod(paymentMethod, email);
-          if (result.success) {
-            if (result.message === "Payment method saved") {
-            }
-          } else {
-            const errorMessage = result.error || "Something went wrong";
-            toast.error(
-              errorMessage.length > 20 ? "Something went wrong" : errorMessage
-            );
-            setIsProcessing(false);
-            return;
-          }
-        }
-
-        if (window.promotekit_referral) {
-          window.promotekit.refer(shippingDetails.email!);
-        }
-
-        router.replace("/cart?success=true");
-      } else {
-        router.replace("/cart?success=true");
+      } else if (paymentIntentResult.paymentIntent.status === "succeeded") {
+        await processSuccessfulPayment(paymentIntentResult.paymentIntent);
       }
     } catch (error) {
       toast.error(
         "An unexpected error occurred while processing your payment."
       );
+    } finally {
       setIsProcessing(false);
     }
   };
@@ -350,7 +366,7 @@ const CardForms = ({
                 </Card>
               ))}
               <Radio className="m-1" value="new">
-                Enter new card details
+                Enter new payment method
               </Radio>
             </RadioGroup>
             <Card

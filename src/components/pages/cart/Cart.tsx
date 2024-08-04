@@ -33,6 +33,7 @@ const Cart = () => {
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
 
   const success = searchParams.get("success");
+  const error = searchParams.get("error");
 
   const {
     removeFromCart,
@@ -61,7 +62,15 @@ const Cart = () => {
       router.push("/cart");
       resetCart();
     }
-  }, [success, router]);
+
+    if (error) {
+      toast.error("Payment failed", {
+        id: error,
+        duration: 5000,
+      });
+      router.push("/cart");
+    }
+  }, [success, router, error]);
 
   const pages = Math.ceil(cartItems ? cartItems?.length / rowsPerPage : 0);
 

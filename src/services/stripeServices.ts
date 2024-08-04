@@ -22,24 +22,11 @@ export const createPaymentIntent = async (
     const fee = calculateStripeFee(amt);
     const netAmount = amt + fee;
 
-    // Determine the currency based on the payment method types
-    const paymentMethodTypes = [
-      "card",
-      "afterpay_clearpay",
-      "klarna",
-      "affirm",
-    ];
-    let currency = "usd";
-
-    if (paymentMethodTypes.includes("afterpay_clearpay")) {
-      currency = "cad"; // Change to a supported currency for afterpay_clearpay
-    }
-
     const paymentIntentParams: Stripe.PaymentIntentCreateParams = {
-      payment_method_types: paymentMethodTypes,
-      // automatic_payment_methods: { enabled: true },
+      // payment_method_types: ["card", "afterpay_clearpay", "klarna", "affirm"],
+      automatic_payment_methods: { enabled: true },
       amount: Math.round(netAmount * 100),
-      currency: currency,
+      currency: "usd",
       metadata: {
         fee: fee.toFixed(2),
         net_amount: netAmount.toFixed(2),
@@ -56,13 +43,21 @@ export const createPaymentIntent = async (
 
       if (customer && customer.data && customer.data.length > 0) {
         paymentIntentParams.customer = customer.data[0].id;
-        // paymentIntentParams.setup_future_usage = "off_session";
+        paymentIntentParams.payment_method_options = {
+          card: {
+            setup_future_usage: "off_session",
+          },
+        };
       } else {
         const newCustomer = await stripe.customers.create({
           email: email,
         });
         paymentIntentParams.customer = newCustomer.id;
-        // paymentIntentParams.setup_future_usage = "off_session";
+        paymentIntentParams.payment_method_options = {
+          card: {
+            setup_future_usage: "off_session",
+          },
+        };
       }
     }
 
@@ -79,6 +74,7 @@ export const createPaymentIntent = async (
 
     return paymentIntentObject;
   } catch (error: any) {
+    console.log(error);
     return { error: error.message };
   }
 };
@@ -99,6 +95,15 @@ export const savePaymentMethod = async (
   email: string
 ): Promise<{ success: boolean; message?: string; error?: string }> => {
   try {
+    const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
+
+    if (paymentMethod.type !== "card") {
+      return {
+        success: false,
+        message: "Only card payment methods can be saved",
+      };
+    }
+
     const customersResponse = await stripe.customers.list({ email });
 
     let customer: Stripe.Customer;
@@ -120,7 +125,7 @@ export const savePaymentMethod = async (
       invoice_settings: { default_payment_method: paymentMethodId },
     });
 
-    return { success: true, message: "Payment method saved" };
+    return { success: true, message: "Card payment method saved" };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
@@ -243,5 +248,18 @@ export const inValidatePromotionCodes = async (codes: string[]) => {
     return { success: true };
   } catch (error: any) {
     return { error: error.message };
+  }
+};
+
+export const checkPaymentIntentStatus = async (
+  paymentIntentId: string
+): Promise<{ paymentIntent: any; error?: string }> => {
+  try {
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    const plainPaymentIntent = JSON.parse(JSON.stringify(paymentIntent));
+    return { paymentIntent: plainPaymentIntent };
+  } catch (error: any) {
+    console.error("Error checking payment intent status:", error);
+    return { paymentIntent: null, error: error.message };
   }
 };

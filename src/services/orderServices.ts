@@ -101,7 +101,6 @@ export const createOrder = async (
 ) => {
   try {
     const { email, contact, id, shippingMethod, ...data } = shippingAddress;
-
     if (!email || !contact) {
       throw new Error("Email and contact are required");
     }
@@ -193,6 +192,7 @@ export const createOrder = async (
       error: null,
     };
   } catch (error: any) {
+    console.log(error);
     return {
       orderID: null,
       success: false,
