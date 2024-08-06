@@ -11,7 +11,7 @@ interface BannerProps {
 const Banner = ({ banners }: BannerProps) => {
   const [[currentSlide, direction], setCurrentSlide] = useState([0, 0]);
 
-  const imageIndex = useMemo(
+  const mediaIndex = useMemo(
     () => wrap(0, banners.length, currentSlide),
     [currentSlide, banners.length]
   );
@@ -24,12 +24,15 @@ const Banner = ({ banners }: BannerProps) => {
   );
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      paginate(1);
-    }, 10000);
+    const interval = setInterval(
+      () => {
+        paginate(1);
+      },
+      banners[mediaIndex].mediaType === "video" ? 30000 : 10000
+    );
 
     return () => clearInterval(interval);
-  }, [paginate]);
+  }, [paginate, mediaIndex, banners]);
 
   if (banners.length === 0) {
     return (
@@ -41,22 +44,41 @@ const Banner = ({ banners }: BannerProps) => {
 
   return (
     <AnimatePresence initial={false} custom={direction}>
-      <motion.img
-        className="w-full h-full object-fit absolute"
-        key={currentSlide}
-        src={banners[imageIndex]?.image}
-        custom={direction}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{
-          x: { type: "spring", stiffness: 300, damping: 300 },
-          opacity: { duration: 1.5 },
-        }}
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={1}
-      />
+      {banners[mediaIndex].mediaType === "image" ? (
+        <motion.img
+          className="w-full h-full object-fit absolute"
+          key={currentSlide}
+          src={banners[mediaIndex].image}
+          custom={direction}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 300 },
+            opacity: { duration: 1.5 },
+          }}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={1}
+        />
+      ) : (
+        <motion.video
+          className="w-full h-full object-cover absolute"
+          key={currentSlide}
+          src={banners[mediaIndex].video}
+          custom={direction}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 300 },
+            opacity: { duration: 1.5 },
+          }}
+          autoPlay
+          loop
+          muted
+        />
+      )}
       <div className="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0 }}
@@ -65,7 +87,7 @@ const Banner = ({ banners }: BannerProps) => {
           transition={{ duration: 2, delay: 0.5 }}
           className="text-center text-white text-4xl font-bold"
         >
-          {banners[imageIndex].message}
+          {banners[mediaIndex].message}
         </motion.div>
       </div>
     </AnimatePresence>

@@ -16,7 +16,9 @@ export const getBanners = async () => {
         "id":_id,
         title,
         message,
-        "image":image.asset->url
+        "image":image.asset->url,
+        "video":video.asset->url,
+        mediaType
   }`;
     const banners: BannerTypes[] = await client.fetch(query);
     return { banners, error: null };

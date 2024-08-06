@@ -3,6 +3,8 @@ export interface BannerTypes {
   title: string;
   message: string;
   image: string;
+  video: string;
+  mediaType: "image" | "video";
 }
 
 export interface CategoryType {
