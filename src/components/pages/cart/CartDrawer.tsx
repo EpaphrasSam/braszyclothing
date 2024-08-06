@@ -30,6 +30,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
     totalAmount,
     updateItemColor,
     updateItemSize,
+    displayPrice,
   } = useCartStore((state) => ({
     removeFromCart: state.removeFromCart,
     incrementQuantity: state.incrementQuantity,
@@ -37,6 +38,12 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
     totalAmount: state.totalAmount,
     updateItemColor: state.updateItemColor,
     updateItemSize: state.updateItemSize,
+    displayPrice: state.displayPrice,
+  }));
+
+  const { currency, exchangeRates } = useCartStore((state) => ({
+    currency: state.currency,
+    exchangeRates: state.exchangeRates,
   }));
 
   const handleCheckout = () => {
@@ -112,7 +119,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                         </div>
                         <div className="w-32 ">
                           <span className="text-sm font-semibold text-gray-500">
-                            ${item.price}
+                            {displayPrice(item.price)}
                           </span>
                           {item.oldPrice && (
                             <span className="ml-1 line-through text-xs">
@@ -205,7 +212,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                         </div>
                       </div>
                       <span className="absolute top-0 right-0 text-gray-500 font-semibold">
-                        ${(item.price * item.quantity!).toFixed(2)}
+                        {displayPrice(item.price * item.quantity!)}
                       </span>
                     </div>
                   </div>
@@ -221,7 +228,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
             <div className="my-2 flex justify-between">
               <p className="text-lg text-gray-600 font-semibold">Total</p>
               <p className="text-lg text-gray-600 font-semibold">
-                ${totalAmount().toFixed(2)}
+                {displayPrice(totalAmount())}
               </p>
             </div>
             <p className="mb-4 text-[13px] text-gray-400">

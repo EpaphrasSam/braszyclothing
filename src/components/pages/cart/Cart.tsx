@@ -24,6 +24,7 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
+import { convertCurrency, formatCurrency } from "@/helpers/currencyConverter";
 
 const Cart = () => {
   const router = useRouter();
@@ -83,6 +84,22 @@ const Cart = () => {
 
   const handleCheckout = () => {
     router.push(`/checkouts/information`);
+  };
+
+  const { currency, exchangeRates } = useCartStore((state) => ({
+    currency: state.currency,
+    exchangeRates: state.exchangeRates,
+  }));
+
+  const displayPrice = (price: number) => {
+    if (!exchangeRates) return `CAD ${price.toFixed(2)}`;
+    const convertedPrice = convertCurrency(
+      price,
+      "CAD",
+      currency,
+      exchangeRates
+    );
+    return formatCurrency(convertedPrice, currency);
   };
 
   if (!cartItems)
@@ -166,7 +183,7 @@ const Cart = () => {
                           </div>
                           <div className="w-32 ">
                             <span className="text-sm font-semibold text-gray-500">
-                              ${item.price}
+                              {displayPrice(item.price)}
                             </span>
                             {item.oldPrice && (
                               <span className="ml-1 line-through text-xs">
@@ -288,7 +305,7 @@ const Cart = () => {
                   </TableCell>
                   <TableCell className="flex items-start">
                     <span className="text-gray-500 font-semibold">
-                      ${(item.price * item.quantity!).toFixed(2)}
+                      {displayPrice(item.price * item.quantity!)}
                     </span>
                   </TableCell>
                 </TableRow>
@@ -303,7 +320,7 @@ const Cart = () => {
               <div className="my-2 flex justify-between">
                 <p className="text-lg text-gray-600 font-semibold">Total</p>
                 <p className="text-lg text-gray-600 font-semibold">
-                  ${totalAmount().toFixed(2)}
+                  {displayPrice(totalAmount())}
                 </p>
               </div>
               <p className="mb-4 text-[13px] text-gray-400">

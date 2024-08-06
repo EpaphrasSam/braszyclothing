@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { ProductType } from "@/types/SanityTypes";
+import { convertCurrency, formatCurrency } from "@/helpers/currencyConverter";
 
 export interface PaymentIntentType {
   amount: number;
@@ -50,6 +51,11 @@ export interface CartState {
   resetCart: () => void;
   resetAmount: () => void;
   resetShippingDetails: () => void;
+  currency: string;
+  exchangeRates: { [key: string]: number } | null;
+  setCurrency: (currency: string) => void;
+  setExchangeRates: (rates: { [key: string]: number } | null) => void;
+  displayPrice: (price: number) => string;
 }
 
 const useCartStore = create<CartState>()(
@@ -145,6 +151,21 @@ const useCartStore = create<CartState>()(
           cartItems: [],
           shippingDetails: null,
         }),
+      currency: "CAD",
+      exchangeRates: null,
+      setCurrency: (currency) => set({ currency }),
+      setExchangeRates: (rates) => set({ exchangeRates: rates }),
+      displayPrice: (price: number) => {
+        const { currency, exchangeRates } = get();
+        if (!exchangeRates) return `CAD ${price.toFixed(2)}`;
+        const convertedPrice = convertCurrency(
+          price,
+          "CAD",
+          currency,
+          exchangeRates
+        );
+        return formatCurrency(convertedPrice, currency);
+      },
     }),
     {
       name: "cart-storage",

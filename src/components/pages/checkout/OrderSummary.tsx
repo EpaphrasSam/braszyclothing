@@ -19,6 +19,7 @@ const OrderSummary = () => {
   const netAmount = useCartStore((state) => state.netAmount);
   const totalAmount = useCartStore((state) => state.totalAmount);
   const setPaymentIntent = useCartStore((state) => state.setPaymentIntent);
+  const displayPrice = useCartStore((state) => state.displayPrice);
   const [isCouponVisible, setIsCouponVisible] = useState(false);
   const appliedCoupons = useStore(
     useCartStore,
@@ -192,7 +193,7 @@ const OrderSummary = () => {
                   {item.name}
                 </h3>
                 <p className="text-sm text-gray-500 font-semibold">
-                  ${item.price.toFixed(2)}
+                  {displayPrice(item.price)}
                 </p>
                 <p className="text-sm mt-1 text-gray-500 font-semibold">
                   Size: <span className="text-gray-800">{item.size}</span>
@@ -204,7 +205,7 @@ const OrderSummary = () => {
             </div>
             <div className="md:col-span-1">
               <span className="text-gray-500 font-semibold">
-                ${(item.price * item.quantity!).toFixed(2)}
+                {displayPrice(item.price * item.quantity!)}
               </span>
             </div>
           </div>
@@ -264,24 +265,25 @@ const OrderSummary = () => {
         </AnimatePresence>
         <Divider className="my-4" />
         <div className="flex justify-between mb-2">
-          <span className="text-gray-500">Subtotal</span>$
-          {totalAmount().toFixed(2)}
+          <span className="text-gray-500">Subtotal</span>
+          {displayPrice(totalAmount())}
         </div>
         <div className="flex justify-between mb-2">
           <span className="text-gray-500">Shipping</span>
-          <span className="font-bold">${shippingFee!.toFixed(2)}</span>
+          <span className="font-bold">{displayPrice(shippingFee!)}</span>
         </div>
         <div className="flex justify-between mb-2">
           <span className="text-gray-500">Discount</span>
-          <span className="font-bold">${discount!.toFixed(2)}</span>
+          <span className="font-bold">{displayPrice(discount!)}</span>
         </div>
         <div className="flex justify-between mb-4">
-          <span className="text-gray-500">Estimated Tax</span>$
-          {paymentIntent?.fee?.toFixed(2) || "0.00"}
+          <span className="text-gray-500">Estimated Tax</span>
+          {displayPrice(paymentIntent?.fee || 0)}
         </div>
         <Divider className="my-4" />
         <div className="flex justify-between font-bold text-lg">
-          <span>Estimated Total</span>${netAmount().toFixed(2)}
+          <span>Estimated Total</span>
+          {displayPrice(netAmount())}
         </div>
       </div>
     </div>

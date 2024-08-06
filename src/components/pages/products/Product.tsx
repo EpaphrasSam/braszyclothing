@@ -18,13 +18,13 @@ type ProductProps = {
 const Product = ({ product }: ProductProps) => {
   const router = useRouter();
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
-  const { addToCart, updateItemColor, updateItemSize } = useCartStore(
-    (state) => ({
+  const { addToCart, updateItemColor, updateItemSize, displayPrice } =
+    useCartStore((state) => ({
       addToCart: state.addToCart,
       updateItemColor: state.updateItemColor,
       updateItemSize: state.updateItemSize,
-    })
-  );
+      displayPrice: state.displayPrice,
+    }));
 
   const cartItem = useMemo(
     () => cartItems && cartItems.find((item) => item.id === product.id),
@@ -105,11 +105,11 @@ const Product = ({ product }: ProductProps) => {
         <div className="mb-4">
           <div className="flex gap-2 items-end">
             <span className="text-xl font-bold text-gray-800 md:text-2xl">
-              ${product.price}
+              {displayPrice(product.price)}
             </span>
             {product.oldPrice && (
               <span className="mb-0.5 text-gray-500 line-through">
-                ${product.oldPrice}
+                {displayPrice(product.oldPrice)}
               </span>
             )}
           </div>

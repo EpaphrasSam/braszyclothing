@@ -57,6 +57,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [[currentSlide, direction], setCurrentSlide] = useState([0, 1]);
   const addToCart = useCartStore((state) => state.addToCart);
+  const displayPrice = useCartStore((state) => state.displayPrice);
   const isDisabled = !product.inStock;
 
   const imageIndex = useMemo(
@@ -141,7 +142,7 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
               {product.name}
             </p>
             <p className="text-black text-sm font-semibold pl-3">
-              ${product.price}
+              {displayPrice(product.price)}
             </p>
           </div>
           <div className="flex justify-between items-center w-full">

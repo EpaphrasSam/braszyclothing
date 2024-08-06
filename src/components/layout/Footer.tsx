@@ -1,17 +1,43 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import { Input, Spinner } from "@nextui-org/react";
+import { Input, Spinner, Select, SelectItem } from "@nextui-org/react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { RiTwitterXLine } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { addEmailToNewsletter } from "@/services/emailServices";
+import useCartStore from "@/store/cart";
+import { countriesWithCurrency } from "@/helpers/currencyConverter";
 
-const Footer = () => {
+const Footer = ({
+  initialCurrency,
+  exchangeRates,
+}: {
+  initialCurrency: string;
+  exchangeRates: { [key: string]: number } | null;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const { currency, setCurrency, setExchangeRates } = useCartStore();
+
+  useEffect(() => {
+    if (!currency) {
+      setCurrency(initialCurrency);
+    }
+    if (exchangeRates) {
+      setExchangeRates(exchangeRates);
+    }
+  }, [initialCurrency, exchangeRates, currency, setCurrency, setExchangeRates]);
+
+  const currencies = Object.entries(countriesWithCurrency).map(
+    ([value, { name }]) => ({
+      label: name,
+      value,
+    })
+  );
+
   const {
     register,
     watch,
@@ -40,10 +66,32 @@ const Footer = () => {
       reset();
     }
   };
+
+  const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurrency(e.target.value);
+    window.location.reload();
+  };
+
   return (
     <footer className="bg-gray-800 text-white py-8 mx-auto w-full">
       <div className="container mx-auto px-4 md:block flex flex-col justify-center items-center">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+        <div className="grid grid-cols-1 w-full md:grid-cols-4 gap-8 text-center">
+          <div className="mt-4">
+            <Select
+              label="Currency"
+              selectedKeys={[currency]}
+              onChange={handleCurrencyChange}
+              variant="flat"
+              radius="none"
+              className="max-w-xs"
+            >
+              {currencies.map((curr) => (
+                <SelectItem key={curr.value} value={curr.value}>
+                  {curr.label}
+                </SelectItem>
+              ))}
+            </Select>
+          </div>
           <div>
             <h3 className="text-lg font-bold mb-4">Customer Service</h3>
             <ul className="space-y-2">
@@ -159,6 +207,7 @@ const Footer = () => {
               />
             </div>
           </div>
+
           <p>
             &copy; {new Date().getFullYear()} Braszy Clothing. All rights
             reserved.
