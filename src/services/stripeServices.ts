@@ -26,7 +26,7 @@ export const createPaymentIntent = async (
       // payment_method_types: ["card", "afterpay_clearpay", "klarna", "affirm"],
       automatic_payment_methods: { enabled: true },
       amount: Math.round(netAmount * 100),
-      currency: "cad",
+      currency: "usd",
       metadata: {
         fee: fee.toFixed(2),
         net_amount: netAmount.toFixed(2),

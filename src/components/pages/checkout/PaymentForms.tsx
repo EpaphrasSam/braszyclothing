@@ -39,6 +39,7 @@ import { Session } from "next-auth";
 import { createOrder } from "@/services/orderServices";
 import { ProductType } from "@/types/SanityTypes";
 import { sendInvoiceEmail } from "@/utils/email";
+import { countryToAbbreviation } from "../../../helpers/countryToAbbreviation";
 
 const CardForms = ({
   session,
@@ -254,34 +255,43 @@ const CardForms = ({
     try {
       let paymentIntentResult: any;
 
+      const address = {
+        line1: shippingDetails.address,
+        city: shippingDetails.city,
+        state: shippingDetails.state!,
+        postal_code: shippingDetails.code,
+        country: countryToAbbreviation(shippingDetails.country),
+      };
+
+      const commonParams = {
+        shipping: {
+          name: `${shippingDetails.firstName} ${shippingDetails.lastName}`,
+          address: address,
+        },
+        receipt_email: shippingDetails.email,
+        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkouts/payment`,
+      };
+
       if (selectedPaymentMethod === "new" || !email) {
         paymentIntentResult = await stripe.confirmPayment({
           elements,
           confirmParams: {
+            ...commonParams,
             payment_method_data: {
               billing_details: {
                 email: shippingDetails.email,
                 phone: shippingDetails.contact,
                 name: `${shippingDetails.firstName} ${shippingDetails.lastName}`,
-                address: {
-                  line1: shippingDetails.address,
-                  city: shippingDetails.city,
-                  state: shippingDetails.state!,
-                  postal_code: shippingDetails.code,
-                  country: "US",
-                },
+                address: address,
               },
             },
-            receipt_email: shippingDetails.email,
-            return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkouts/payment`,
           },
           redirect: "if_required",
         });
       } else {
         paymentIntentResult = await stripe.confirmCardPayment(clientSecret!, {
           payment_method: selectedPaymentMethod,
-          receipt_email: shippingDetails.email,
-          return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkouts/payment`,
+          ...commonParams,
         });
       }
 
@@ -481,7 +491,10 @@ const PaymentForms = () => {
     <div className="flex items-center justify-center flex-col min-h-screen">
       <Elements
         stripe={stripePromise}
-        options={{ clientSecret, appearance: { theme: "stripe" } }}
+        options={{
+          clientSecret,
+          appearance: { theme: "stripe" },
+        }}
       >
         <CardForms
           session={session!!}
