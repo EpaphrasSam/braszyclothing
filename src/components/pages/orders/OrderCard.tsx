@@ -15,6 +15,7 @@ import OrderDetails from "./OrderDetails";
 import CustomModal from "@/components/global/CustomModal";
 import { cancelOrder } from "@/services/orderServices";
 import toast from "react-hot-toast";
+import useCartStore from "@/store/cart";
 
 interface OrderCardProps {
   order: OrderWithProductDetails;
@@ -39,6 +40,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const displayPrice = useCartStore((state) => state.displayPrice);
 
   const handleCancelOrder = async () => {
     setIsLoading(true);
@@ -108,7 +110,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
                     </div>
                   </div>
                   <div>
-                    ${item.product.price}{" "}
+                    {displayPrice(item.product.price)}{" "}
                     <span className="text-[14px] text-gray-500">
                       x {item.quantity}
                     </span>
@@ -128,7 +130,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
         <CardFooter className="flex justify-between p-4 py-6">
           <div className="text-gray-900 ">
             <span className="text-base font-semibold">
-              ${order?.paymentIntent?.netAmount.toFixed(2)}{" "}
+              {displayPrice(order?.paymentIntent?.netAmount!)}{" "}
               <span className="text-gray-500">({order?.items.length}) </span>
             </span>
           </div>

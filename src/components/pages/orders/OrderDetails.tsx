@@ -18,6 +18,7 @@ import { FaFilePdf } from "react-icons/fa";
 import useSWR from "swr";
 import axios from "axios";
 import toast from "react-hot-toast";
+import useCartStore from "@/store/cart";
 
 interface OrderDetailsProps {
   order: OrderWithProductDetails;
@@ -26,6 +27,7 @@ interface OrderDetailsProps {
 }
 
 const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
+  const displayPrice = useCartStore((state) => state.displayPrice);
   const fetcher = async () => {
     if (!order.paymentIntent) return;
     const res = await getPaymentMethodDetails(
@@ -166,7 +168,7 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
         <ModalFooter className="w-full flex flex-col">
           <div className="sm:grid flex justify-between grid-cols-2">
             <div className="flex flex-col gap-2">
-              Payment
+              <p className="font-semibold text-lg">Payment Details</p>
               {isLoading ? (
                 <div className="w-full flex flex-col gap-2">
                   <Skeleton className="h-3 w-3/5 rounded-lg" />
@@ -174,15 +176,21 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
                 </div>
               ) : (
                 <div className="flex gap-1 items-center">
-                  <div>**** **** **** {data?.last4!}</div>
-                  <Chip size="sm" radius="sm" color="primary">
-                    {data?.brand!}
-                  </Chip>
+                  {data?.type === "card" ? (
+                    <>
+                      <div>**** **** **** {data.last4}</div>
+                      <Chip size="sm" radius="sm" color="primary">
+                        {data.brand}
+                      </Chip>
+                    </>
+                  ) : (
+                    <div>{data?.name}</div>
+                  )}
                 </div>
               )}
             </div>
             <div className="flex flex-col">
-              <div>Delivery</div>
+              <div className="font-bold text-lg">Delivery</div>
               <div className="text-xs my-2 font-semibold text-gray-500">
                 Address
               </div>
@@ -212,19 +220,19 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
               <div className="text-base text-gray-600">
                 <div className="flex justify-between">
                   <p>Subtotal</p>
-                  <p>${order?.paymentIntent?.totalAmount.toFixed(2)}</p>
+                  <p>{displayPrice(order?.paymentIntent?.totalAmount!)}</p>
                 </div>
                 <div className="flex justify-between">
                   <p>Shipping</p>
-                  <p>${order?.paymentIntent?.shippingFee.toFixed(2)}</p>
+                  <p>{displayPrice(order?.paymentIntent?.shippingFee!)}</p>
                 </div>
                 <div className="flex justify-between">
                   <p>Discount</p>
-                  <p>-${order?.paymentIntent?.discount.toFixed(2)}</p>
+                  <p>-{displayPrice(order?.paymentIntent?.discount!)}</p>
                 </div>
                 <div className="flex justify-between">
                   <p>Tax</p>
-                  <p>${order?.paymentIntent?.fee.toFixed(2)}</p>
+                  <p>{displayPrice(order?.paymentIntent?.fee!)}</p>
                 </div>
               </div>
               <div className="flex my-2 items-center gap-1 overflow-hidden">
@@ -235,7 +243,7 @@ const OrderDetails = ({ order, isOpen, onClose }: OrderDetailsProps) => {
               <div className="flex justify-between">
                 <p>Total:</p>
                 <p className="text-base font-semibold">
-                  <p>${order?.paymentIntent?.netAmount.toFixed(2)}</p>
+                  <p>{displayPrice(order?.paymentIntent?.netAmount!)}</p>
                 </p>
               </div>
             </div>

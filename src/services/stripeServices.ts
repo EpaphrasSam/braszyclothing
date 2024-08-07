@@ -6,8 +6,10 @@ import { stripe } from "@/utils/stripe";
 import Stripe from "stripe";
 
 interface PaymentMethodDetails {
-  last4: string;
-  brand: string;
+  last4?: string;
+  brand?: string;
+  type: string;
+  name?: string;
 }
 
 export const createPaymentIntent = async (
@@ -179,10 +181,20 @@ export const getPaymentMethodDetails = async (
 
     const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
 
-    return {
-      last4: paymentMethod.card?.last4 || "",
-      brand: paymentMethod.card?.brand || "",
+    const details: PaymentMethodDetails = {
+      type: paymentMethod.type,
     };
+
+    if (paymentMethod.type === "card") {
+      details.last4 = paymentMethod.card?.last4 || "";
+      details.brand = paymentMethod.card?.brand || "";
+    } else {
+      details.name =
+        paymentMethod.type.charAt(0).toUpperCase() +
+        paymentMethod.type.slice(1);
+    }
+
+    return details;
   } catch (error: any) {
     return { error: error.message };
   }

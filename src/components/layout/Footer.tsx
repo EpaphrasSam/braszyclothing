@@ -119,13 +119,16 @@ const Footer = () => {
     }
   };
 
-  const handleCountryChange = (value: string) => {
-    if (!value) return;
-    const [selectedCountry, selectedCurrency] = value.split("-");
-    setCurrency(selectedCurrency);
-    setCountry(selectedCountry);
-    window.location.reload();
-  };
+  const handleCountryChange = useCallback(
+    (value: string) => {
+      if (!value) return;
+      const [selectedCountry, selectedCurrency] = value.split("-");
+      setCurrency(selectedCurrency);
+      setCountry(selectedCountry);
+      window.location.reload();
+    },
+    [country, currency]
+  );
 
   return (
     <footer className="bg-gray-800 text-white py-8 mx-auto w-full">
