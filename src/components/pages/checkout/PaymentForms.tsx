@@ -49,6 +49,7 @@ const CardForms = ({
   shippingFee,
   PaymentIntent,
   appliedCoupons,
+  displayPrice,
 }: {
   session: Session | null;
   shippingDetails: ShippingDetails;
@@ -60,6 +61,7 @@ const CardForms = ({
   shippingFee: number;
   PaymentIntent: PaymentIntentType | null;
   appliedCoupons: string[];
+  displayPrice: (price: number) => string;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -260,7 +262,8 @@ const CardForms = ({
         city: shippingDetails.city,
         state: shippingDetails.state!,
         postal_code: shippingDetails.code,
-        country: countryToAbbreviation(shippingDetails.country),
+        // country: countryToAbbreviation(shippingDetails.country),
+        country: "CA",
       };
 
       const commonParams = {
@@ -332,7 +335,7 @@ const CardForms = ({
                 disabled={isDisabled}
                 isLoading={isProcessing}
               >
-                Pay ${netAmount.toFixed(2)}
+                Pay {displayPrice(netAmount)}
               </Button>
             </CardFooter>
           </Card>
@@ -398,7 +401,7 @@ const CardForms = ({
                 disabled={isDisabled}
                 isLoading={isProcessing}
               >
-                Pay ${netAmount.toFixed(2)}
+                Pay {displayPrice(netAmount)}
               </Button>
             </div>
           </form>
@@ -432,6 +435,7 @@ const PaymentForms = () => {
   const appliedCoupons = useCartStore((state) => state.appliedCoupons);
   const netAmount = useCartStore((state) => state.netAmount);
   const setPaymentIntent = useCartStore((state) => state.setPaymentIntent);
+  const displayPrice = useCartStore((state) => state.displayPrice);
   const shippingDetails = useCartStore((state) => state.shippingDetails);
 
   useEffect(() => {
@@ -504,6 +508,7 @@ const PaymentForms = () => {
           shippingFee={shippingFee}
           PaymentIntent={paymentIntent}
           appliedCoupons={appliedCoupons}
+          displayPrice={displayPrice}
         />
       </Elements>
       <Divider className="my-4" />
