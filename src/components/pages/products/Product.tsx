@@ -2,7 +2,7 @@
 
 import React, { useCallback, useMemo } from "react";
 import ImageGallery from "@/components/pages/products/ImageGallery";
-import { Button, Card, CardBody } from "@nextui-org/react";
+import { Button, Card, CardBody, Skeleton } from "@nextui-org/react";
 import { CiStar } from "react-icons/ci";
 import { FiTruck } from "react-icons/fi";
 import useCartStore from "@/store/cart";
@@ -18,6 +18,8 @@ type ProductProps = {
 const Product = ({ product }: ProductProps) => {
   const router = useRouter();
   const cartItems = useStore(useCartStore, (state) => state.cartItems);
+  const currency = useStore(useCartStore, (state) => state.currency);
+  const exchangeRates = useStore(useCartStore, (state) => state.exchangeRates);
   const { addToCart, updateItemColor, updateItemSize, displayPrice } =
     useCartStore((state) => ({
       addToCart: state.addToCart,
@@ -104,13 +106,22 @@ const Product = ({ product }: ProductProps) => {
 
         <div className="mb-4">
           <div className="flex gap-2 items-end">
-            <span className="text-xl font-bold text-gray-800 md:text-2xl">
-              {displayPrice(product.price)}
-            </span>
-            {product.oldPrice && (
-              <span className="mb-0.5 text-gray-500 line-through">
-                {displayPrice(product.oldPrice)}
-              </span>
+            {currency && exchangeRates ? (
+              <>
+                <span className="text-xl font-bold text-gray-800 md:text-2xl">
+                  {displayPrice(product.price)}
+                </span>
+                {product.oldPrice && (
+                  <span className="mb-0.5 text-gray-500 line-through">
+                    {displayPrice(product.oldPrice)}
+                  </span>
+                )}
+              </>
+            ) : (
+              <>
+                <Skeleton className="w-20 h-6" />
+                {product.oldPrice && <Skeleton className="w-20 h-6" />}
+              </>
             )}
           </div>
         </div>

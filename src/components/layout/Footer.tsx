@@ -10,32 +10,46 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { addEmailToNewsletter } from "@/services/emailServices";
 import useCartStore from "@/store/cart";
-import { countriesWithCurrency } from "@/helpers/currencyConverter";
+import {
+  countriesWithCurrency,
+  getCurrencyByCountry,
+} from "@/helpers/currencyConverter";
+import { useStore } from "@/store/useStore";
 
 const Footer = ({
   initialCurrency,
+  initialCountry,
   exchangeRates,
 }: {
   initialCurrency: string;
+  initialCountry: string;
   exchangeRates: { [key: string]: number } | null;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { currency, setCurrency, setExchangeRates } = useCartStore();
+  const setCurrency = useCartStore((state) => state.setCurrency);
+  const setExchangeRates = useCartStore((state) => state.setExchangeRates);
+  const setCountry = useCartStore((state) => state.setCountry);
+  const currency = useStore(useCartStore, (state) => state.currency);
+  const country = useStore(useCartStore, (state) => state.country);
 
-  useEffect(() => {
-    if (!currency) {
-      setCurrency(initialCurrency);
-    }
-    if (exchangeRates) {
-      setExchangeRates(exchangeRates);
-    }
-  }, [initialCurrency, exchangeRates, currency, setCurrency, setExchangeRates]);
+  // useEffect(() => {
+  //   if (!currency || !country) {
+  //     setCurrency(initialCurrency);
+  //     setCountry(initialCountry);
+  //   }
+  //   if (exchangeRates) {
+  //     setExchangeRates(exchangeRates);
+  //   }
+  // }, [initialCurrency, exchangeRates, currency, initialCountry, country]);
 
-  const currencies = Object.entries(countriesWithCurrency).map(
-    ([value, { name }]) => ({
-      label: name,
-      value,
-    })
+  const countries = Object.entries(countriesWithCurrency).flatMap(
+    ([currency, { countries }]) =>
+      countries.map((country) => ({
+        label: country.name,
+        value: `${country.code}-${currency}`,
+        countryCode: country.code,
+        currency: currency,
+      }))
   );
 
   const {
@@ -67,8 +81,10 @@ const Footer = ({
     }
   };
 
-  const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCurrency(e.target.value);
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const [selectedCountry, selectedCurrency] = e.target.value.split("-");
+    setCurrency(selectedCurrency);
+    setCountry(selectedCountry);
     window.location.reload();
   };
 
@@ -78,18 +94,20 @@ const Footer = ({
         <div className="grid grid-cols-1 w-full md:grid-cols-4 gap-8 text-center">
           <div className="mt-4">
             <Select
-              label="Currency"
-              selectedKeys={[currency]}
-              onChange={handleCurrencyChange}
+              label="Country"
+              selectedKeys={[`${country!}-${currency!}`]}
+              onChange={handleCountryChange}
               variant="flat"
               radius="none"
               className="max-w-xs"
             >
-              {currencies.map((curr) => (
-                <SelectItem key={curr.value} value={curr.value}>
-                  {curr.label}
-                </SelectItem>
-              ))}
+              {countries
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((country) => (
+                  <SelectItem key={country.value} value={country.value}>
+                    {country.label}
+                  </SelectItem>
+                ))}
             </Select>
           </div>
           <div>

@@ -1,7 +1,11 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { ProductType } from "@/types/SanityTypes";
-import { convertCurrency, formatCurrency } from "@/helpers/currencyConverter";
+import {
+  convertCurrency,
+  countriesWithCurrency,
+  formatCurrency,
+} from "@/helpers/currencyConverter";
 
 export interface PaymentIntentType {
   amount: number;
@@ -52,8 +56,10 @@ export interface CartState {
   resetAmount: () => void;
   resetShippingDetails: () => void;
   currency: string;
+  country: string;
   exchangeRates: { [key: string]: number } | null;
   setCurrency: (currency: string) => void;
+  setCountry: (country: string) => void;
   setExchangeRates: (rates: { [key: string]: number } | null) => void;
   displayPrice: (price: number) => string;
 }
@@ -151,9 +157,17 @@ const useCartStore = create<CartState>()(
           cartItems: [],
           shippingDetails: null,
         }),
-      currency: "CAD",
+      currency: "",
+      country: "",
       exchangeRates: null,
-      setCurrency: (currency) => set({ currency }),
+      setCurrency: (currency) => {
+        const country =
+          Object.entries(countriesWithCurrency).find(([, { countries }]) =>
+            countries.some((c) => c.code === currency)
+          )?.[1].countries[0].code || "CA";
+        set({ currency, country });
+      },
+      setCountry: (country) => set({ country }),
       setExchangeRates: (rates) => set({ exchangeRates: rates }),
       displayPrice: (price: number) => {
         const { currency, exchangeRates } = get();
