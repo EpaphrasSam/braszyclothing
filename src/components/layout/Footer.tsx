@@ -1,13 +1,21 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import { Input, Spinner, Select, SelectItem } from "@nextui-org/react";
+import {
+  Input,
+  Spinner,
+  Select,
+  SelectItem,
+  Autocomplete,
+  AutocompleteItem,
+} from "@nextui-org/react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { RiTwitterXLine } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import useSWR from "swr";
 import { addEmailToNewsletter } from "@/services/emailServices";
 import useCartStore from "@/store/cart";
 import {
@@ -15,16 +23,9 @@ import {
   getCurrencyByCountry,
 } from "@/helpers/currencyConverter";
 import { useStore } from "@/store/useStore";
+import { getUserLocation, getExchangeRates } from "@/services/otherApiServices";
 
-const Footer = ({
-  initialCurrency,
-  initialCountry,
-  exchangeRates,
-}: {
-  initialCurrency: string;
-  initialCountry: string;
-  exchangeRates: { [key: string]: number } | null;
-}) => {
+const Footer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const setCurrency = useCartStore((state) => state.setCurrency);
   const setExchangeRates = useCartStore((state) => state.setExchangeRates);
@@ -32,25 +33,62 @@ const Footer = ({
   const currency = useStore(useCartStore, (state) => state.currency);
   const country = useStore(useCartStore, (state) => state.country);
 
-  // useEffect(() => {
-  //   if (!currency || !country) {
-  //     setCurrency(initialCurrency);
-  //     setCountry(initialCountry);
-  //   }
-  //   if (exchangeRates) {
-  //     setExchangeRates(exchangeRates);
-  //   }
-  // }, [initialCurrency, exchangeRates, currency, initialCountry, country]);
+  const userLocationFetcher = useCallback(async () => {
+    if (country && currency) return null;
+    const userCountry = await getUserLocation();
+    return userCountry;
+  }, [country, currency]);
 
-  const countries = Object.entries(countriesWithCurrency).flatMap(
-    ([currency, { countries }]) =>
+  const exchangeRatesFetcher = useCallback(async () => {
+    const rates = await getExchangeRates();
+    return rates;
+  }, []);
+
+  const { data: userCountry, error: userCountryError } = useSWR(
+    "userLocation",
+    userLocationFetcher,
+    { revalidateOnFocus: false, revalidateOnReconnect: false }
+  );
+
+  const { data: exchangeRates, error: exchangeRatesError } = useSWR(
+    "exchangeRates",
+    exchangeRatesFetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 3600000, // Refresh every hour
+    }
+  );
+
+  React.useEffect(() => {
+    if (userCountry && !country && !currency) {
+      const { currency: detectedCurrency } = getCurrencyByCountry(userCountry);
+      setCountry(userCountry);
+      setCurrency(detectedCurrency);
+    }
+    if (exchangeRates) {
+      setExchangeRates(exchangeRates);
+    }
+  }, [
+    userCountry,
+    exchangeRates,
+    country,
+    currency,
+    setCountry,
+    setCurrency,
+    setExchangeRates,
+  ]);
+
+  const countries = Object.entries(countriesWithCurrency)
+    .flatMap(([currency, { countries }]) =>
       countries.map((country) => ({
         label: country.name,
         value: `${country.code}-${currency}`,
         countryCode: country.code,
         currency: currency,
       }))
-  );
+    )
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   const {
     register,
@@ -81,8 +119,9 @@ const Footer = ({
     }
   };
 
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const [selectedCountry, selectedCurrency] = e.target.value.split("-");
+  const handleCountryChange = (value: string) => {
+    if (!value) return;
+    const [selectedCountry, selectedCurrency] = value.split("-");
     setCurrency(selectedCurrency);
     setCountry(selectedCountry);
     window.location.reload();
@@ -93,22 +132,23 @@ const Footer = ({
       <div className="container mx-auto px-4 md:block flex flex-col justify-center items-center">
         <div className="grid grid-cols-1 w-full md:grid-cols-4 gap-8 text-center">
           <div className="mt-4">
-            <Select
+            <Autocomplete
               label="Country"
-              selectedKeys={[`${country!}-${currency!}`]}
-              onChange={handleCountryChange}
-              variant="flat"
+              selectedKey={
+                country && currency ? `${country}-${currency}` : undefined
+              }
+              onSelectionChange={(value) =>
+                handleCountryChange(value as string)
+              }
               radius="none"
               className="max-w-xs"
             >
-              {countries
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((country) => (
-                  <SelectItem key={country.value} value={country.value}>
-                    {country.label}
-                  </SelectItem>
-                ))}
-            </Select>
+              {countries.map((country) => (
+                <AutocompleteItem key={country.value} value={country.value}>
+                  {country.label}
+                </AutocompleteItem>
+              ))}
+            </Autocomplete>
           </div>
           <div>
             <h3 className="text-lg font-bold mb-4">Customer Service</h3>
