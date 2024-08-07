@@ -568,6 +568,9 @@ export const convertCurrency = (
 };
 
 export const formatCurrency = (amount: number, currency: string): string => {
+  if (typeof currency === "undefined") {
+    return amount.toFixed(2);
+  }
   return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(
     amount
   );

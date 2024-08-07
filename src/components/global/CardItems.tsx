@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Card,
   CardFooter,
@@ -58,7 +58,15 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
   const [[currentSlide, direction], setCurrentSlide] = useState([0, 1]);
   const addToCart = useCartStore((state) => state.addToCart);
   const displayPrice = useCartStore((state) => state.displayPrice);
+  const currency = useCartStore((state) => state.currency);
+  const exchangeRates = useCartStore((state) => state.exchangeRates);
   const isDisabled = !product.inStock;
+
+  const [, forceUpdate] = useState({});
+
+  useEffect(() => {
+    forceUpdate({});
+  }, [currency, exchangeRates]);
 
   const imageIndex = useMemo(
     () => wrap(0, product.imageUrls.length, currentSlide),

@@ -160,13 +160,7 @@ const useCartStore = create<CartState>()(
       currency: "",
       country: "",
       exchangeRates: null,
-      setCurrency: (currency) => {
-        const country =
-          Object.entries(countriesWithCurrency).find(([, { countries }]) =>
-            countries.some((c) => c.code === currency)
-          )?.[1].countries[0].code || "CA";
-        set({ currency, country });
-      },
+      setCurrency: (currency) => set({ currency }),
       setCountry: (country) => set({ country }),
       setExchangeRates: (rates) => set({ exchangeRates: rates }),
       displayPrice: (price: number) => {
