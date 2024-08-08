@@ -43,7 +43,7 @@ export default function RootLayout({
                 f.parentNode.insertBefore(a,f)})(window,document,'script', 'https://invitejs.trustpilot.com/tp.min.js', 'tp');
                 tp('register', 'CbshEyqQHHTu288h');`,
               }}
-            />
+            ></Script>
             <main>{children}</main>
           </Providers>
         </SessionProvider>
