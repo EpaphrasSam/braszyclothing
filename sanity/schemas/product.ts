@@ -14,8 +14,21 @@ export default defineType({
     defineField({
       name: "images",
       type: "array",
-      title: "Product Images",
-      of: [{ type: "image" }],
+      title: "Images and Videos",
+      of: [
+        {
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+        },
+        {
+          type: "file",
+          options: {
+            accept: "video/*",
+          },
+        },
+      ],
       validation: (Rule) => Rule.required(),
     }),
     defineField({

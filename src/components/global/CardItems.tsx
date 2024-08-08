@@ -68,10 +68,14 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
     forceUpdate({});
   }, [currency, exchangeRates]);
 
-  const imageIndex = useMemo(
-    () => wrap(0, product.imageUrls.length, currentSlide),
-    [currentSlide, product.imageUrls.length]
+  const mediaIndex = useMemo(
+    () => wrap(0, product.mediaUrls.length, currentSlide),
+    [currentSlide, product.mediaUrls.length]
   );
+
+  const handleVideoEnded = useCallback(() => {
+    setCurrentSlide([currentSlide + 1, direction]);
+  }, [currentSlide, direction]);
 
   return (
     <div className="flex flex-row w-full justify-center gap-4 flex-wrap">
@@ -96,17 +100,29 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
               setCurrentSlide([currentSlide, direction])
             }
           >
-            {product.imageUrls.map((url, index) => (
-              <motion.img
-                key={`slide-${index}`}
-                className="w-full h-[231px] object-fit object-center"
-                src={url}
-                alt={`Product Image ${index + 1}`}
-              />
-            ))}
+            {product.mediaUrls.map((media, index) =>
+              media.type === "video" ? (
+                <motion.video
+                  key={`video-${index}`}
+                  className="w-full h-[231px] object-cover object-center"
+                  src={media.url}
+                  autoPlay
+                  muted
+                  playsInline
+                  loop
+                />
+              ) : (
+                <motion.img
+                  key={`slide-${index}`}
+                  className="w-full h-[231px] object-fit object-center"
+                  src={media.url}
+                  alt={`Product Image ${index + 1}`}
+                />
+              )
+            )}
           </Carousel>
           <Chip size="sm" className="absolute top-2 right-2 text-sm font-bold">
-            {imageIndex + 1}/{product.imageUrls.length}
+            {mediaIndex + 1}/{product.mediaUrls.length}
           </Chip>
           {isHovered && (
             <motion.div

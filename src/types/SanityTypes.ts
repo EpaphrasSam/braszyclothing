@@ -31,7 +31,10 @@ export interface ProductType {
   categorySlug: string;
   inStock: boolean;
   slug: string;
-  imageUrls: string[];
+  mediaUrls: {
+    url: string;
+    type: "image" | "video";
+  }[];
   colors: string[];
   sizes: string[];
 }

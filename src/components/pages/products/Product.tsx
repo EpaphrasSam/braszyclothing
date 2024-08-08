@@ -91,7 +91,7 @@ const Product = ({ product }: ProductProps) => {
   return (
     <div className="flex flex-col md:flex-row gap-8 md:grid-cols-2">
       <div className="w-full md:w-1/2 md:sticky md:top-0 md:self-start">
-        <ImageGallery images={product.imageUrls} inStock={product.inStock} />
+        <ImageGallery mediaUrls={product.mediaUrls} inStock={product.inStock} />
       </div>
       <div className="w-full md:w-1/2">
         <div className="mb-2 md:mb-3">
@@ -194,8 +194,6 @@ const Product = ({ product }: ProductProps) => {
             size="lg"
             startContent={<FaCheckCircle />}
             className={`rounded-md ${isDisabled ? "bg-gray-500 text-white" : "bg-black text-white"}`}
-            // color={`${isDisabled ? "default" : "secondary"}`}
-
             isDisabled={isDisabled}
             onClick={handleCheckOut}
           >

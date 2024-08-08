@@ -84,7 +84,14 @@ export const getLatestProducts = async () => {
       "categoryName": category->title,
       "categorySlug": category->slug.current,
       "slug": slug.current,
-      "imageUrls": images[].asset->url,
+      "mediaUrls": images[].asset->{
+        "url": url,
+        "type": select(
+          _type == "sanity.fileAsset" => "video",
+          _type == "sanity.imageAsset" => "image",
+          "unknown"
+        )
+      },
       "colors": color,
       "sizes": size
     }`;
@@ -108,10 +115,18 @@ export const getProduct = async (slug: string) => {
       "categoryName": category->title,
       "categorySlug": category->slug.current,
       "slug": slug.current,
-      "imageUrls": images[].asset->url,
+      "mediaUrls": images[].asset->{
+        "url": url,
+        "type": select(
+          _type == "sanity.fileAsset" => "video",
+          _type == "sanity.imageAsset" => "image",
+          "unknown"
+        )
+      },
       "colors": color,
       "sizes": size
     }`;
+    console.log(query);
     const response: ProductType = await client.fetch(query);
     return { product: response, error: null };
   } catch (error: any) {
@@ -185,7 +200,14 @@ export const getAllProductsByCategory = async (
       "categoryName": category->title,
       "categorySlug": category->slug.current,
       "slug": slug.current,
-      "imageUrls": images[].asset->url,
+      "mediaUrls": images[].asset->{
+        "url": url,
+        "type": select(
+          _type == "sanity.fileAsset" => "video",
+          _type == "sanity.imageAsset" => "image",
+          "unknown"
+        )
+      },
       "colors": color,
       "sizes": size
     }`;
