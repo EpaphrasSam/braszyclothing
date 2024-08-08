@@ -6,6 +6,7 @@ import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
 import Script from "next/script";
+import Head from "next/head";
 
 const inter = Open_Sans({ subsets: ["latin"] });
 
@@ -25,6 +26,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          id="trustpilot-script"
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,r,n){w.TrustpilotObject=n;w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)};
+            a=d.createElement(s);a.async=1;a.src=r;a.type='text/java'+s;f=d.getElementsByTagName(s)[0];
+            f.parentNode.insertBefore(a,f)})(window,document,'script', 'https://invitejs.trustpilot.com/tp.min.js', 'tp');
+            tp('register', 'CbshEyqQHHTu288h');`,
+          }}
+        ></script>
+      </head>
       <body className={`${inter.className} `}>
         <Toaster position="top-center" />
         <SessionProvider>
@@ -34,7 +46,7 @@ export default function RootLayout({
               src="https://cdn.promotekit.com/promotekit.js"
               data-promotekit="ab283b38-496d-4103-9794-5e9ecced440d"
             ></Script>
-            <Script
+            {/* <Script
               id="trustpilot-script"
               strategy="afterInteractive"
               dangerouslySetInnerHTML={{
@@ -43,7 +55,7 @@ export default function RootLayout({
                 f.parentNode.insertBefore(a,f)})(window,document,'script', 'https://invitejs.trustpilot.com/tp.min.js', 'tp');
                 tp('register', 'CbshEyqQHHTu288h');`,
               }}
-            ></Script>
+            ></Script> */}
             <main>{children}</main>
           </Providers>
         </SessionProvider>
