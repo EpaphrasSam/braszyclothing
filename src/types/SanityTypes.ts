@@ -74,7 +74,10 @@ export interface SearchType {
       id: string;
       name: string;
       slug: string;
-      imageUrls: string[];
+      mediaUrls: {
+        url: string;
+        type: "image" | "video";
+      }[];
     }[];
   };
 }

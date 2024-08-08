@@ -30,7 +30,7 @@ const Product = ({ product }: ProductProps) => {
 
   const cartItem = useMemo(
     () => cartItems && cartItems.find((item) => item.id === product.id),
-    [cartItems, product.id]
+    [cartItems, product?.id]
   );
 
   const isDisabled = !product.inStock;

@@ -105,7 +105,10 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                   <div>
                     <div className="flex w-full relative">
                       <Image
-                        src={item.imageUrls[0]}
+                        src={
+                          item.mediaUrls.find((media) => media.type === "image")
+                            ?.url || item.mediaUrls[0].url
+                        }
                         alt={item.name || "Product Image"}
                         width={100}
                         height={100}

@@ -169,11 +169,14 @@ const Cart = () => {
                   <TableCell>
                     <div className="flex w-full relative">
                       <Image
-                        src={item.imageUrls[0]}
+                        src={
+                          item.mediaUrls.find((media) => media.type === "image")
+                            ?.url || item.mediaUrls[0].url
+                        }
                         alt={item.name || "Product Image"}
                         width={80}
                         height={80}
-                        className=" w-24 h-24 object-cover object-center rounded-sm"
+                        className="w-24 h-24 object-cover object-center rounded-sm"
                       />
 
                       <div className="flex flex-col ml-1 w-40">

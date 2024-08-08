@@ -126,7 +126,7 @@ export const getProduct = async (slug: string) => {
       "colors": color,
       "sizes": size
     }`;
-    console.log(query);
+
     const response: ProductType = await client.fetch(query);
     return { product: response, error: null };
   } catch (error: any) {
@@ -280,8 +280,16 @@ export const searchProducts = async (searchQuery: string) => {
       "apparel": apparel-> title,
       "categoryName": category->title,
       "slug": slug.current,
-      "imageUrls": images[].asset->url
-    }`;
+       "mediaUrls": images[].asset->{
+        "url": url,
+        "type": select(
+          _type == "sanity.fileAsset" => "video",
+          _type == "sanity.imageAsset" => "image",
+          "unknown"
+        )
+    }
+  }`;
+
     const apparelQuery = `*[_type == "apparel" && title match "${searchQuery}*"]{
       "id": _id,
       title,

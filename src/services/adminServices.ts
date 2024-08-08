@@ -61,7 +61,14 @@ export const getTopProducts = async () => {
       "categoryName": category->title,
       "categorySlug": category->slug.current,
       "slug": slug.current,
-      "imageUrls": images[].asset->url,
+      "mediaUrls": images[].asset->{
+          "url": url,
+          "type": select(
+            _type == "sanity.fileAsset" => "video",
+            _type == "sanity.imageAsset" => "image",
+            "unknown"
+          )
+      },
       "colors": color,
       "sizes": size
     }`;

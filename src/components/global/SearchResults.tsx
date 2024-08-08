@@ -123,7 +123,11 @@ const SearchResults = ({ data, loading, onClose }: SearchResultsProps) => {
                             className="flex gap-2 items-center cursor-pointer"
                           >
                             <Image
-                              src={product.imageUrls[0]}
+                              src={
+                                product.mediaUrls.find(
+                                  (media) => media.type === "image"
+                                )?.url || product.mediaUrls[0].url
+                              }
                               alt={product.name || "Product Image"}
                               width={50}
                               height={50}

@@ -35,7 +35,11 @@ const TopProducts = ({ topProducts }: TopProductsProps) => {
                   >
                     <div className="flex gap-1">
                       <Image
-                        src={product.imageUrls[0]}
+                        src={
+                          product.mediaUrls.find(
+                            (media) => media.type === "image"
+                          )?.url || product.mediaUrls[0].url
+                        }
                         alt={product.name || "Product Image"}
                         className="w-16 h-16"
                         width={100}

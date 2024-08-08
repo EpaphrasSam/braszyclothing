@@ -151,7 +151,13 @@ const InvoicePDF = ({
           {cartItems.map((item) => (
             <View key={item.id} style={styles.itemRow}>
               <View style={styles.itemDetails}>
-                <Image src={item.imageUrls[0]} style={styles.itemImage} />
+                <Image
+                  src={
+                    item.mediaUrls.find((media) => media.type === "image")
+                      ?.url || item.mediaUrls[0].url
+                  }
+                  style={styles.itemImage}
+                />
                 <View>
                   <Text style={styles.text}>{item.name}</Text>
                   <Text style={styles.text}>

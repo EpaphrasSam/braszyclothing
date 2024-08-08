@@ -1,4 +1,5 @@
 "use client";
+import useCartStore from "@/store/cart";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 
@@ -12,8 +13,9 @@ interface StatisticsCardsProps {
 }
 
 const StatisticsCards = ({ stats }: StatisticsCardsProps) => {
+  const displayPrice = useCartStore((state) => state.displayPrice);
   const statsArray = [
-    { title: "Total Sales", value: `$${stats?.totalSales.toFixed(2)}` },
+    { title: "Total Sales", value: `${displayPrice(stats?.totalSales)}` },
     { title: "Total Orders", value: stats?.Orders },
     { title: "Total Users", value: stats?.Users },
     { title: "Total Guests", value: stats?.Guests },

@@ -35,6 +35,7 @@ import toast from "react-hot-toast";
 import { updateOrderStatus } from "@/services/adminServices";
 import { AiFillCloseCircle } from "react-icons/ai";
 import axios from "axios";
+import useCartStore from "@/store/cart";
 
 interface OrdersTableProps {
   orders: Orders[];
@@ -89,8 +90,7 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [dateRange, setDateRange] = useState<any>(null);
-
-  // console.log(dateRange);
+  const displayPrice = useCartStore((state) => state.displayPrice);
 
   const handleActionClick = (orderId: string, action: string) => {
     setSelectedStatus({ id: orderId, action });
@@ -399,7 +399,9 @@ const OrdersTable = ({ orders, isRecentOnly }: OrdersTableProps) => {
                         type="Address"
                       />
                     </TableCell>
-                    <TableCell>${item.paymentIntent?.netAmount}</TableCell>
+                    <TableCell>
+                      {displayPrice(item.paymentIntent?.netAmount!)}
+                    </TableCell>
                     <TableCell>
                       {getShippingStatusChip(item.shippingStatus)}
                     </TableCell>
