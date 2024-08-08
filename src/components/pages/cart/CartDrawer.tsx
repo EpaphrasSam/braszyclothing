@@ -106,8 +106,11 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                     <div className="flex w-full relative">
                       <Image
                         src={
-                          item.mediaUrls.find((media) => media.type === "image")
-                            ?.url || item.mediaUrls[0].url
+                          item.mediaUrls?.find(
+                            (media) => media.type === "image"
+                          )?.url ??
+                          item.mediaUrls?.[0]?.url ??
+                          ""
                         }
                         alt={item.name || "Product Image"}
                         width={100}
@@ -126,7 +129,7 @@ const CartDrawer = ({ onClose }: { onClose: () => void }) => {
                           </span>
                           {item.oldPrice && (
                             <span className="ml-1 line-through text-xs">
-                              ${item.oldPrice}
+                              {displayPrice(item.oldPrice)}
                             </span>
                           )}
                           <div className="flex gap-4 mt-1">

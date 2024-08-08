@@ -54,8 +54,12 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
   );
 
   useEffect(() => {
+    const isFormEmpty = (formValues: ShippingDetails) => {
+      return Object.values(formValues).some((value) => value === "");
+    };
+
     if (session && addresses.length > 0) {
-      if (!formDefaultValues) {
+      if (!formDefaultValues || isFormEmpty(formDefaultValues)) {
         setSelected(addresses[0]);
         reset(addresses[0]);
       } else {

@@ -170,13 +170,17 @@ const Cart = () => {
                     <div className="flex w-full relative">
                       <Image
                         src={
-                          item.mediaUrls.find((media) => media.type === "image")
-                            ?.url || item.mediaUrls[0].url
+                          item.mediaUrls?.find(
+                            (media) => media.type === "image"
+                          )?.url ??
+                          item.mediaUrls?.[0]?.url ??
+                          ""
                         }
                         alt={item.name || "Product Image"}
                         width={80}
                         height={80}
                         className="w-24 h-24 object-cover object-center rounded-sm"
+                        onClick={() => router.push(`/products/${item.slug}`)}
                       />
 
                       <div className="flex flex-col ml-1 w-40">
