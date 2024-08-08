@@ -24,15 +24,18 @@ const Banner = ({ banners }: BannerProps) => {
   );
 
   useEffect(() => {
-    const interval = setInterval(
-      () => {
+    if (banners[mediaIndex].mediaType !== "video") {
+      const interval = setInterval(() => {
         paginate(1);
-      },
-      banners[mediaIndex].mediaType === "video" ? 30000 : 10000
-    );
+      }, 10000);
 
-    return () => clearInterval(interval);
+      return () => clearInterval(interval);
+    }
   }, [paginate, mediaIndex, banners]);
+
+  const handleVideoEnded = useCallback(() => {
+    paginate(1);
+  }, [paginate]);
 
   if (banners.length === 0) {
     return (
@@ -44,7 +47,25 @@ const Banner = ({ banners }: BannerProps) => {
 
   return (
     <AnimatePresence initial={false} custom={direction}>
-      {banners[mediaIndex].mediaType === "image" ? (
+      {banners[mediaIndex].mediaType === "video" ? (
+        <motion.video
+          className="w-full h-full object-cover absolute pointer-events-none"
+          key={currentSlide}
+          src={banners[mediaIndex].video}
+          custom={direction}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 300 },
+            opacity: { duration: 1.5 },
+          }}
+          autoPlay
+          muted
+          playsInline
+          onEnded={handleVideoEnded}
+        />
+      ) : (
         <motion.img
           className="w-full h-full object-fit absolute"
           key={currentSlide}
@@ -60,23 +81,6 @@ const Banner = ({ banners }: BannerProps) => {
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={1}
-        />
-      ) : (
-        <motion.video
-          className="w-full h-full object-cover absolute"
-          key={currentSlide}
-          src={banners[mediaIndex].video}
-          custom={direction}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{
-            x: { type: "spring", stiffness: 300, damping: 300 },
-            opacity: { duration: 1.5 },
-          }}
-          autoPlay
-          loop
-          muted
         />
       )}
       <div className="absolute inset-0 bg-black bg-opacity-25 flex items-center justify-center">
