@@ -6,8 +6,6 @@ import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import {
   Input,
   Spinner,
-  Select,
-  SelectItem,
   Autocomplete,
   AutocompleteItem,
 } from "@nextui-org/react";
@@ -24,6 +22,15 @@ import {
 } from "@/helpers/currencyConverter";
 import { useStore } from "@/store/useStore";
 import { getUserLocation, getExchangeRates } from "@/services/otherApiServices";
+import dynamic from "next/dynamic";
+import TrustpilotServiceReview from "../essentials/Trustpilot/TrustpilotServiceReview";
+
+// const TrustpilotServiceReview = dynamic(
+//   () => import("../essentials/Trustpilot/TrustpilotServiceReview"),
+//   {
+//     ssr: false,
+//   }
+// );
 
 const Footer = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -268,7 +275,7 @@ const Footer = () => {
               />
             </div>
           </div>
-
+          <TrustpilotServiceReview />
           <p>
             &copy; {new Date().getFullYear()} Braszy Clothing. All rights
             reserved.

@@ -186,6 +186,18 @@ const CardForms = ({
             PaymentIntent?.netAmount!,
             shippingDetails?.email!
           );
+
+          if (window.tp) {
+            const trustpilot_invitation = {
+              recipientEmail: shippingDetails.email,
+              recipientName: `${shippingDetails.firstName} ${shippingDetails.lastName}`,
+              referenceId: res.orderID,
+              source: "InvitationScript",
+            };
+            console.log(trustpilot_invitation);
+            window.tp("createInvitation", trustpilot_invitation);
+          }
+
           toast.success("Order placed successfully");
         } catch (error) {
           console.log(error);

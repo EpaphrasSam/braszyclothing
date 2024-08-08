@@ -4,6 +4,10 @@ declare global {
     promotekit: {
       refer: (email: string, stripeCustomerId?: string) => void;
     };
+    Trustpilot?: {
+      loadFromElement: (element: HTMLElement | null) => void;
+    };
+    tp?: (action: string, data: any) => void;
   }
 }
 
