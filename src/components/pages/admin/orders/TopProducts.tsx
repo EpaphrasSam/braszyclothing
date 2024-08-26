@@ -1,5 +1,6 @@
 "use client";
 
+import useCartStore from "@/store/cart";
 import { ProductType } from "@/types/SanityTypes";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import Image from "next/image";
@@ -10,6 +11,7 @@ interface TopProductsProps {
 }
 
 const TopProducts = ({ topProducts }: TopProductsProps) => {
+  const displayPrice = useCartStore((state) => state.displayPrice);
   return (
     <div className="w-full">
       <Card className="min-h-[300px]">
@@ -31,7 +33,7 @@ const TopProducts = ({ topProducts }: TopProductsProps) => {
                 {topProducts.map((product, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between mb-4"
+                    className="flex items-start gap-6 justify-between mb-4"
                   >
                     <div className="flex gap-1">
                       <Image
@@ -48,7 +50,7 @@ const TopProducts = ({ topProducts }: TopProductsProps) => {
                       <div>
                         <p className="text-zinc-700 text-sm">{product.name}</p>
                         <p className="text-zinc-400 text-xs">
-                          ${product.price}
+                          {displayPrice(product.price)}
                         </p>
                       </div>
                     </div>

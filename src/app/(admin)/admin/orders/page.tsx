@@ -2,7 +2,7 @@ import OrdersTable from "@/components/pages/admin/orders/OrdersTable";
 import { getOrders } from "@/services/adminServices";
 import { Divider } from "@nextui-org/react";
 
-export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export default async function OrdersPage() {
   const { orders, error } = await getOrders();

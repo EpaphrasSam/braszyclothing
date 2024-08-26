@@ -5,7 +5,7 @@ import { getOrders, getStats, getTopProducts } from "@/services/adminServices";
 import { Divider } from "@nextui-org/react";
 import React from "react";
 
-export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
   const { stats, error: statsError } = await getStats();
