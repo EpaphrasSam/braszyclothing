@@ -160,14 +160,21 @@ const CardItems = ({ product, hide = false }: CardItemsProps) => {
         </CardBody>
         <CardFooter className="flex mb-1 flex-col sm:px-4 px-2 bg-white bottom-0 border-t-1 border-gray-300 ">
           <div
-            className={`flex justify-between items-center w-full ${hide ? "max-[500px]:flex-col" : ""}`}
+            className={`flex justify-between items-start w-full ${hide ? "max-[500px]:flex-col" : ""}`}
           >
             <p className="text-black text-sm font-semibold line-clamp-1">
               {product.name}
             </p>
-            <p className="text-black text-sm font-semibold pl-3">
-              {displayPrice(product.price)}
-            </p>
+            <div className="flex flex-col">
+              <p className="text-black text-sm font-semibold pl-3">
+                {displayPrice(product.price)}
+              </p>
+              {product.oldPrice && (
+                <p className="text-gray-500 text-sm font-semibold line-through pl-3">
+                  {displayPrice(product.oldPrice)}
+                </p>
+              )}
+            </div>
           </div>
           <div className="flex justify-between items-center w-full">
             <p
