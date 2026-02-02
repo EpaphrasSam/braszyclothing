@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/utils/auth/auth";
+import { auth } from "@/utils/auth/auth.edge";
 import {
   emailProtectedRoutes,
   protectedRoutes,

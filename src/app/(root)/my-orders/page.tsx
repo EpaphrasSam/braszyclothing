@@ -6,9 +6,10 @@ import { Suspense } from "react";
 export default async function OrderPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string };
+  searchParams?: Promise<{ [key: string]: string }>;
 }) {
   const session = await auth();
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
   const { data, totalPages, error } = await fetchUserOrders(
     session?.user.id!,
     1,
@@ -22,7 +23,7 @@ export default async function OrderPage({
           userId={session?.user.id!}
           InitialOrders={data}
           InitialTotalPages={totalPages}
-          search={searchParams}
+          search={resolvedSearchParams}
         />
       </div>
     </Suspense>

@@ -20,14 +20,17 @@ export default async function CategoryPage({
   params,
   searchParams,
 }: {
-  params: { slug: string };
-  searchParams?: { [key: string]: string };
+  params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ [key: string]: string }>;
 }) {
+  const { slug } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+
   const { AllProducts, totalPages, error } = await getAllProductsByCategory(
-    params.slug,
-    searchParams?.apparel ? { apparel: searchParams?.apparel } : {},
+    slug,
+    resolvedSearchParams?.apparel ? { apparel: resolvedSearchParams.apparel } : {},
     "a-z",
-    searchParams?.page ? Number(searchParams.page) : 1,
+    resolvedSearchParams?.page ? Number(resolvedSearchParams.page) : 1,
     10
   );
 
@@ -36,8 +39,8 @@ export default async function CategoryPage({
       <div className="sm:mx-10 my-10 mx-2">
         <Shop
           allProducts={AllProducts}
-          slug={params.slug}
-          search={searchParams}
+          slug={slug}
+          search={resolvedSearchParams}
           total={totalPages!}
         />
       </div>

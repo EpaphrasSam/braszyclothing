@@ -6,6 +6,7 @@ const withAutoCert = autoCert({
 });
 
 const nextConfig = {
+  turbopack: {},
   images: {
     remotePatterns: [
       {

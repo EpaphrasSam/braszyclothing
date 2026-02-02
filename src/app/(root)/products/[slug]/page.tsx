@@ -6,9 +6,10 @@ export const revalidate = 0;
 export default async function ProductPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { product, error } = await getProduct(params.slug);
+  const { slug } = await params;
+  const { product, error } = await getProduct(slug);
   return (
     <div className="bg-white sm:m-10 m-5 ">
       <Product product={product!} />

@@ -9,11 +9,14 @@ import { generateInvoicePDF } from "@/components/pages/invoice/generateInvoicePD
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const generateOTP = (): string => {
+export const generateOTP = async (): Promise<string> => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-export const encryptOTP = (otp: string, email: string): string => {
+export const encryptOTP = async (
+  otp: string,
+  email: string
+): Promise<string> => {
   const algorithm = "aes-256-cbc";
   const key = crypto.createHash("sha256").update(email).digest();
   const iv = crypto.randomBytes(16);
@@ -24,7 +27,10 @@ export const encryptOTP = (otp: string, email: string): string => {
   return iv.toString("hex") + ":" + encrypted;
 };
 
-export const decryptOTP = (encryptedOtp: string, email: string): string => {
+export const decryptOTP = async (
+  encryptedOtp: string,
+  email: string
+): Promise<string> => {
   const [iv, content] = encryptedOtp.split(":");
   const key = crypto.createHash("sha256").update(email).digest();
   // @ts-ignore
