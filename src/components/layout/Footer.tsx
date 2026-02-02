@@ -154,7 +154,7 @@ const Footer = () => {
               className="max-w-xs"
             >
               {countries.map((country) => (
-                <AutocompleteItem key={country.value} value={country.value}>
+                <AutocompleteItem key={country.value}>
                   {country.label}
                 </AutocompleteItem>
               ))}

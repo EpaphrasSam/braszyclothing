@@ -210,11 +210,11 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
             >
               {[
                 ...addresses.map((address, index) => (
-                  <SelectItem key={index.toString()} value={index.toString()}>
+                  <SelectItem key={index.toString()}>
                     {`${address.firstName} ${address.lastName} - ${address.address}, ${address.country}, ${address.code}`}
                   </SelectItem>
                 )),
-                <SelectItem key="add_new" value="new">
+                <SelectItem key="add_new">
                   Add New Address
                 </SelectItem>,
               ]}
@@ -348,7 +348,7 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
                   isInvalid={!!Errors?.country || !!errors.country}
                 >
                   {countries.map((country) => (
-                    <SelectItem key={country.name} value={country.name}>
+                    <SelectItem key={country.name}>
                       {country.name}
                     </SelectItem>
                   ))}
@@ -392,7 +392,6 @@ const ShippingAddressForm: React.FC<ShippingAddressFormProps> = ({
                     {getStateOrProvinceOptions().map((location) => (
                       <SelectItem
                         key={location.state_name}
-                        value={location.state_name}
                       >
                         {location.state_name}
                       </SelectItem>

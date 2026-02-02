@@ -134,25 +134,12 @@ const OrderHistory = ({
             label="Items"
             disallowEmptySelection
           >
-            <SelectItem key="5" value="5">
-              5
-            </SelectItem>
-            <SelectItem key="10" value="10">
-              10
-            </SelectItem>
-            <SelectItem key="15" value="15">
-              15
-            </SelectItem>
-
-            <SelectItem key="20" value="20">
-              20
-            </SelectItem>
-            <SelectItem key="25" value="25">
-              25
-            </SelectItem>
-            <SelectItem key="30" value="30">
-              30
-            </SelectItem>
+            <SelectItem key="5">5</SelectItem>
+            <SelectItem key="10">10</SelectItem>
+            <SelectItem key="15">15</SelectItem>
+            <SelectItem key="20">20</SelectItem>
+            <SelectItem key="25">25</SelectItem>
+            <SelectItem key="30">30</SelectItem>
           </Select>
 
           {totalPages && totalPages > 1 && (

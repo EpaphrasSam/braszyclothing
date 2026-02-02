@@ -129,7 +129,7 @@ const OTP = () => {
                       key={index}
                       type="text"
                       maxLength={1}
-                      ref={(el) => {
+                      ref={(el: HTMLInputElement | null) => {
                         if (el) {
                           inputRefs.current[index] = el;
                         }
