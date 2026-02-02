@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Img from "@/../public/images/img16.png"; // Update with your image path
-import { Button, Chip, Input, Link } from "@nextui-org/react";
+import { Button, Chip, Input, Link } from "@heroui/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";

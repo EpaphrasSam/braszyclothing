@@ -16,7 +16,7 @@ import {
   DropdownItem,
   Button,
   Divider,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 const CartDrawer = ({ onClose }: { onClose: () => void }) => {
   const pathname = usePathname();

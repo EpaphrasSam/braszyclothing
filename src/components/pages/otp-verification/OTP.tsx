@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import picture from "@/../public/images/img14.png";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { useStore } from "@/store/useStore";
 import useUserStore from "@/store/user";
 import toast from "react-hot-toast";

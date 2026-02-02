@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "@/helpers/validators";

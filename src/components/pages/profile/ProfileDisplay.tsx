@@ -1,5 +1,5 @@
 import { logoutAction } from "@/services/authServices";
-import { Badge, Button, Divider } from "@nextui-org/react";
+import { Badge, Button, Divider } from "@heroui/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import toast from "react-hot-toast";

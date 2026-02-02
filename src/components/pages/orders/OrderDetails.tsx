@@ -10,7 +10,7 @@ import {
   ModalHeader,
   Skeleton,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import Image from "next/image";
 import React from "react";
 import { CiDeliveryTruck } from "react-icons/ci";

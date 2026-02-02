@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input, Button, Divider } from "@nextui-org/react";
+import { Input, Button, Divider } from "@heroui/react";
 import * as z from "zod";
 import { CiMail, CiUser, CiEdit } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";

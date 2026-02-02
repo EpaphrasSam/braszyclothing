@@ -2,7 +2,7 @@
 
 import CardItems from "@/components/global/CardItems";
 import { ProductType } from "@/types/SanityTypes";
-import { Divider } from "@nextui-org/react";
+import { Divider } from "@heroui/react";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import SkeletonLoader from "../../global/SkeletonLoader";

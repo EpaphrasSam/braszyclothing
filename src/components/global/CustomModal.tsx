@@ -6,7 +6,7 @@ import {
   Button,
   ModalBody,
   Spinner,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 
 type CustomModalProps = {

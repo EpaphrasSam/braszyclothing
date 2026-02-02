@@ -1,6 +1,6 @@
 "use client";
 
-import { Pagination, Select, SelectItem } from "@nextui-org/react";
+import { Pagination, Select, SelectItem } from "@heroui/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";

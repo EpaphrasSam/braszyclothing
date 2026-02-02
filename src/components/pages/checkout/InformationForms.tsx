@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { Button, Divider, Input } from "@nextui-org/react";
+import { Button, Divider, Input } from "@heroui/react";
 import { CiMail } from "react-icons/ci";
 import { FieldValues, SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { MdOutlinePhone } from "react-icons/md";

@@ -12,7 +12,7 @@ import {
   Checkbox,
   CheckboxGroup,
   Input,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { getUniqueApparelsAndPrices } from "@/services/sanityServices";
 import useSWR from "swr";
 import { filterReducer } from "@/lib/reducers/filterReducer";

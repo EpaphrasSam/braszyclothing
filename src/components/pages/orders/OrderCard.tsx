@@ -7,7 +7,7 @@ import {
   CardHeader,
   Chip,
   Divider,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React, { useState } from "react";
 import { MdCancel, MdInfo } from "react-icons/md";
 import Image from "next/image";

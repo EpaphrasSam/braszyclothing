@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { ApparelType } from "@/types/SanityTypes";
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import Carousel from "react-multi-carousel";
 import { motion } from "framer-motion";
 import ImageTransition from "@/components/global/ImageTransition";

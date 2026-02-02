@@ -2,7 +2,7 @@ import StatisticsCards from "@/components/pages/admin/dashboard/StatisticsCards"
 import OrdersTable from "@/components/pages/admin/orders/OrdersTable";
 import TopProducts from "@/components/pages/admin/orders/TopProducts";
 import { getOrders, getStats, getTopProducts } from "@/services/adminServices";
-import { Divider } from "@nextui-org/react";
+import { Divider } from "@heroui/react";
 import React from "react";
 
 export const dynamic = "force-dynamic";

@@ -8,7 +8,7 @@ import {
   Spinner,
   Autocomplete,
   AutocompleteItem,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { RiTwitterXLine } from "react-icons/ri";
 import { useForm } from "react-hook-form";

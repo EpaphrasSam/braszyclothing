@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { Navbar, NavbarContent } from "@nextui-org/react";
+import { Navbar, NavbarContent } from "@heroui/react";
 import { IoReturnDownBack } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
 import AdminDrawer from "../pages/admin/AdminDrawer";

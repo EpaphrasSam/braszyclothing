@@ -2,7 +2,7 @@
 
 import React, { useCallback, useMemo } from "react";
 import ImageGallery from "@/components/pages/products/ImageGallery";
-import { Button, Card, CardBody, Skeleton } from "@nextui-org/react";
+import { Button, Card, CardBody, Skeleton } from "@heroui/react";
 import { CiStar } from "react-icons/ci";
 import { FiTruck } from "react-icons/fi";
 import useCartStore from "@/store/cart";

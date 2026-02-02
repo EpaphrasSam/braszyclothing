@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { adminSidebarLinks } from "@/lib/constants/routes";
 import { Drawer } from "@mui/material";
 import { MdPersonOutline } from "react-icons/md";
-import { Divider } from "@nextui-org/react";
+import { Divider } from "@heroui/react";
 import { useSession } from "next-auth/react";
 import { IoCloseOutline } from "react-icons/io5";
 

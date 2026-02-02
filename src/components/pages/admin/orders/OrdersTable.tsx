@@ -19,7 +19,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import Link from "next/link";
 import React, { useState, useEffect, useMemo } from "react";
 import OrderAccordion from "./OrderAccordion";

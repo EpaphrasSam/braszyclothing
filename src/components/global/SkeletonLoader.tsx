@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Skeleton, Card } from "@nextui-org/react";
+import { Skeleton, Card } from "@heroui/react";
 
 interface SkeletonLoaderProps {
   array?: number;

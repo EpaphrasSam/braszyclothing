@@ -15,7 +15,7 @@
     "@mui/icons-material": "^5.15.16",
     "@mui/joy": "^5.0.0-beta.36",
     "@mui/material": "^5.15.16",
-    "@nextui-org/react": "^2.3.6",
+    "@heroui/react": "^2.4.8",
     "@prisma/client": "^5.15.0",
     "@react-pdf/renderer": "^3.4.4",
     "@sanity/image-url": "^1.0.2",

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 import { IoCloseOutline, IoSearchOutline } from "react-icons/io5";
 import useSWR from "swr";
 import { searchProducts } from "@/services/sanityServices";

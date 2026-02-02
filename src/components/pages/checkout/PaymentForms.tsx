@@ -18,7 +18,7 @@ import {
   RadioGroup,
   Skeleton,
   Spinner,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import useCartStore, { PaymentIntentType, ShippingDetails } from "@/store/cart";
 import { useStore } from "@/store/useStore";
 import {

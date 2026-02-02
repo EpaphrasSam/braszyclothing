@@ -1,7 +1,7 @@
 "use client";
 
 import useCartStore from "@/store/cart";
-import { Button, Divider, RadioGroup, Radio } from "@nextui-org/react";
+import { Button, Divider, RadioGroup, Radio } from "@heroui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
+import { Button, Divider, Input, Select, SelectItem } from "@heroui/react";
 import { useForm, Controller } from "react-hook-form";
 import { ShippingDetails } from "@/store/cart";
 import { countries, provinces, states } from "@/lib/constants/countries";

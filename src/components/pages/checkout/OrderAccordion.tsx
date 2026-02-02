@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import { Accordion, AccordionItem } from "@heroui/react";
 import { CiShoppingCart } from "react-icons/ci";
 import OrderSummary from "./OrderSummary";
 

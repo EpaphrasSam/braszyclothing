@@ -18,7 +18,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import Image from "next/image";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";

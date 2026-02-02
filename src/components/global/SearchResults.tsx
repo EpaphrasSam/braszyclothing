@@ -1,6 +1,6 @@
 import React from "react";
 import { ApparelType, SearchType } from "@/types/SanityTypes";
-import { Divider, Spinner } from "@nextui-org/react";
+import { Divider, Spinner } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";

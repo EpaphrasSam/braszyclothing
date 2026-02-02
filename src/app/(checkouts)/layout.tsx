@@ -2,7 +2,7 @@ import CheckoutHeader from "@/components/layout/CheckoutHeader";
 import OrderAccordion from "@/components/pages/checkout/OrderAccordion";
 import OrderSummary from "@/components/pages/checkout/OrderSummary";
 import getSession from "@/utils/auth/getSession";
-import { Divider } from "@nextui-org/react";
+import { Divider } from "@heroui/react";
 import { SessionProvider } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";

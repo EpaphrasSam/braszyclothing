@@ -2,7 +2,7 @@
 
 import useCartStore from "@/store/cart";
 import { ProductType } from "@/types/SanityTypes";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardHeader } from "@heroui/react";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 

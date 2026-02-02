@@ -12,7 +12,7 @@ import {
   Select,
   SelectItem,
   Divider,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 interface OrderHistoryProps {
   userId: string;

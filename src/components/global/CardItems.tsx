@@ -8,7 +8,7 @@ import {
   Chip,
   CardBody,
   Image,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { CiShoppingCart } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cart";

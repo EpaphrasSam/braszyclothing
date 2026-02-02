@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import illustration from "@/../public/images/img14.png"; // Ensure correct path
 import Image from "next/image";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import toast from "react-hot-toast";
 import {
   checkIfEmailExistsAction,

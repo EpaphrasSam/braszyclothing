@@ -2,7 +2,7 @@
 
 import useCartStore from "@/store/cart";
 import { useStore } from "@/store/useStore";
-import { Badge, Button, Divider, Input, Skeleton } from "@nextui-org/react";
+import { Badge, Button, Divider, Input, Skeleton } from "@heroui/react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { FiMinus, FiPlus } from "react-icons/fi";
